@@ -16,7 +16,7 @@ namespace TechEngineer.Constants
         /// <summary>
         ///   Email address of the super admin. Email address of the super admin can not be changed.
         /// </summary>
-        public const string SuperAdminEmailAddress = "admin@techengine.com";
+        public const string SuperAdminEmailAddress = "superadmin@techengine.com";
     }
 
     public abstract class TechEngineerGlobalMethod

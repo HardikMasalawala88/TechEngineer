@@ -1,4 +1,5 @@
 ﻿using Abp.AutoMapper;
+using Abp.Runtime.Validation;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -14,7 +15,7 @@ namespace TechEngineer.DBEntities.Organizations.Dto
     /// Class to create organization dto.
     /// </summary>
     [AutoMapTo(typeof(OrganizationEntity))]
-    public class CreateOrganizationDto
+    public class CreateOrganizationDto : IShouldNormalize
     {
         /// <summary>
         /// Gets or sets name field.
@@ -47,15 +48,17 @@ namespace TechEngineer.DBEntities.Organizations.Dto
         /// </summary>
         public bool IsActive { get; set; }
 
-        ///// <summary>
-        ///// Gets or sets address id.
-        ///// </summary>
-
-        //public Guid LocationId { get; set; }
-
         /// <summary>
-        /// Gets or sets address entity.
+        /// Gets or sets location entity.
         /// </summary>
         public virtual CreateLocationDto Location { get; set; }
+
+        public void Normalize()
+        {
+            if (Location == null)
+            {
+                Location = new CreateLocationDto();
+            }
+        }
     }
 }

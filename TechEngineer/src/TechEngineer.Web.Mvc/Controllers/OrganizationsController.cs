@@ -2,13 +2,14 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using TechEngineer.Authorization;
+using TechEngineer.Controllers;
 using TechEngineer.DBEntities.Organizations;
 using TechEngineer.Web.Models.Organizations;
 
 namespace TechEngineer.Web.Controllers
 {
     [AbpMvcAuthorize(PermissionNames.Pages_Organizations)]
-    public class OrganizationsController : Controller
+    public class OrganizationsController : TechEngineerControllerBase
     {
         private readonly IOrganizationAppService _organizationAppService;
 

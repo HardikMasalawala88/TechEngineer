@@ -22,9 +22,11 @@ namespace TechEngineer.Web.Controllers
         public async Task<ActionResult> Index()
         {
             var roles = (await _userAppService.GetRoles()).Items;
+            var users = (await _userAppService.GetUsers()).Items;
             var model = new UserListViewModel
             {
-                Roles = roles
+                Roles = roles,
+                Users = users
             };
             return View(model);
         }

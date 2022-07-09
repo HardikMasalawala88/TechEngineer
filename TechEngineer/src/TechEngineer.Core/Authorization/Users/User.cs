@@ -26,6 +26,8 @@ namespace TechEngineer.Authorization.Users
                 Name = AdminUserName,
                 Surname = AdminUserName,
                 EmailAddress = emailAddress,
+                OrganizationId = Guid.NewGuid(),
+                LocationId = Guid.NewGuid(),
                 Roles = new List<UserRole>()
             };
 

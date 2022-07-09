@@ -20,5 +20,11 @@ namespace TechEngineer.DBEntities.Locations
         /// <param name="input">Input parameter.</param>
         /// <returns>Return location data.</returns>
         Task<LocationDto> GetBaseLocationByOrganizationAsync(EntityDto<Guid> input);
+
+        /// <summary>
+        /// Method to get list of locations.
+        /// </summary>
+        /// <returns>Return list of location.</returns>
+        Task<ListResultDto<LocationDto>> GetLocationsAsync();
     }
 }

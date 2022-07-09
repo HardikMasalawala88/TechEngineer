@@ -15,6 +15,12 @@
     <PreserveCompilationReferences>true</PreserveCompilationReferences>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="wwwroot\libs\**" />
+    <Content Remove="wwwroot\libs\**" />
+    <EmbeddedResource Remove="wwwroot\libs\**" />
+    <None Remove="wwwroot\libs\**" />
+  </ItemGroup>
+  <ItemGroup>
     <None Include="app.config" />
     <None Update="Dockerfile">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -37,13 +43,13 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.Web.LibraryManager.Build" Version="2.1.174" />
     <PackageReference Include="PaulMiami.AspNetCore.Mvc.Recaptcha" Version="1.2.2" />
     <PackageReference Include="Abp.HangFire" Version="7.3.0" />
     <PackageReference Include="Abp.RedisCache" Version="7.3.0" />
     <PackageReference Include="Abp.Castle.Log4Net" Version="7.3.0" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="wwwroot\libs\" />
     <Folder Include="wwwroot\view-resources\Views\_Bundles\" />
   </ItemGroup>
 </Project>

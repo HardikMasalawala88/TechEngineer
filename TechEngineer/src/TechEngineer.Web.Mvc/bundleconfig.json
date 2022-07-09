@@ -80,7 +80,7 @@
       "wwwroot/libs/abp-web-resources/Abp/Framework/scripts/libs/abp.spin.js",
       "wwwroot/libs/abp-web-resources/Abp/Framework/scripts/libs/abp.sweet-alert.js",
       "wwwroot/libs/abp-web-resources/Abp/Framework/scripts/libs/abp.signalr-client.js",
-      
+
       "wwwroot/libs/jquery-validate/jquery.validate.js",
       "wwwroot/libs/jquery-validate/jquery.validate.unobtrusive.js",
       "wwwroot/libs/push.js/push.js",
@@ -101,6 +101,12 @@
     "outputFileName": "wwwroot/view-resources/Views/Tenants/Index.min.js",
     "inputFiles": [
       "wwwroot/view-resources/Views/Tenants/Index.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/view-resources/Views/Organizations/Index.min.js",
+    "inputFiles": [
+      "wwwroot/view-resources/Views/Organizations/Index.js"
     ]
   },
   {

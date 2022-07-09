@@ -2,6 +2,7 @@
 using Abp.Application.Services.Dto;
 using Abp.Authorization;
 using Abp.Domain.Repositories;
+using Abp.Extensions;
 using Abp.Linq.Extensions;
 using Abp.ObjectMapping;
 using Abp.Runtime.Session;
@@ -27,7 +28,7 @@ namespace TechEngineer.DBEntities.Organizations
     /// <summary>
     /// Class to define organization app service.
     /// </summary>
-    //[AbpAuthorize(PermissionNames.Pages_Organizations)]
+    [AbpAuthorize(PermissionNames.Pages_Organizations)]
     public class OrganizationAppService : AsyncCrudAppService<OrganizationEntity, OrganizationDto, Guid, PagedOrganizationResultRequestDto, CreateOrganizationDto, OrganizationDto>, IOrganizationAppService
     {
         private readonly IRepository<OrganizationEntity, Guid> _organizationRepository;
@@ -85,7 +86,7 @@ namespace TechEngineer.DBEntities.Organizations
         /// </summary>
         /// <param name="input">Input organization parameter.</param>
         /// <returns>Return list of organization.</returns>
-        [AbpAuthorize(PermissionNames.Pages_Organizations_List)]
+        //[AbpAuthorize(PermissionNames.Pages_Organizations_List)]
         public override async Task<PagedResultDto<OrganizationDto>> GetAllAsync(PagedOrganizationResultRequestDto input)
         {
             var currentUser = await _userManager.GetUserByIdAsync(_abpSession.GetUserId());
@@ -120,29 +121,32 @@ namespace TechEngineer.DBEntities.Organizations
         /// <returns>Return list of organization.</returns>
         public async Task<ListResultDto<OrganizationDto>> GetOrganizationsAsync()
         {
-            CheckGetPermission();
-            List<OrganizationEntity> organizationEntities = new List<OrganizationEntity>();
-            var currentUser = await _userManager.GetUserByIdAsync(_abpSession.GetUserId());
-            var roles = await _userManager.GetRolesAsync(currentUser);
-            if (roles.Contains(StaticRoleNames.Tenants.SuperAdmin))
-            {
-                organizationEntities.Add(new OrganizationEntity { Id = Guid.Empty, Name = "All" });
-                var organizationInfo = await _organizationRepository.GetAllListAsync();
-                organizationInfo.ForEach(organization =>
-                {
-                    if (organization.IsActive)
-                    {
-                        organizationEntities.Add(organization);
-                    }
-                });
-            }
-            else
-            {
-                //User able to see their own organizatino only
-                organizationEntities.Add(await _organizationRepository.GetAsync(currentUser.OrganizationId));
-            }
+            //CheckGetPermission();
+            var organizations = await Repository.GetAllListAsync();
+            return new ListResultDto<OrganizationDto>(ObjectMapper.Map<List<OrganizationDto>>(organizations));
 
-            return new ListResultDto<OrganizationDto>(_objectMapper.Map<List<OrganizationDto>>(organizationEntities));
+            //List<OrganizationEntity> organizationEntities = new List<OrganizationEntity>();
+            //var currentUser = await _userManager.GetUserByIdAsync(_abpSession.GetUserId());
+            //var roles = await _userManager.GetRolesAsync(currentUser);
+            //if (roles.Contains(StaticRoleNames.Tenants.SuperAdmin))
+            //{
+            //    organizationEntities.Add(new OrganizationEntity { Id = Guid.Empty, Name = "All" });
+            //    var organizationInfo = await _organizationRepository.GetAllListAsync();
+            //    organizationInfo.ForEach(organization =>
+            //    {
+            //        if (organization.IsActive)
+            //        {
+            //            organizationEntities.Add(organization);
+            //        }
+            //    });
+            //}
+            //else
+            //{
+            //    //User able to see their own organizatino only
+            //    organizationEntities.Add(await _organizationRepository.GetAsync(currentUser.OrganizationId));
+            //}
+
+            //return new ListResultDto<OrganizationDto>(_objectMapper.Map<List<OrganizationDto>>(organizationEntities));
         }
 
         /// <summary>
@@ -150,7 +154,7 @@ namespace TechEngineer.DBEntities.Organizations
         /// </summary>
         /// <param name="input">Organization input data.</param>
         /// <returns>Return organization.</returns>
-        [AbpAuthorize(PermissionNames.Pages_Organizations_Add)]
+        //[AbpAuthorize(PermissionNames.Pages_Organizations_Add)]
         public override async Task<OrganizationDto> CreateAsync(CreateOrganizationDto input)
         {
             CheckCreatePermission();
@@ -159,14 +163,14 @@ namespace TechEngineer.DBEntities.Organizations
             organization.PrimaryEmailAddress = organization.PrimaryEmailAddress.ToLower();
             await _organizationRepository.InsertAsync(organization);
             CurrentUnitOfWork.SaveChanges();
-
+            
             if (organization.Id != default)
             {
                 CreateLocationDto locationDto = _objectMapper.Map<CreateLocationDto>(input.Location);
                 locationDto.OrganizationId = organization.Id;
                 locationDto.IsActive = true;
                 locationDto.IsBaseLocation = true;
-                LocationDto createdLocation = await _locationAppService.CreateAsync(locationDto); ;
+                LocationDto createdLocation = await _locationAppService.CreateAsync(locationDto);
                 if (organization.Id != default)
                 {
                     await _userAppService.CreateAsync(new CreateUserDto()
@@ -228,6 +232,13 @@ namespace TechEngineer.DBEntities.Organizations
 
             //await _locationRepository.DeleteAsync(addresses);
             await _organizationRepository.DeleteAsync(organization);
+        }
+
+        protected override IQueryable<OrganizationEntity> CreateFilteredQuery(PagedOrganizationResultRequestDto input)
+        {
+            return Repository.GetAll()
+                .WhereIf(!input.Keyword.IsNullOrWhiteSpace(), x => x.Name.Contains(input.Keyword) || x.ContactPersonName.Contains(input.Keyword) || x.PrimaryEmailAddress.Contains(input.Keyword))
+                .WhereIf(input.IsActive.HasValue, x => x.IsActive == input.IsActive);
         }
     }
 }

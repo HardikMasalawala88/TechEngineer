@@ -14,5 +14,7 @@ namespace TechEngineer.Users
         Task ChangeLanguage(ChangeUserLanguageDto input);
 
         Task<bool> ChangePassword(ChangePasswordDto input);
+
+        Task<ListResultDto<UserDto>> GetUsers();
     }
 }

@@ -63,6 +63,8 @@ namespace TechEngineer.Users
             var user = ObjectMapper.Map<User>(input);
 
             user.TenantId = AbpSession.TenantId;
+            user.OrganizationId = Guid.NewGuid();
+            user.LocationId = Guid.NewGuid();
             user.IsEmailConfirmed = true;
 
             await _userManager.InitializeOptionsAsync(AbpSession.TenantId);
@@ -255,25 +257,15 @@ namespace TechEngineer.Users
         /// </summary>
         /// <param name="input"></param>
         /// <returns>Return list of users.</returns>
+        //[AbpAuthorize(PermissionNames.Pages_Users_List)]
         public override async Task<PagedResultDto<UserDto>> GetAllAsync(PagedUserResultRequestDto input)
         {
             CheckGetPermission();
             List<User> organizationEntities = new List<User>();
             var currentUser = await _userManager.GetUserByIdAsync(_abpSession.GetUserId());
             var roles = await _userManager.GetRolesAsync(currentUser);
-            //if (roles.Contains(StaticRoleNames.Tenants.SuperAdmin))
-            //{
-            //    return await base.GetAllAsync(input);
-            //}
-            //else
-            //{
-            //    var t = Repository.GetAll().Where(x => x.OrganizationId == input.OrganizationId && x.OrganizationId != default && x.IsActive == true).PageBy(input).ToList();
-            //    return new PagedResultDto<UserDto>
-            //    {
-            //        TotalCount = t.Count(),
-            //        Items = _objectMapper.Map<List<UserDto>>(t)
-            //    };
-            //}
+            input.OrganizationId = currentUser?.OrganizationId;
+
             if (roles.Contains(StaticRoleNames.Tenants.SuperAdmin))
             {
                 if (input.OrganizationId.HasValue && input.OrganizationId != Guid.Empty)
@@ -355,6 +347,13 @@ namespace TechEngineer.Users
 
             return MapToEntityDto(user);
         }
+
+        public async Task<ListResultDto<UserDto>> GetUsers()
+        {
+            var users = await Repository.GetAllListAsync();
+            return new ListResultDto<UserDto>(ObjectMapper.Map<List<UserDto>>(users));
+        }
+
     }
 }
 

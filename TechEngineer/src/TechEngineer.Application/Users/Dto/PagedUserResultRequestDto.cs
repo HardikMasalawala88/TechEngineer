@@ -3,7 +3,9 @@ using System;
 
 namespace TechEngineer.Users.Dto
 {
-    //custom PagedResultRequestDto
+    /// <summary>
+    /// custom PagedResultRequestDto
+    /// </summary>
     public class PagedUserResultRequestDto : PagedResultRequestDto
     {
         public string Keyword { get; set; }

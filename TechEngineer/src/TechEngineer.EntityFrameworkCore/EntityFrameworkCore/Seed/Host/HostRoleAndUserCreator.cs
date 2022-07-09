@@ -9,6 +9,8 @@ using TechEngineer.Authorization.Roles;
 using TechEngineer.Authorization.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
+using System;
+using TechEngineer.Constants;
 
 namespace TechEngineer.EntityFrameworkCore.Seed.Host
 {
@@ -24,16 +26,55 @@ namespace TechEngineer.EntityFrameworkCore.Seed.Host
         public void Create()
         {
             CreateHostRoleAndUsers();
+            CreateDefaultRoles();
+        }
+
+        private void CreateDefaultRoles()
+        {
+            var organizationAdminRoleForHost = _context.Roles.IgnoreQueryFilters().FirstOrDefault(r => r.TenantId == null && r.Name == StaticRoleNames.Host.OrganizationITHead);
+            if (organizationAdminRoleForHost == null)
+            {
+                _context.Roles.Add(new Role(null, StaticRoleNames.Host.OrganizationITHead, StaticRoleNames.Host.OrganizationITHead) { IsStatic = false, IsDefault = false });
+            }
+
+            var storeITHeadRoleForHost = _context.Roles.IgnoreQueryFilters().FirstOrDefault(r => r.TenantId == null && r.Name == StaticRoleNames.Host.StoreITHead);
+            if (storeITHeadRoleForHost == null)
+            {
+                _context.Roles.Add(new Role(null, StaticRoleNames.Host.StoreITHead, StaticRoleNames.Host.StoreITHead) { IsStatic = false, IsDefault = false });
+            }
+
+            var storeUserRoleForHost = _context.Roles.IgnoreQueryFilters().FirstOrDefault(r => r.TenantId == null && r.Name == StaticRoleNames.Host.StoreUser);
+            if (storeUserRoleForHost == null)
+            {
+                _context.Roles.Add(new Role(null, StaticRoleNames.Host.StoreUser, StaticRoleNames.Host.StoreUser) { IsStatic = false, IsDefault = false });
+            }
+
+            var storeAdminRoleForHost = _context.Roles.IgnoreQueryFilters().FirstOrDefault(r => r.TenantId == null && r.Name == StaticRoleNames.Host.StoreAdmin);
+            if (storeAdminRoleForHost == null)
+            {
+                _context.Roles.Add(new Role(null, StaticRoleNames.Host.StoreAdmin, StaticRoleNames.Host.StoreAdmin) { IsStatic = false, IsDefault = false });
+            }
+
+            var engineerRoleForHost = _context.Roles.IgnoreQueryFilters().FirstOrDefault(r => r.TenantId == null && r.Name == StaticRoleNames.Host.Engineer);
+            if (engineerRoleForHost == null)
+            {
+                _context.Roles.Add(new Role(null, StaticRoleNames.Host.Engineer, StaticRoleNames.Host.Engineer) { IsStatic = false, IsDefault = false });
+            }
+
+            if (organizationAdminRoleForHost == null || engineerRoleForHost == null)
+            {
+                _context.SaveChanges();
+            }
         }
 
         private void CreateHostRoleAndUsers()
         {
             // Admin role for host
 
-            var adminRoleForHost = _context.Roles.IgnoreQueryFilters().FirstOrDefault(r => r.TenantId == null && r.Name == StaticRoleNames.Host.Admin);
+            var adminRoleForHost = _context.Roles.IgnoreQueryFilters().FirstOrDefault(r => r.TenantId == null && r.Name == StaticRoleNames.Host.SuperAdmin);
             if (adminRoleForHost == null)
             {
-                adminRoleForHost = _context.Roles.Add(new Role(null, StaticRoleNames.Host.Admin, StaticRoleNames.Host.Admin) { IsStatic = true, IsDefault = true }).Entity;
+                adminRoleForHost = _context.Roles.Add(new Role(null, StaticRoleNames.Host.SuperAdmin, StaticRoleNames.Host.SuperAdmin) { IsStatic = true, IsDefault = true }).Entity;
                 _context.SaveChanges();
             }
 
@@ -67,16 +108,16 @@ namespace TechEngineer.EntityFrameworkCore.Seed.Host
 
             // Admin user for host
 
-            var adminUserForHost = _context.Users.IgnoreQueryFilters().FirstOrDefault(u => u.TenantId == null && u.UserName == AbpUserBase.AdminUserName);
+            var adminUserForHost = _context.Users.IgnoreQueryFilters().FirstOrDefault(u => u.TenantId == null && u.UserName == TechEngineerUserCustomBase.SuperAdminUserName);
             if (adminUserForHost == null)
             {
                 var user = new User
                 {
                     TenantId = null,
-                    UserName = AbpUserBase.AdminUserName,
-                    Name = "admin",
+                    UserName = TechEngineerUserCustomBase.SuperAdminUserName,
+                    Name = "Super",
                     Surname = "admin",
-                    EmailAddress = "admin@aspnetboilerplate.com",
+                    EmailAddress = TechEngineerUserCustomBase.SuperAdminEmailAddress,
                     IsEmailConfirmed = true,
                     IsActive = true
                 };

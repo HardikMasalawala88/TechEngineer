@@ -15,6 +15,15 @@ namespace TechEngineer.Web.Startup
             context.Manager.MainMenu
                 .AddItem(
                     new MenuItemDefinition(
+                        PageNames.Home,
+                        L("HomePage"),
+                        url: "",
+                        icon: "fas fa-home",
+                        requiresAuthentication: true
+                    )
+                )
+                .AddItem(
+                    new MenuItemDefinition(
                         PageNames.About,
                         L("About"),
                         url: "About",
@@ -22,14 +31,6 @@ namespace TechEngineer.Web.Startup
                     )
                 )
                 .AddItem(
-                    new MenuItemDefinition(
-                        PageNames.Home,
-                        L("HomePage"),
-                        url: "",
-                        icon: "fas fa-home",
-                        requiresAuthentication: true
-                    )
-                ).AddItem(
                     new MenuItemDefinition(
                         PageNames.Tenants,
                         L("Tenants"),

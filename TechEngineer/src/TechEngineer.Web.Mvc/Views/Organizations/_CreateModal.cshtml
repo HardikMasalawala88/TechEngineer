@@ -9,85 +9,98 @@
             @await Html.PartialAsync("~/Views/Shared/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel(L("CreateNewOrganization")))
             <form name="organizationCreateForm" role="form" class="form-horizontal">
                 <div class="modal-body">
-                    <div class="form-group row required">
-                        <label class="col-md-3 col-form-label" for="organizationName">@L("Name")</label>
-                        <div class="col-md-9">
-                            <input id="organizationName" type="text" name="Name" class="form-control" required maxlength="32" minlength="2">
-                        </div>
-                    </div>
-                    <div class="form-group row required">
-                        <label class="col-md-3 col-form-label" for="contactpersonName">@L("Contact person name")</label>
-                        <div class="col-md-9">
-                            <input id="contactpersonName" type="text" name="ContactPersonName" class="form-control" required maxlength="32" minlength="2">
-                        </div>
-                    </div>
-                    <div class="form-group row required">
-                        <label class="col-md-3 col-form-label" for="contactnumber">@L("Contact number")</label>
-                        <div class="col-md-9">
-                            <input id="contactnumber" type="text" name="ContactNumber" class="form-control" required maxlength="32" minlength="2">
-                        </div>
-                    </div>
-                    <div class="form-group row required">
-                        <label class="col-md-3 col-form-label" for="gstnumber">@L("Gst number")</label>
-                        <div class="col-md-9">
-                            <input id="gstnumber" type="text" name="GstNumber" class="form-control" required maxlength="32" minlength="2">
-                        </div>
-                    </div>
-                    <div class="form-group row required">
-                        <label class="col-md-3 col-form-label" for="emailaddress">@L("Email Address")</label>
-                        <div class="col-md-9">
-                            <input id="emailaddress" type="text" name="Emailaddress" class="form-control" required maxlength="32" minlength="2">
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-md-3 col-form-label" for="CreateOrgIsActive">@L("IsActive")</label>
-                        <div class="col-md-9">
-                            <input id="CreateOrgIsActive" type="checkbox" name="IsActive" value="true" checked />
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-md-3 col-form-label">@L("Address")</label>
-                        <div class="col-md-9">
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-toggle="tab" role="tab" href="#create-org-details">@L("OrganizationDetails")</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" role="tab" href="#create-org-address">@L("Address")</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content mt-4">
+                        <div role="tabpanel" class="tab-pane container active" id="create-org-details">
                             <div class="form-group row required">
-                                <label class="col-md-3 col-form-label" for="addressline1">@L("Address line 1")</label>
+                                <label class="col-md-3 col-form-label" for="organizationName">@L("Name")</label>
                                 <div class="col-md-9">
-                                    <input id="addressline1" type="text" name="Addressline1" class="form-control" required maxlength="32" minlength="2">
+                                    <input id="organizationName" type="text" name="Name" class="form-control" required maxlength="32" minlength="2">
                                 </div>
                             </div>
                             <div class="form-group row required">
-                                <label class="col-md-3 col-form-label" for="addressline2">@L("Address line 2")</label>
+                                <label class="col-md-3 col-form-label" for="contactpersonName">@L("ContactPersonName")</label>
                                 <div class="col-md-9">
-                                    <input id="addressline2" type="text" name="Addressline2" class="form-control" required maxlength="32" minlength="2">
+                                    <input id="contactpersonName" type="text" name="ContactPersonName" class="form-control" required maxlength="32" minlength="2">
                                 </div>
                             </div>
                             <div class="form-group row required">
-                                <label class="col-md-3 col-form-label" for="landmark">@L("Land mark")</label>
+                                <label class="col-md-3 col-form-label" for="contactnumber">@L("ContactNumber")</label>
                                 <div class="col-md-9">
-                                    <input id="landmark" type="text" name="Landmark" class="form-control" required maxlength="32" minlength="2">
+                                    <input id="contactnumber" type="text" name="ContactNumber" class="form-control" required maxlength="32" minlength="2">
                                 </div>
                             </div>
                             <div class="form-group row required">
-                                <label class="col-md-3 col-form-label" for="postalcode">@L("Postal code")</label>
+                                <label class="col-md-3 col-form-label" for="gstnumber">@L("GstNumber")</label>
                                 <div class="col-md-9">
-                                    <input id="postalcode" type="text" name="Postalcode" class="form-control" required maxlength="32" minlength="2">
+                                    <input id="gstnumber" type="text" name="GstNumber" class="form-control" required maxlength="32" minlength="2">
                                 </div>
                             </div>
                             <div class="form-group row required">
-                                <label class="col-md-3 col-form-label" for="country">@L("Country")</label>
+                                <label class="col-md-3 col-form-label" for="primaryemailaddress">@L("PrimaryEmailAddress")</label>
                                 <div class="col-md-9">
-                                    <input id="country" type="text" name="Country" class="form-control" required maxlength="32" minlength="2">
+                                    <input id="primaryemailaddress" type="text" name="PrimaryEmailAddress" class="form-control" required maxlength="32" minlength="2">
                                 </div>
                             </div>
-                            <div class="form-group row required">
-                                <label class="col-md-3 col-form-label" for="state">@L("State")</label>
+                            <div class="form-group row">
+                                <label class="col-md-3 col-form-label" for="CreateOrgIsActive">@L("IsActive")</label>
                                 <div class="col-md-9">
-                                    <input id="state" type="text" name="State" class="form-control" required maxlength="32" minlength="2">
+                                    <input id="CreateOrgIsActive" type="checkbox" name="IsActive" value="true" checked />
                                 </div>
                             </div>
-                            <div class="form-group row required">
-                                <label class="col-md-3 col-form-label" for="city">@L("City")</label>
+                        </div>
+                        <div role="tabpanel" class="tab-pane container" id="create-org-address">
+                            <div class="form-group row">
                                 <div class="col-md-9">
-                                    <input id="city" type="text" name="City" class="form-control" required maxlength="32" minlength="2">
+                                    <div class="form-group row required">
+                                        <label class="col-md-3 col-form-label" for="addressline1">@L("AddressLine1")</label>
+                                        <div class="col-md-9">
+                                            <input id="addressline1" type="text" name="AddressLine1" class="form-control" required maxlength="32" minlength="2">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row required">
+                                        <label class="col-md-3 col-form-label" for="addressline2">@L("AddressLine2")</label>
+                                        <div class="col-md-9">
+                                            <input id="addressline2" type="text" name="AddressLine2" class="form-control" required maxlength="32" minlength="2">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row required">
+                                        <label class="col-md-3 col-form-label" for="landmark">@L("Landmark")</label>
+                                        <div class="col-md-9">
+                                            <input id="landmark" type="text" name="Landmark" class="form-control" required maxlength="32" minlength="2">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row required">
+                                        <label class="col-md-3 col-form-label" for="postalcode">@L("PostalCode")</label>
+                                        <div class="col-md-9">
+                                            <input id="postalcode" type="text" name="PostalCode" class="form-control" required maxlength="32" minlength="2">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row required">
+                                        <label class="col-md-3 col-form-label" for="country">@L("Country")</label>
+                                        <div class="col-md-9">
+                                            <input id="country" type="text" name="Country" class="form-control" required maxlength="32" minlength="2">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row required">
+                                        <label class="col-md-3 col-form-label" for="state">@L("State")</label>
+                                        <div class="col-md-9">
+                                            <input id="state" type="text" name="State" class="form-control" required maxlength="32" minlength="2">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row required">
+                                            <label class="col-md-3 col-form-label" for="city">@L("City")</label>
+                                            <div class="col-md-9">
+                                                <input id="city" type="text" name="City" class="form-control" required maxlength="32" minlength="2">
+                                            </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

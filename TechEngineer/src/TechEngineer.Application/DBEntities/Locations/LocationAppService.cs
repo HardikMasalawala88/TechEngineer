@@ -24,7 +24,7 @@ namespace TechEngineer.DBEntities.Locations
     /// <summary>
     /// Class to define Location app service.
     /// </summary>
-    //[AbpAuthorize(PermissionNames.Pages_Locations)]
+    [AbpAuthorize(PermissionNames.Pages_Locations)]
     public class LocationAppService : AsyncCrudAppService<LocationEntity, LocationDto, Guid, PagedLocationResultRequestDto, CreateLocationDto, LocationDto>, ILocationAppService
     {
         private readonly IRepository<LocationEntity, Guid> _locationRepository;
@@ -87,7 +87,6 @@ namespace TechEngineer.DBEntities.Locations
         /// <returns>Return list of location.</returns>
         public override async Task<PagedResultDto<LocationDto>> GetAllAsync(PagedLocationResultRequestDto input)
         {
-
             var currentUser = await _userManager.GetUserByIdAsync(_abpSession.GetUserId());
             var roles = await _userManager.GetRolesAsync(currentUser);
             if (roles.Contains(StaticRoleNames.Tenants.SuperAdmin))
@@ -119,7 +118,7 @@ namespace TechEngineer.DBEntities.Locations
         /// </summary>
         /// <param name="input">Location input data.</param>
         /// <returns>Return location.</returns>
-        [AbpAuthorize(PermissionNames.Pages_Locations_Add)]
+        //[AbpAuthorize(PermissionNames.Pages_Locations_Add)]
         public override async Task<LocationDto> CreateAsync(CreateLocationDto input)
         {
             CheckCreatePermission();
@@ -129,6 +128,16 @@ namespace TechEngineer.DBEntities.Locations
             CurrentUnitOfWork.SaveChanges();
 
             return MapToEntityDto(location);
+        }
+
+        /// <summary>
+        /// Mehtod to get locations data.
+        /// </summary>
+        /// <returns>Return location list.</returns>
+        public async Task<ListResultDto<LocationDto>> GetLocationsAsync()
+        {
+            var locations = await Repository.GetAllListAsync();
+            return new ListResultDto<LocationDto>(ObjectMapper.Map<List<LocationDto>>(locations));
         }
     }
 }
