@@ -2,6 +2,7 @@
 using Abp.Application.Services.Dto;
 using Abp.Authorization;
 using Abp.Domain.Repositories;
+using Abp.Domain.Uow;
 using Abp.Extensions;
 using Abp.Linq.Extensions;
 using Abp.ObjectMapping;
@@ -9,7 +10,6 @@ using Abp.Runtime.Session;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using TechEngineer.Authorization;
 using TechEngineer.Authorization.Roles;
@@ -71,7 +71,7 @@ namespace TechEngineer.DBEntities.Organizations
         /// </summary>
         /// <param name="input">Entity input.</param>
         /// <returns></returns>
-        [AbpAuthorize(PermissionNames.Pages_Organizations_Get)]
+        //[AbpAuthorize(PermissionNames.Pages_Organizations_Get)]
         public override async Task<OrganizationDto> GetAsync(EntityDto<Guid> input)
         {
             var organization = await _organizationRepository.FirstOrDefaultAsync(x => x.Id == input.Id && x.IsActive == true);
@@ -119,34 +119,12 @@ namespace TechEngineer.DBEntities.Organizations
         /// Method to get list of organizations.
         /// </summary>
         /// <returns>Return list of organization.</returns>
+        [UnitOfWork]
         public async Task<ListResultDto<OrganizationDto>> GetOrganizationsAsync()
         {
-            //CheckGetPermission();
+            CheckGetPermission();
             var organizations = await Repository.GetAllListAsync();
             return new ListResultDto<OrganizationDto>(ObjectMapper.Map<List<OrganizationDto>>(organizations));
-
-            //List<OrganizationEntity> organizationEntities = new List<OrganizationEntity>();
-            //var currentUser = await _userManager.GetUserByIdAsync(_abpSession.GetUserId());
-            //var roles = await _userManager.GetRolesAsync(currentUser);
-            //if (roles.Contains(StaticRoleNames.Tenants.SuperAdmin))
-            //{
-            //    organizationEntities.Add(new OrganizationEntity { Id = Guid.Empty, Name = "All" });
-            //    var organizationInfo = await _organizationRepository.GetAllListAsync();
-            //    organizationInfo.ForEach(organization =>
-            //    {
-            //        if (organization.IsActive)
-            //        {
-            //            organizationEntities.Add(organization);
-            //        }
-            //    });
-            //}
-            //else
-            //{
-            //    //User able to see their own organizatino only
-            //    organizationEntities.Add(await _organizationRepository.GetAsync(currentUser.OrganizationId));
-            //}
-
-            //return new ListResultDto<OrganizationDto>(_objectMapper.Map<List<OrganizationDto>>(organizationEntities));
         }
 
         /// <summary>
@@ -197,16 +175,12 @@ namespace TechEngineer.DBEntities.Organizations
         /// </summary>
         /// <param name="organization">Pass organization as parameter.</param>
         /// <returns>Return organization.</returns>
-        [AbpAuthorize(PermissionNames.Pages_Organizations_Edit)]
+        //[AbpAuthorize(PermissionNames.Pages_Organizations_Edit)]
         public override async Task<OrganizationDto> UpdateAsync(OrganizationDto organization)
         {
             CheckUpdatePermission();
 
             var organizationData = await _organizationRepository.GetAsync(organization.Id);
-            //var addressesData = await _locationRepository.GetAsync(organization.LocationId);
-
-            //_objectMapper.Map(organization.Location, addressesData);
-            //await _locationRepository.UpdateAsync(addressesData);
 
             _objectMapper.Map(organization, organizationData);
             await _organizationRepository.UpdateAsync(organizationData);
@@ -219,7 +193,7 @@ namespace TechEngineer.DBEntities.Organizations
         /// </summary>
         /// <param name="entity">Pass id as entity.</param>
         /// <returns>Return Task.</returns>
-        [AbpAuthorize(PermissionNames.Pages_Organizations_Delete)]
+        //[AbpAuthorize(PermissionNames.Pages_Organizations_Delete)]
         public override async Task DeleteAsync(EntityDto<Guid> entity)
         {
             CheckDeletePermission();
@@ -227,10 +201,11 @@ namespace TechEngineer.DBEntities.Organizations
             var organization = await _organizationRepository.GetAsync(entity.Id);
             organization.IsActive = false;
 
-            //var addresses = await _locationRepository.GetAsync(organization.LocationId);
-            //addresses.IsActive = false;
+            var orgData = GetAsync(entity).Result;
+            var addresses = await _locationRepository.GetAsync(orgData.Location.Id);
+            addresses.IsActive = false;
 
-            //await _locationRepository.DeleteAsync(addresses);
+            await _locationRepository.DeleteAsync(addresses);
             await _organizationRepository.DeleteAsync(organization);
         }
 
@@ -239,6 +214,17 @@ namespace TechEngineer.DBEntities.Organizations
             return Repository.GetAll()
                 .WhereIf(!input.Keyword.IsNullOrWhiteSpace(), x => x.Name.Contains(input.Keyword) || x.ContactPersonName.Contains(input.Keyword) || x.PrimaryEmailAddress.Contains(input.Keyword))
                 .WhereIf(input.IsActive.HasValue, x => x.IsActive == input.IsActive);
+        }
+
+        /// <summary>
+        /// Method to get organization for edit.
+        /// </summary>
+        /// <param name="input">Organization id.</param>
+        /// <returns>Return organization entity.</returns>
+        public async Task<OrganizationDto> GetOrganizationForEdit(EntityDto<Guid> input)
+        {
+            var organization = await GetAsync(input);
+            return organization;
         }
     }
 }

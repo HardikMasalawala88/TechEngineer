@@ -103,8 +103,9 @@
         if (!_$form.valid()) {
             return;
         }
-
+        debugger;
         var location = _$form.serializeFormToObject();
+        location.OrganizationId = $('.organization-dropdown')[0].value;
 
         abp.ui.setBusy(_$modal);
         _locationService.create(location).done(function () {
@@ -124,7 +125,8 @@
         deleteLocation(locationId, locationName);
     });
 
-    function deleteLocation(locationId, locationName) {
+    function deleteLocation(locationId, locationName)
+    {
         abp.message.confirm(
             abp.utils.formatString(
                 l('AreYouSureWantToDelete'),
@@ -159,25 +161,63 @@
         });
     });
 
-    $(document).on('click', 'a[data-target="#LocationCreateModal"]', (e) => {
-        $('.nav-tabs a[href="#location-details"]').tab('show')
+    $(document).on('click', 'a[id="LocationCreateBtn"]', (e) => {
+        if ($('.organization-dropdown')[0].value != "All Organization")
+        {
+            $("#LocationCreateModal").addClass('show');
+            $("#LocationCreateModal").show();
+            $('.nav-tabs a[href="#location-details"]').tab('show');
+        }
+        else
+        {
+            $("#LocationCreateModal").removeClass('show');
+            abp.message.error(abp.utils.formatString(l('Please select Organization before create from dropdown in header.')));
+        }
     });
+
+    $(document).on('click', '.close', (e) => {
+        $("#LocationCreateModal").hide();
+        _$form.clearForm();
+    });
+
+    _$form.find('.close-button').on('click', (e) => {
+        $("#LocationCreateModal").hide();
+        _$form.clearForm();
+    });
+
+    //$(document).on('click', 'a[data-target="#LocationCreateModal"]', (e) => {
+    //    if ($('.organization-dropdown')[0].value != "All Organization")
+    //    {
+    //        $('.nav-tabs a[href="#location-details"]').tab('show');
+    //    }
+    //    else
+    //    {
+    //        debugger
+    //        _$form.hide();
+    //        $('#LocationCreateModal').hide();
+    //        abp.message.error(abp.utils.formatString(l('Please select Organization before create from dropdown in header.')));
+    //        $('#LocationCreateModal').removeClass('show');
+    //    }
+    //});
 
     abp.event.on('location.edited', (data) => {
         _$locationsTable.ajax.reload();
     });
 
     _$modal.on('shown.bs.modal', () => {
+        debugger
         _$modal.find('input:not([type=hidden]):first').focus();
     }).on('hidden.bs.modal', () => {
         _$form.clearForm();
     });
 
     $('.btn-search').on('click', (e) => {
+        debugger
         _$locationsTable.ajax.reload();
     });
 
     $('.txt-search').on('keypress', (e) => {
+        debugger
         if (e.which == 13) {
             _$locationsTable.ajax.reload();
             return false;

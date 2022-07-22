@@ -2,6 +2,7 @@
 using Abp.Application.Services.Dto;
 using System;
 using System.Threading.Tasks;
+using TechEngineer.DBEntities.Organization;
 using TechEngineer.DBEntities.Organizations.Dto;
 
 namespace TechEngineer.DBEntities.Organizations
@@ -16,5 +17,12 @@ namespace TechEngineer.DBEntities.Organizations
         /// </summary>
         /// <returns>Return list of organization.</returns>
         Task<ListResultDto<OrganizationDto>> GetOrganizationsAsync();
+
+        /// <summary>
+        /// Method to get organization for edit.
+        /// </summary>
+        /// <param name="input">Organization Id.</param>
+        /// <returns>Return organization data.</returns>
+        Task<OrganizationDto> GetOrganizationForEdit(EntityDto<Guid> input);
     }
 }

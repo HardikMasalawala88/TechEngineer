@@ -54,15 +54,16 @@ namespace TechEngineer.DBEntities.Locations
         protected override IQueryable<LocationEntity> CreateFilteredQuery(PagedLocationResultRequestDto input)
         {
             return Repository.GetAllIncluding(x => x.Organization)
-                 .WhereIf(!input.Keyword.IsNullOrWhiteSpace(), x => x.Organization.Name.Contains(input.Keyword) || x.Address1.Contains(input.Keyword) || x.Address2.Contains(input.Keyword))
+                 .WhereIf(!input.Keyword.IsNullOrWhiteSpace(), x => x.Organization.Name.Contains(input.Keyword) || x.Address1.Contains(input.Keyword) ||
+                        x.CityId.Contains(input.Keyword) || x.Landmark.Contains(input.Keyword) || x.StateId.Contains(input.Keyword) || x.CountryId.Contains(input.Keyword))
                  .WhereIf(input.IsActive.HasValue, x => x.IsActive == input.IsActive);
         }
 
         /// <summary>
-        /// Get base location of organization
+        /// Get base location of organization.
         /// </summary>
-        /// <param name="input">Organization Id</param>
-        /// <returns>Return location</returns>
+        /// <param name="input">Organization Id.</param>
+        /// <returns>Return location.</returns>
         public async Task<LocationDto> GetBaseLocationByOrganizationAsync(EntityDto<Guid> input)
         {
             LocationEntity location = await Repository.FirstOrDefaultAsync(x => x.OrganizationId == input.Id && x.IsBaseLocation == true && x.IsActive == true);
@@ -138,6 +139,29 @@ namespace TechEngineer.DBEntities.Locations
         {
             var locations = await Repository.GetAllListAsync();
             return new ListResultDto<LocationDto>(ObjectMapper.Map<List<LocationDto>>(locations));
+        }
+
+        public override async Task<LocationDto> UpdateAsync(LocationDto location)
+        {
+            CheckUpdatePermission();
+
+            var locationData = await _locationRepository.GetAsync(location.Id);
+
+            _objectMapper.Map(location, locationData);
+            await _locationRepository.UpdateAsync(locationData);
+
+            return MapToEntityDto(locationData);
+        }
+
+        /// <summary>
+        /// Method to get location for edit.
+        /// </summary>
+        /// <param name="input">Input as a parameter.</param>
+        /// <returns>Return location data.</returns>
+        public async Task<LocationDto> GetLocationForEdit(EntityDto<Guid> input)
+        {
+            var location = await GetAsync(input);
+            return location;
         }
     }
 }

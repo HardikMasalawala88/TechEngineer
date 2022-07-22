@@ -14,6 +14,7 @@ namespace TechEngineer.Authorization
             context.CreatePermission(PermissionNames.Pages_Tenants, L("Tenants"), multiTenancySides: MultiTenancySides.Host);
             context.CreatePermission(PermissionNames.Pages_Organizations, L("Organizations"));
             context.CreatePermission(PermissionNames.Pages_Locations, L("Locations"));
+            context.CreatePermission(PermissionNames.Pages_Assets, L("Assets"));
         }
 
         private static ILocalizableString L(string name)

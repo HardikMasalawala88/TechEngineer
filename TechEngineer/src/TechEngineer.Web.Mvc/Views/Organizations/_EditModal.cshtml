@@ -2,6 +2,7 @@
 @using TechEngineer.Web.Models.Organizations
 @model EditOrgModalViewModel
 @{
+    var location = Model.Locations;
     Layout = null;
 }
 @await Html.PartialAsync("~/Views/Shared/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel(L("EditOrganization")))
@@ -21,31 +22,31 @@
                 <div class="form-group row required">
                     <label class="col-md-3 col-form-label" for="organizationName">@L("Name")</label>
                     <div class="col-md-9">
-                        <input id="organizationName" type="text" name="Name" class="form-control" required maxlength="32" minlength="2">
+                        <input id="organizationName" type="text" name="Name" class="form-control" value="@Model.Organization.Name" required maxlength="32" minlength="2">
                     </div>
                 </div>
                 <div class="form-group row required">
                     <label class="col-md-3 col-form-label" for="contactpersonName">@L("ContactPersonName")</label>
                     <div class="col-md-9">
-                        <input id="contactpersonName" type="text" name="ContactPersonName" class="form-control" required maxlength="32" minlength="2">
+                        <input id="contactpersonName" type="text" name="ContactPersonName" value="@Model.Organization.ContactPersonName" class="form-control" required maxlength="32" minlength="2">
                     </div>
                 </div>
                 <div class="form-group row required">
                     <label class="col-md-3 col-form-label" for="contactnumber">@L("ContactNumber")</label>
                     <div class="col-md-9">
-                        <input id="contactnumber" type="text" name="ContactNumber" class="form-control" required maxlength="32" minlength="2">
+                        <input id="contactnumber" type="text" name="ContactNumber" value="@Model.Organization.ContactNumber" class="form-control" required maxlength="32" minlength="2">
                     </div>
                 </div>
                 <div class="form-group row required">
                     <label class="col-md-3 col-form-label" for="gstnumber">@L("GstNumber")</label>
                     <div class="col-md-9">
-                        <input id="gstnumber" type="text" name="GstNumber" class="form-control" required maxlength="32" minlength="2">
+                        <input id="gstnumber" type="text" name="GstNumber" value="@Model.Organization.GSTNumber" class="form-control" required maxlength="32" minlength="2">
                     </div>
                 </div>
                 <div class="form-group row required">
                     <label class="col-md-3 col-form-label" for="primaryemailaddress">@L("PrimaryEmailAddress")</label>
                     <div class="col-md-9">
-                        <input id="primaryemailaddress" type="text" name="PrimaryEmailAddress" class="form-control" required maxlength="32" minlength="2">
+                        <input id="primaryemailaddress" type="text" name="PrimaryEmailAddress" value="@Model.Organization.PrimaryEmailAddress" class="form-control" required maxlength="32" minlength="2">
                     </div>
                 </div>
                 <div class="form-group row">
@@ -61,43 +62,43 @@
                         <div class="form-group row required">
                             <label class="col-md-3 col-form-label" for="addressline1">@L("AddressLine1")</label>
                             <div class="col-md-9">
-                                <input id="addressline1" type="text" name="AddressLine1" class="form-control" required maxlength="32" minlength="2">
+                                <input id="addressline1" type="text" name="AddressLine1" value="@location.Address1" class="form-control" required maxlength="32" minlength="2">
                             </div>
                         </div>
                         <div class="form-group row required">
                             <label class="col-md-3 col-form-label" for="addressline2">@L("AddressLine2")</label>
                             <div class="col-md-9">
-                                <input id="addressline2" type="text" name="AddressLine2" class="form-control" required maxlength="32" minlength="2">
+                                <input id="addressline2" type="text" name="AddressLine2" value="@location.Address2" class="form-control" required maxlength="32" minlength="2">
                             </div>
                         </div>
                         <div class="form-group row required">
                             <label class="col-md-3 col-form-label" for="landmark">@L("Landmark")</label>
                             <div class="col-md-9">
-                                <input id="landmark" type="text" name="Landmark" class="form-control" required maxlength="32" minlength="2">
+                                <input id="landmark" type="text" name="Landmark" value="@location.Landmark" class="form-control" required maxlength="32" minlength="2">
                             </div>
                         </div>
                         <div class="form-group row required">
                             <label class="col-md-3 col-form-label" for="postalcode">@L("PostalCode")</label>
                             <div class="col-md-9">
-                                <input id="postalcode" type="text" name="PostalCode" class="form-control" required maxlength="32" minlength="2">
+                                <input id="postalcode" type="text" name="PostalCode" value="@location.PostalCode" class="form-control" required maxlength="32" minlength="2">
                             </div>
                         </div>
                         <div class="form-group row required">
                             <label class="col-md-3 col-form-label" for="country">@L("Country")</label>
                             <div class="col-md-9">
-                                <input id="country" type="text" name="Country" class="form-control" required maxlength="32" minlength="2">
+                                <input id="country" type="text" name="Country" value="@location.CountryId" class="form-control" required maxlength="32" minlength="2">
                             </div>
                         </div>
                         <div class="form-group row required">
                             <label class="col-md-3 col-form-label" for="state">@L("State")</label>
                             <div class="col-md-9">
-                                <input id="state" type="text" name="State" class="form-control" required maxlength="32" minlength="2">
+                                <input id="state" type="text" name="State" value="@location.StateId" class="form-control" required maxlength="32" minlength="2">
                             </div>
                         </div>
                         <div class="form-group row required">
                             <label class="col-md-3 col-form-label" for="city">@L("City")</label>
                             <div class="col-md-9">
-                                <input id="city" type="text" name="City" class="form-control" required maxlength="32" minlength="2">
+                                <input id="city" type="text" name="City" value="@location.CityId" class="form-control" required maxlength="32" minlength="2">
                             </div>
                         </div>
                     </div>

@@ -15,15 +15,6 @@ namespace TechEngineer.Web.Startup
             context.Manager.MainMenu
                 .AddItem(
                     new MenuItemDefinition(
-                        PageNames.Home,
-                        L("HomePage"),
-                        url: "",
-                        icon: "fas fa-home",
-                        requiresAuthentication: true
-                    )
-                )
-                .AddItem(
-                    new MenuItemDefinition(
                         PageNames.About,
                         L("About"),
                         url: "About",
@@ -31,6 +22,14 @@ namespace TechEngineer.Web.Startup
                     )
                 )
                 .AddItem(
+                    new MenuItemDefinition(
+                        PageNames.Home,
+                        L("HomePage"),
+                        url: "",
+                        icon: "fas fa-home",
+                        requiresAuthentication: true
+                    )
+                ).AddItem(
                     new MenuItemDefinition(
                         PageNames.Tenants,
                         L("Tenants"),
@@ -69,6 +68,14 @@ namespace TechEngineer.Web.Startup
                         url: "Locations",
                         icon: "fas fa-map-marker",
                         permissionDependency: new SimplePermissionDependency(PermissionNames.Pages_Locations)
+                    )
+                ).AddItem(
+                    new MenuItemDefinition(
+                        PageNames.Assets,
+                        L("Assets"),
+                        url: "Assets",
+                        icon: "fas fa-building",
+                        permissionDependency: new SimplePermissionDependency(PermissionNames.Pages_Assets)
                     )
                 );
         }

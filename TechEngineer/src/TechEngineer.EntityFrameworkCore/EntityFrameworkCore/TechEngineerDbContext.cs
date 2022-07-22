@@ -5,6 +5,7 @@ using TechEngineer.Authorization.Users;
 using TechEngineer.MultiTenancy;
 using TechEngineer.DBEntities.Organization;
 using TechEngineer.DBEntities.Location;
+using TechEngineer.DBEntities.Assets;
 
 namespace TechEngineer.EntityFrameworkCore
 {
@@ -13,6 +14,7 @@ namespace TechEngineer.EntityFrameworkCore
         /* Define a DbSet for each entity of the application */
         public DbSet<OrganizationEntity> Organizations { get; set; }
         public DbSet<LocationEntity> Locations { get; set; }
+        public DbSet<AssetEntity> Assets { get; set; }
 
 
         public TechEngineerDbContext(DbContextOptions<TechEngineerDbContext> options)

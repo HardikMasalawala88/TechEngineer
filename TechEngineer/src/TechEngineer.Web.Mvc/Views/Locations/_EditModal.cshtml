@@ -1,0 +1,71 @@
+﻿@using TechEngineer.Web.Models.Common.Modals
+@using TechEngineer.Web.Models.Locations
+@model EditLocationViewModel
+
+@await Html.PartialAsync("~/Views/Shared/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel(L("EditLocation")))
+<form name="locationEditForm" role="form" class="form-horizontal">
+    <input type="hidden" name="Id" value="@Model.Locations.Id" />
+    <input type="hidden" name="OrganizationId" value="@Model.Locations.OrganizationId" />
+    <div class="modal-body">
+        <ul class="nav nav-tabs" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" data-toggle="tab" role="tab" href="#edit-location-details">@L("LocationDetails")</a>
+            </li>
+        </ul>
+        <div class="tab-content mt-4">
+            <div role="tabpanel" class="tab-pane container active" id="edit-location-details">
+                <div class="form-group row required">
+                    <label class="col-md-3 col-form-label" for="address1">@L("Address1")</label>
+                    <div class="col-md-9">
+                        <input id="address1" type="text" name="Address1" class="form-control" value="@Model.Locations.Address1" required maxlength="32" minlength="2">
+                    </div>
+                </div>
+                <div class="form-group row required">
+                    <label class="col-md-3 col-form-label" for="address2">@L("Address2")</label>
+                    <div class="col-md-9">
+                        <input id="address" type="text" name="Address2" value="@Model.Locations.Address2" class="form-control" required maxlength="32" minlength="2">
+                    </div>
+                </div>
+                <div class="form-group row required">
+                    <label class="col-md-3 col-form-label" for="landMark">@L("landmark")</label>
+                    <div class="col-md-9">
+                        <input id="landMark" type="text" name="Landmark" value="@Model.Locations.Landmark" class="form-control" required maxlength="32" minlength="2">
+                    </div>
+                </div>
+                <div class="form-group row required">
+                    <label class="col-md-3 col-form-label" for="postalCode">@L("PostalCode")</label>
+                    <div class="col-md-9">
+                        <input id="postalCode" type="text" name="PostalCode" value="@Model.Locations.PostalCode" class="form-control" required maxlength="32" minlength="2">
+                    </div>
+                </div>
+                <div class="form-group row required">
+                    <label class="col-md-3 col-form-label" for="countryId">@L("CountryId")</label>
+                    <div class="col-md-9">
+                        <input id="countryId" type="text" name="CountryId" value="@Model.Locations.CountryId" class="form-control" required maxlength="32" minlength="2">
+                    </div>
+                </div>
+                <div class="form-group row required">
+                    <label class="col-md-3 col-form-label" for="stateId">@L("StateId")</label>
+                    <div class="col-md-9">
+                        <input id="stateId" type="text" name="StateId" value="@Model.Locations.StateId" class="form-control" required maxlength="32" minlength="2">
+                    </div>
+                </div>
+                <div class="form-group row required">
+                    <label class="col-md-3 col-form-label" for="cityId">@L("CityId")</label>
+                    <div class="col-md-9">
+                        <input id="cityId" type="text" name="CityId" value="@Model.Locations.CityId" class="form-control" required maxlength="32" minlength="2">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-md-3 col-form-label" for="EditLocationIsActive">@L("IsActive")</label>
+                    <div class="col-md-9">
+                        <input id="EditLocationIsActive" type="checkbox" name="IsActive" value="true" @(Model.Locations.IsActive ? "checked" : "") />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @await Html.PartialAsync("~/Views/Shared/Modals/_ModalFooterWithSaveAndCancel.cshtml")
+</form>
+
+<script src="~/view-resources/Views/Locations/_EditModal.js" asp-append-version="true"></script>

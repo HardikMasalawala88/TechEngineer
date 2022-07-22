@@ -83,7 +83,6 @@
         }
 
         var organization = _$form.serializeFormToObject();
-        debugger
         organization.location = {
             Address1: organization['AddressLine1'],
             Address2: organization['AddressLine2'],
