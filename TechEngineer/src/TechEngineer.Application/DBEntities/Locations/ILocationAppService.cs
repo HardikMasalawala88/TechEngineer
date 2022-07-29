@@ -33,5 +33,12 @@ namespace TechEngineer.DBEntities.Locations
         /// <param name="input">Input parameter.</param>
         /// <returns>Return location data.</returns>
         Task<LocationDto> GetLocationForEdit(EntityDto<Guid> input);
+
+        /// <summary>
+        /// Get location by id.
+        /// </summary>
+        /// <param name="locationId">Location id.</param>
+        /// <returns>Return location data.</returns>
+        LocationDto GetLocationById(Guid locationId);
     }
 }

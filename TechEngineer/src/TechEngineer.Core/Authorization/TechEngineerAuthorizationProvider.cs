@@ -15,6 +15,7 @@ namespace TechEngineer.Authorization
             context.CreatePermission(PermissionNames.Pages_Organizations, L("Organizations"));
             context.CreatePermission(PermissionNames.Pages_Locations, L("Locations"));
             context.CreatePermission(PermissionNames.Pages_Assets, L("Assets"));
+            context.CreatePermission(PermissionNames.Pages_Appointments, L("Appointments"));
         }
 
         private static ILocalizableString L(string name)

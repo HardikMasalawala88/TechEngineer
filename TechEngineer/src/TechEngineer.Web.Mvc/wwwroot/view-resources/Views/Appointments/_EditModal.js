@@ -1,7 +1,7 @@
 ﻿(function ($) {
-    var _locationService = abp.services.app.location,
+    var _appointmentService = abp.services.app.appointment,
         l = abp.localization.getSource('TechEngineer'),
-        _$modal = $('#LocationEditModal'),
+        _$modal = $('#AppointmentEditModal'),
         _$form = _$modal.find('form');
 
     function save() {
@@ -9,13 +9,16 @@
             return;
         }
 
-        var location = _$form.serializeFormToObject();
+        var appointment = _$form.serializeFormToObject();
+        debugger;
+        appointment.organizationId = $('.selected-organization').attr("id");
+        appointment.locationId = $('.location_dd').children(":selected").attr("id");
 
         abp.ui.setBusy(_$form);
-        _locationService.update(location).done(function () {
+        _appointmentService.update(appointment).done(function () {
             _$modal.modal('hide');
             abp.notify.info(l('SavedSuccessfully'));
-            abp.event.trigger('location.edited', location);
+            abp.event.trigger('appointment.edited', appointment);
         }).always(function () {
             abp.ui.clearBusy(_$form);
         });

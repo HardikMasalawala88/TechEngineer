@@ -1,0 +1,85 @@
+﻿@using TechEngineer.Web.Models.Common.Modals
+@using TechEngineer.Web.Models.Assets
+@model EditAssetViewModel
+
+@await Html.PartialAsync("~/Views/Shared/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel(L("EditAsset")))
+<form name="assetEditForm" role="form" class="form-horizontal">
+    <input type="hidden" name="Id" value="@Model.Asset.Id" />
+    <div class="modal-body">
+        <ul class="nav nav-tabs" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" data-toggle="tab" role="tab" href="#edit-asset-details">@L("AssetDetails")</a>
+            </li>
+        </ul>
+        <div class="tab-content mt-4">
+            <div role="tabpanel" class="tab-pane container active" id="edit-location-details">
+                <div class="form-group row required">
+                        <label class="col-md-3 col-form-label" for="locationId">@L("Location")</label>
+                        <div class="col-md-9">
+                            <select class="form-control location_dd" disabled name="locationId" id="location_data">
+                                <option id="@Model.Asset.LocationId" selected>@(string.Concat(Model.Location.Address1, " ", Model.Location.Address2))</option>
+                            </select>
+                            <input type="hidden" class="selected-organization" name="organizationId" id="@Model.Location.Organization.Id" value="@Model.Location.Organization.Name" />
+                        </div>
+                    </div>
+                    <div class="form-group row required">
+                        <label class="col-md-3 col-form-label" for="assetName">@L("Name")</label>
+                        <div class="col-md-9">
+                            <input id="assetName" type="text" name="Name" class="form-control" value="@Model.Asset.Name" required maxlength="32" minlength="2">
+                        </div>
+                    </div>
+                    <div class="form-group row required">
+                        <label class="col-md-3 col-form-label" for="category">@L("Category")</label>
+                        <div class="col-md-9">
+                            <input id="category" type="text" name="Category" class="form-control" value="@Model.Asset.Category" required maxlength="32" minlength="2">
+                        </div>
+                    </div>
+                    <div class="form-group row required">
+                        <label class="col-md-3 col-form-label" for="serialNumber">@L("SerialNumber")</label>
+                        <div class="col-md-9">
+                            <input id="serialNumber" type="text" name="SerialNumber" class="form-control" value="@Model.Asset.SerialNumber" required maxlength="32" minlength="2">
+                        </div>
+                    </div>
+                    <div class="form-group row required">
+                        <label class="col-md-3 col-form-label" for="details">@L("Details")</label>
+                        <div class="col-md-9">
+                            <input id="details" type="text" name="Details" class="form-control" value="@Model.Asset.Details" required maxlength="32" minlength="2">
+                        </div>
+                    </div>
+                    <div class="form-group row required">
+                        <label class="col-md-3 col-form-label" for="modelNumber">@L("ModelNumber")</label>
+                        <div class="col-md-9">
+                            <input id="modelNumber" type="text" name="ModelNumber" class="form-control" value="@Model.Asset.ModelNumber" required maxlength="32" minlength="2">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-md-3 col-form-label" for="isInWarrenty">@L("IsInWarrenty")</label>
+                        <div class="col-md-9">
+                            <input id="isInWarrenty" type="checkbox" name="IsInWarrenty" value="true" @(Model.Asset.IsInWarrenty ? "checked" : "") />
+                        </div>
+                    </div>
+                    <div class="form-group row required">
+                        <label class="col-md-3 col-form-label" for="startWarrentyDate">@L("StartWarrentyDate")</label>
+                        <div class="col-md-9">
+                            <input id="startWarrentyDate" type="date" name="StartWarrentyDate" value="@(Model.Asset.StartWarrentyDate.ToString("yyyy-MM-dd"))" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="form-group row required">
+                        <label class="col-md-3 col-form-label" for="endWarrentyDate">@L("EndWarrentyDate")</label>
+                        <div class="col-md-9">
+                            <input id="endWarrentyDate" type="date" name="EndWarrentyDate" value="@Model.Asset.EndWarrentyDate.ToString("yyyy-MM-dd")" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-md-3 col-form-label" for="CreateAssetIsActive">@L("IsActive")</label>
+                        <div class="col-md-9">
+                            <input id="CreateAssetIsActive" type="checkbox" name="IsActive" value="true" @(Model.Asset.IsActive ? "checked" : "") />
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </div>
+    @await Html.PartialAsync("~/Views/Shared/Modals/_ModalFooterWithSaveAndCancel.cshtml")
+</form>
+
+<script src="~/view-resources/Views/Assets/_EditModal.js" asp-append-version="true"></script>

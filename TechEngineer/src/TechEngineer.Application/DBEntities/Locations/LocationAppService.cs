@@ -123,7 +123,6 @@ namespace TechEngineer.DBEntities.Locations
         public override async Task<LocationDto> CreateAsync(CreateLocationDto input)
         {
             CheckCreatePermission();
-
             var location = _objectMapper.Map<LocationEntity>(input);
             await _locationRepository.InsertAsync(location);
             CurrentUnitOfWork.SaveChanges();
@@ -139,6 +138,18 @@ namespace TechEngineer.DBEntities.Locations
         {
             var locations = await Repository.GetAllListAsync();
             return new ListResultDto<LocationDto>(ObjectMapper.Map<List<LocationDto>>(locations));
+        }
+
+        /// <summary>
+        /// Get location by id.
+        /// </summary>
+        /// <param name="locationId">Location id.</param>
+        /// <returns>Return location data.</returns>
+        public LocationDto GetLocationById(Guid locationId)
+        {
+            var location = Repository.Get(locationId);
+            location.Organization = _organizationRepository.Get(location.OrganizationId);
+            return ObjectMapper.Map<LocationDto>(location);
         }
 
         public override async Task<LocationDto> UpdateAsync(LocationDto location)

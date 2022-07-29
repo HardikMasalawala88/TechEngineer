@@ -75,6 +75,7 @@
                 autoWidth: false,
                 defaultContent: '',
                 render: (data, type, row, meta) => {
+                    debugger
                     return [
                         `   <button type="button" class="btn btn-sm bg-secondary edit-location" data-location-id="${row.id}" data-toggle="modal" data-target="#LocationEditModal">`,
                         `       <i class="fas fa-pencil-alt"></i> ${l('Edit')}`,
@@ -103,15 +104,16 @@
         if (!_$form.valid()) {
             return;
         }
-        debugger;
         var location = _$form.serializeFormToObject();
-        location.OrganizationId = $('.organization-dropdown')[0].value;
+        location.OrganizationId = $('.organization-dropdown').children(":selected").attr("id");
+        location.IsActive = true;
 
         abp.ui.setBusy(_$modal);
         _locationService.create(location).done(function () {
             _$modal.modal('hide');
             _$form[0].reset();
             abp.notify.info(l('SavedSuccessfully'));
+            $("#LocationCreateModal").hide();
             _$locationsTable.ajax.reload();
         }).always(function () {
             abp.ui.clearBusy(_$modal);
@@ -125,8 +127,7 @@
         deleteLocation(locationId, locationName);
     });
 
-    function deleteLocation(locationId, locationName)
-    {
+    function deleteLocation(locationId, locationName){
         abp.message.confirm(
             abp.utils.formatString(
                 l('AreYouSureWantToDelete'),
@@ -147,7 +148,6 @@
 
     $(document).on('click', '.edit-location', function (e) {
         var locationId = $(this).attr("data-location-id");
-
         e.preventDefault();
         abp.ajax({
             url: abp.appPath + 'Locations/EditModal?locationId=' + locationId,
@@ -162,14 +162,12 @@
     });
 
     $(document).on('click', 'a[id="LocationCreateBtn"]', (e) => {
-        if ($('.organization-dropdown')[0].value != "All Organization")
-        {
+        if ($('.organization-dropdown')[0].value != "All Organization"){
             $("#LocationCreateModal").addClass('show');
             $("#LocationCreateModal").show();
             $('.nav-tabs a[href="#location-details"]').tab('show');
         }
-        else
-        {
+        else {
             $("#LocationCreateModal").removeClass('show');
             abp.message.error(abp.utils.formatString(l('Please select Organization before create from dropdown in header.')));
         }
@@ -185,39 +183,21 @@
         _$form.clearForm();
     });
 
-    //$(document).on('click', 'a[data-target="#LocationCreateModal"]', (e) => {
-    //    if ($('.organization-dropdown')[0].value != "All Organization")
-    //    {
-    //        $('.nav-tabs a[href="#location-details"]').tab('show');
-    //    }
-    //    else
-    //    {
-    //        debugger
-    //        _$form.hide();
-    //        $('#LocationCreateModal').hide();
-    //        abp.message.error(abp.utils.formatString(l('Please select Organization before create from dropdown in header.')));
-    //        $('#LocationCreateModal').removeClass('show');
-    //    }
-    //});
-
     abp.event.on('location.edited', (data) => {
         _$locationsTable.ajax.reload();
     });
 
     _$modal.on('shown.bs.modal', () => {
-        debugger
         _$modal.find('input:not([type=hidden]):first').focus();
     }).on('hidden.bs.modal', () => {
         _$form.clearForm();
     });
 
     $('.btn-search').on('click', (e) => {
-        debugger
         _$locationsTable.ajax.reload();
     });
 
     $('.txt-search').on('keypress', (e) => {
-        debugger
         if (e.which == 13) {
             _$locationsTable.ajax.reload();
             return false;

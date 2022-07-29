@@ -6,6 +6,7 @@ using TechEngineer.MultiTenancy;
 using TechEngineer.DBEntities.Organization;
 using TechEngineer.DBEntities.Location;
 using TechEngineer.DBEntities.Assets;
+using TechEngineer.DBEntities.Appointments;
 
 namespace TechEngineer.EntityFrameworkCore
 {
@@ -15,7 +16,7 @@ namespace TechEngineer.EntityFrameworkCore
         public DbSet<OrganizationEntity> Organizations { get; set; }
         public DbSet<LocationEntity> Locations { get; set; }
         public DbSet<AssetEntity> Assets { get; set; }
-
+        public DbSet<AppointmentEntity> Appointments  { get; set; }
 
         public TechEngineerDbContext(DbContextOptions<TechEngineerDbContext> options)
             : base(options)

@@ -1,0 +1,36 @@
+﻿@using TechEngineer.Web.Models.Common.Modals
+@model TechEngineer.Web.Models.Appointments.EditAppointmentViewModel
+@{
+    List<string> StatusList = new List<string>() { "Initial", "Open", "InProgress", "OnHold", "Closed"};
+}
+
+@await Html.PartialAsync("~/Views/Shared/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel(L("EditAppointment")))
+<form name="appointmentEditForm" role="form" class="form-horizontal">
+    <div class="modal-body">
+        <div class="form-group row required">
+            <label class="col-md-3 col-form-label" for="assetId">@L("Asset")</label>
+            <div class="col-md-9">
+                <select class="form-control asset_dd" name="assetId" disabled id="asset_data">
+                    <option id="@Model.Asset.Id" selected>@Model.Asset.Name</option>
+                </select>
+                <input type="hidden" name="locationId" id="locationId" />
+                <input type="hidden" name="organizationId" id="organizationId" />
+            </div>
+        </div>
+        <div class="form-group row required">
+            <label class="col-md-3 col-form-label" for="status">@L("Status")</label>
+            <div class="col-md-9">
+                <select class="form-control status_dd" name="status" id="status_data">
+                    <option selected>@Model.Appointment.Status</option>
+                    @foreach (var status in StatusList)
+                    {
+                        <option id="@status">@status</option>
+                    }
+                </select>
+            </div>
+        </div>
+    </div>
+    @await Html.PartialAsync("~/Views/Shared/Modals/_ModalFooterWithSaveAndCancel.cshtml")
+</form>
+
+<script src="~/view-resources/Views/Appointments/_EditModal.js" asp-append-version="true"></script>

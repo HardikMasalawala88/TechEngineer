@@ -10,5 +10,6 @@
         public const string Organizations = "Organizations"; 
         public const string Locations = "Locations"; 
         public const string Assets = "Assets"; 
+        public const string Appointments = "Appointments"; 
     }
 }

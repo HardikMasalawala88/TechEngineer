@@ -1,7 +1,7 @@
 ﻿(function ($) {
-    var _locationService = abp.services.app.location,
+    var _assetService = abp.services.app.asset,
         l = abp.localization.getSource('TechEngineer'),
-        _$modal = $('#LocationEditModal'),
+        _$modal = $('#AssetEditModal'),
         _$form = _$modal.find('form');
 
     function save() {
@@ -9,13 +9,16 @@
             return;
         }
 
-        var location = _$form.serializeFormToObject();
+        var asset = _$form.serializeFormToObject();
+        debugger;
+        asset.organizationId = $('.selected-organization').attr("id");
+        asset.locationId = $('.location_dd').children(":selected").attr("id");
 
         abp.ui.setBusy(_$form);
-        _locationService.update(location).done(function () {
+        _assetService.update(asset).done(function () {
             _$modal.modal('hide');
             abp.notify.info(l('SavedSuccessfully'));
-            abp.event.trigger('location.edited', location);
+            abp.event.trigger('asset.edited', asset);
         }).always(function () {
             abp.ui.clearBusy(_$form);
         });
@@ -34,6 +37,8 @@
     });
 
     _$modal.on('shown.bs.modal', function () {
+        debugger;
         _$form.find('input[type=text]:first').focus();
+        var date = document.getElementById("startWarrentyDate");
     });
 })(jQuery);

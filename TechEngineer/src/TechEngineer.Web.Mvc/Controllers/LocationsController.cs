@@ -10,7 +10,7 @@ using TechEngineer.Web.Models.Locations;
 
 namespace TechEngineer.Web.Controllers
 {
-    [AbpMvcAuthorize(PermissionNames.Pages_Organizations)]
+    [AbpMvcAuthorize(PermissionNames.Pages_Locations)]
     public class LocationsController : TechEngineerControllerBase
     {
         private readonly ILocationAppService _locationAppService;
@@ -22,10 +22,10 @@ namespace TechEngineer.Web.Controllers
 
         public IActionResult Index()
         {
-            var locations = _locationAppService.GetLocationsAsync().Result;
+            var locations = _locationAppService.GetLocationsAsync().Result.Items;
             var model = new LocationListViewModel
             {
-                Locations = locations.Items
+                Locations = locations
             };
 
             return View(model);

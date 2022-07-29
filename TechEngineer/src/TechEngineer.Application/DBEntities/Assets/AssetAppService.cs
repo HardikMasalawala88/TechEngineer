@@ -2,6 +2,7 @@
 using Abp.Application.Services.Dto;
 using Abp.Authorization;
 using Abp.Domain.Repositories;
+using Abp.Extensions;
 using Abp.Linq.Extensions;
 using Abp.ObjectMapping;
 using Abp.Runtime.Session;
@@ -123,31 +124,39 @@ namespace TechEngineer.DBEntities.Assets
         /// <returns>Return list of assets.</returns>
         public async Task<ListResultDto<AssetDto>> GetAssetsAsync()
         {
-            CheckGetPermission();
-            List<AssetEntity> assetEntities = new List<AssetEntity>();
-            var currentUser = await _userManager.GetUserByIdAsync(_abpSession.GetUserId());
-            var roles = await _userManager.GetRolesAsync(currentUser);
-            if (roles.Contains(StaticRoleNames.Tenants.SuperAdmin))
-            {
-                //var locationData = await _locationAppService.GetLocationsAsync();
-                assetEntities.Add(new AssetEntity { Id = Guid.Empty, Name = "All" });
-                var assetInfo = await _assetsRepository.GetAllListAsync();
-                assetInfo.ForEach(asset =>
-                {
-                    if (asset.IsActive)
-                    {
-                        //asset.Location = (LocationEntity)locationData.Items;
-                        assetEntities.Add(asset);
-                    }
-                });
-            }
-            else
-            {
-                //User able to see their own organization only
-                assetEntities.Add(await _assetsRepository.GetAsync(currentUser.OrganizationId));
-            }
+            var assets = await Repository.GetAllListAsync();
+            return new ListResultDto<AssetDto>(ObjectMapper.Map<List<AssetDto>>(assets));
+        }
 
-            return new ListResultDto<AssetDto>(_objectMapper.Map<List<AssetDto>>(assetEntities));
+        /// <summary>
+        /// Get asset for edit.
+        /// </summary>
+        /// <param name="input">Input parameter.</param>
+        /// <returns>Return assets data.</returns>
+        public async Task<AssetDto> GetAssetForEdit(EntityDto<Guid> input)
+        {
+            var asset = await GetAsync(input);
+            return asset;
+        }
+
+        protected override IQueryable<AssetEntity> CreateFilteredQuery(PagedAssetResultRequestDto input)
+        {
+            return Repository.GetAllIncluding(x => x.Location)
+                 .WhereIf(!input.Keyword.IsNullOrWhiteSpace(), x => x.Organization.Name.Contains(input.Keyword) || x.Name.Contains(input.Keyword) ||
+                        x.Category.Contains(input.Keyword) || x.SerialNumber.Contains(input.Keyword) || x.ModelNumber.Contains(input.Keyword))
+                 .WhereIf(input.IsActive.HasValue, x => x.IsActive == input.IsActive);
+        }
+
+        /// <summary>
+        /// Method to get list of asset by using location id and organization id.
+        /// </summary>
+        /// <param name="locationId">Location id.</param>
+        /// <param name="organizationId">organization id.</param>
+        /// <returns>Return list of assets.</returns>
+        public List<AssetDto> GetAssetsForSpecificLocAndOrg(Guid locationId, Guid organizationId)
+        {
+            var assets = Repository.GetAll().Where(ass => ass.OrganizationId == organizationId && ass.LocationId == locationId).ToList();
+            return _objectMapper.Map<List<AssetDto>>(assets);
         }
     }
 }

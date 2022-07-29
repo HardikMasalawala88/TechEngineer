@@ -77,6 +77,14 @@ namespace TechEngineer.Web.Startup
                         icon: "fas fa-building",
                         permissionDependency: new SimplePermissionDependency(PermissionNames.Pages_Assets)
                     )
+                ).AddItem(
+                    new MenuItemDefinition(
+                        PageNames.Appointments,
+                        L("Appointments"),
+                        url: "Appointments",
+                        icon: "fas fa-building",
+                        permissionDependency: new SimplePermissionDependency(PermissionNames.Pages_Appointments)
+                    )
                 );
         }
 
