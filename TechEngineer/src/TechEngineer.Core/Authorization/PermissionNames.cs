@@ -10,7 +10,6 @@
         public const string Pages_Users_Delete = "Pages.Users.Delete";
         public const string Pages_Users_List = "Pages.Users.List";
         public const string Pages_Users_Get = "Pages.Users.Get";
-
         public const string Pages_Users_Activation = "Pages.Users.Activation";
 
         public const string Pages_Roles = "Pages.Roles";

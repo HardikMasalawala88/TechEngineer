@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <localizationDictionary culture="en">
 	<texts>
+		<text name="Dashboard" value="Dashboard" />
 		<text name="HomePage" value="Home page" />
 		<text name="About" value="About" />
 		<text name="WelcomeMessage" value="Welcome to TechEngineer!" />
@@ -116,7 +117,7 @@
 		<text name="Clear">Clear</text>
 		<text name="ResetPasswordStepOneInfo">1. Enter your administrator password</text>
 		<text name="ResetPasswordStepTwoInfo">2. Copy this random password so you can send it to the user</text>
-		<text name="UsersActivation">Users activation</text>
+		<text name="UsersActivation">Users ACTIVATION</text>
 		<!--Newly added-->
 		<text name="Organizations">Organizations</text>
 		<text name="Locations">Locations</text>
@@ -155,6 +156,16 @@
 		<text name="Locations_DELETE">Locations DELETE</text>
 		<text name="Locations_LIST">Locations LIST</text>
 		<text name="Locations_GET">Locations GET</text>
+		<text name="Assets_ADD">Assets ADD</text>
+		<text name="Assets_EDIT">Assets EDIT</text>
+		<text name="Assets_DELETE">Assets DELETE</text>
+		<text name="Assets_LIST">Assets LIST</text>
+		<text name="Assets_GET">Assets GET</text>
+		<text name="Appointments_ADD">Appointments ADD</text>
+		<text name="Appointments_EDIT">Appointments EDIT</text>
+		<text name="Appointments_DELETE">Appointments DELETE</text>
+		<text name="Appointments_LIST">Appointments LIST</text>
+		<text name="Appointments_GET">Appointments GET</text>
 		<text name="AddStoreItHead">Add StoreItHead</text>
 		<text name="AddStoreItHeadFromLocation">[Location] Add StoreItHead</text>
 		<text name="PleaseSelectOrganizationBeforeCreate">Please select Organization before create from dropdown in header.</text>

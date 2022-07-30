@@ -13,18 +13,18 @@ namespace TechEngineer.Web.Startup
         public override void SetNavigation(INavigationProviderContext context)
         {
             context.Manager.MainMenu
-                .AddItem(
-                    new MenuItemDefinition(
-                        PageNames.About,
-                        L("About"),
-                        url: "About",
-                        icon: "fas fa-info-circle"
-                    )
-                )
+                //.AddItem(
+                //    new MenuItemDefinition(
+                //        PageNames.About,
+                //        L("About"),
+                //        url: "About",
+                //        icon: "fas fa-info-circle"
+                //    )
+                //)
                 .AddItem(
                     new MenuItemDefinition(
                         PageNames.Home,
-                        L("HomePage"),
+                        L("Dashboard"),
                         url: "",
                         icon: "fas fa-home",
                         requiresAuthentication: true

@@ -31,13 +31,60 @@
             <label class="col-md-3 col-form-label">@L("Permissions")</label>
             <div class="col-md-9">
                 <div class="row">
-                    @foreach (var permission in Model.Permissions)
+                    <div class="col-12"><label>@L("Assets")</label></div>                    
+                    @foreach (var permission in Model.Permissions.Where(x => x.Name.Contains("Assets")))
                     {
                         <div class="col-md-6">
                             <input type="checkbox" name="permission" value="@permission.Name" id="@($"permission{permission.Name}")" @(Model.HasPermission(permission) ? "checked" : "") @(Model.Role.IsStatic ? "disabled" : "") />
                             <label for="@($"permission{permission.Name}")">@permission.DisplayName</label>
                         </div>
                     }
+                    <div class="col-12"><label>@L("Appointments")</label></div>
+                    @foreach (var permission in Model.Permissions.Where(x => x.Name.Contains("Appointments")))
+                    {
+                        <div class="col-md-6">
+                            <input type="checkbox" name="permission" value="@permission.Name" id="@($"permission{permission.Name}")" @(Model.HasPermission(permission) ? "checked" : "") @(Model.Role.IsStatic ? "disabled" : "") />
+                            <label for="@($"permission{permission.Name}")">@permission.DisplayName</label>
+                        </div>
+                    }
+                    <div class="col-12"><label>@L("Locations")</label></div>
+                    @foreach (var permission in Model.Permissions.Where(x => x.Name.Contains("Locations")))
+                    {
+                        <div class="col-md-6">
+                            <input type="checkbox" name="permission" value="@permission.Name" id="@($"permission{permission.Name}")" @(Model.HasPermission(permission) ? "checked" : "") @(Model.Role.IsStatic ? "disabled" : "") />
+                            <label for="@($"permission{permission.Name}")">@permission.DisplayName</label>
+                        </div>
+                    }
+                    <div class="col-12"><label>@L("Organizations")</label></div>
+                    @foreach (var permission in Model.Permissions.Where(x => x.Name.Contains("Organizations")))
+                    {
+                        <div class="col-md-6">
+                            <input type="checkbox" name="permission" value="@permission.Name" id="@($"permission{permission.Name}")" @(Model.HasPermission(permission) ? "checked" : "") @(Model.Role.IsStatic ? "disabled" : "") />
+                            <label for="@($"permission{permission.Name}")">@permission.DisplayName</label>
+                        </div>
+                    }
+                    <div class="col-12"><label>@L("Users")</label></div>
+                    @foreach (var permission in Model.Permissions.Where(x => x.Name.Contains("Users")))
+                    {
+                        <div class="col-md-6">
+                            <input type="checkbox" name="permission" value="@permission.Name" id="@($"permission{permission.Name}")" @(Model.HasPermission(permission) ? "checked" : "") @(Model.Role.IsStatic ? "disabled" : "") />
+                            <label for="@($"permission{permission.Name}")">@permission.DisplayName</label>
+                        </div>
+                    }
+                    <div class="col-12"><label>@L("Other")</label></div>
+                    @foreach (var permission in Model.Permissions.Where(x => 
+                    !x.Name.Contains("Users") 
+                    && !x.Name.Contains("Organizations") 
+                    && !x.Name.Contains("Locations") 
+                    && !x.Name.Contains("Appointments")
+                    && !x.Name.Contains("Assets")))
+                    {
+                        <div class="col-md-6">
+                            <input type="checkbox" name="permission" value="@permission.Name" id="@($"permission{permission.Name}")" @(Model.HasPermission(permission) ? "checked" : "") @(Model.Role.IsStatic ? "disabled" : "") />
+                            <label for="@($"permission{permission.Name}")">@permission.DisplayName</label>
+                        </div>
+                    }
+                    
                 </div>
             </div>
         </div>
