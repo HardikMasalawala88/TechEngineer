@@ -105,7 +105,13 @@ namespace TechEngineer.DBEntities.Locations
             }
             else
             {
-                var t = Repository.GetAllIncluding(x => x.Organization).Where(x => x.OrganizationId == input.OrganizationId && x.IsActive == true).PageBy(input).ToList();
+                List<LocationEntity> t = new List<LocationEntity>();
+                if (input.OrganizationId is not null) {
+                    t = Repository.GetAllIncluding(x => x.Organization).Where(x => x.OrganizationId == input.OrganizationId && x.IsActive == true).PageBy(input).ToList();
+                }
+                else {
+                    t = Repository.GetAllIncluding(x => x.Organization).Where(x => x.OrganizationId == currentUser.OrganizationId && x.IsActive == true).PageBy(input).ToList();
+                }
                 return new PagedResultDto<LocationDto>
                 {
                     TotalCount = t.Count(),

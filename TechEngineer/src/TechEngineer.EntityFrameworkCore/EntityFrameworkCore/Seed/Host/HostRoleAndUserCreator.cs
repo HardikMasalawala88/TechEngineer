@@ -71,10 +71,10 @@ namespace TechEngineer.EntityFrameworkCore.Seed.Host
         {
             // Admin role for host
 
-            var adminRoleForHost = _context.Roles.IgnoreQueryFilters().FirstOrDefault(r => r.TenantId == null && r.Name == StaticRoleNames.Host.SuperAdmin);
-            if (adminRoleForHost == null)
+            var superadminRoleForHost = _context.Roles.IgnoreQueryFilters().FirstOrDefault(r => r.TenantId == null && r.Name == StaticRoleNames.Host.SuperAdmin);
+            if (superadminRoleForHost == null)
             {
-                adminRoleForHost = _context.Roles.Add(new Role(null, StaticRoleNames.Host.SuperAdmin, StaticRoleNames.Host.SuperAdmin) { IsStatic = true, IsDefault = true }).Entity;
+                superadminRoleForHost = _context.Roles.Add(new Role(null, StaticRoleNames.Host.SuperAdmin, StaticRoleNames.Host.SuperAdmin) { IsStatic = true, IsDefault = true }).Entity;
                 _context.SaveChanges();
             }
 
@@ -82,7 +82,7 @@ namespace TechEngineer.EntityFrameworkCore.Seed.Host
 
             var grantedPermissions = _context.Permissions.IgnoreQueryFilters()
                 .OfType<RolePermissionSetting>()
-                .Where(p => p.TenantId == null && p.RoleId == adminRoleForHost.Id)
+                .Where(p => p.TenantId == null && p.RoleId == superadminRoleForHost.Id)
                 .Select(p => p.Name)
                 .ToList();
 
@@ -100,16 +100,15 @@ namespace TechEngineer.EntityFrameworkCore.Seed.Host
                         TenantId = null,
                         Name = permission.Name,
                         IsGranted = true,
-                        RoleId = adminRoleForHost.Id
+                        RoleId = superadminRoleForHost.Id
                     })
                 );
                 _context.SaveChanges();
             }
 
             // Admin user for host
-
-            var adminUserForHost = _context.Users.IgnoreQueryFilters().FirstOrDefault(u => u.TenantId == null && u.UserName == TechEngineerUserCustomBase.SuperAdminUserName);
-            if (adminUserForHost == null)
+            var superadminUserForHost = _context.Users.IgnoreQueryFilters().FirstOrDefault(u => u.TenantId == null && u.UserName == TechEngineerUserCustomBase.SuperAdminUserName);
+            if (superadminUserForHost == null)
             {
                 var user = new User
                 {
@@ -125,14 +124,13 @@ namespace TechEngineer.EntityFrameworkCore.Seed.Host
                 user.Password = new PasswordHasher<User>(new OptionsWrapper<PasswordHasherOptions>(new PasswordHasherOptions())).HashPassword(user, "123qwe");
                 user.SetNormalizedNames();
 
-                adminUserForHost = _context.Users.Add(user).Entity;
+                superadminUserForHost = _context.Users.Add(user).Entity;
                 _context.SaveChanges();
 
                 // Assign Admin role to admin user
-                _context.UserRoles.Add(new UserRole(null, adminUserForHost.Id, adminRoleForHost.Id));
+                _context.UserRoles.Add(new UserRole(null, superadminUserForHost.Id, superadminRoleForHost.Id));
                 _context.SaveChanges();
 
-                _context.SaveChanges();
             }
         }
     }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Abp.Authorization.Users;
 using Abp.Extensions;
+using TechEngineer.Constants;
 
 namespace TechEngineer.Authorization.Users
 {
@@ -22,12 +23,15 @@ namespace TechEngineer.Authorization.Users
             var user = new User
             {
                 TenantId = tenantId,
-                UserName = AdminUserName,
-                Name = AdminUserName,
-                Surname = AdminUserName,
+                //UserName = AdminUserName,
+                //Name = AdminUserName,
+                //Surname = AdminUserName,
+                UserName = TechEngineerUserCustomBase.SuperAdminUserName,
+                Name = TechEngineerUserCustomBase.SuperAdminUserName,
+                Surname = TechEngineerUserCustomBase.SuperAdminUserName,
                 EmailAddress = emailAddress,
-                OrganizationId = Guid.NewGuid(),
-                LocationId = Guid.NewGuid(),
+                OrganizationId = Guid.Empty,
+                LocationId = Guid.Empty,
                 Roles = new List<UserRole>()
             };
 
