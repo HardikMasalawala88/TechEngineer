@@ -32,7 +32,7 @@ namespace TechEngineer.Authorization
             context.CreatePermission(PermissionNames.Pages_Locations_Delete, L("Locations" + PA(3)));
             context.CreatePermission(PermissionNames.Pages_Locations_List, L("Locations" + PA(4)));
             context.CreatePermission(PermissionNames.Pages_Locations_Get, L("Locations" + PA(5)));
-            context.CreatePermission(PermissionNames.Pages_Locations_Add_StoreItHead, L("AddStoreItHeadFromLocation"));
+            context.CreatePermission(PermissionNames.Pages_Locations_Add_BranchITHead, L("AddBranchITHeadFromLocation"));
             context.CreatePermission(PermissionNames.Pages_Locations_Add_StoreUser, L("AddStoreUserFromLocation"));
 
             context.CreatePermission(PermissionNames.Pages_Assets, L("Assets"));
@@ -48,6 +48,8 @@ namespace TechEngineer.Authorization
             context.CreatePermission(PermissionNames.Pages_Appointments_Delete, L("Appointments" + PA(3)));
             context.CreatePermission(PermissionNames.Pages_Appointments_List, L("Appointments" + PA(4)));
             context.CreatePermission(PermissionNames.Pages_Appointments_Get, L("Appointments" + PA(5)));
+
+            context.CreatePermission(PermissionNames.Pages_Master_Organizations_Dropdown, L("OrganizationsDropdown"));
         }
 
         private static ILocalizableString L(string name)

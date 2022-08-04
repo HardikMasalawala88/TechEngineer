@@ -15,13 +15,6 @@ namespace TechEngineer.DBEntities.Appointments
     public interface IAppointmentAppService : IAsyncCrudAppService<AppointmentDto, Guid, PagedAppointmentResultRequestDto, CreateAppointmentDto, AppointmentDto>
     {
         /// <summary>
-        /// Method to update appointment.
-        /// </summary>
-        /// <param name="appointment">Appointment data to update.</param>
-        /// <returns>Return appointment dto.</returns>
-        Task<AppointmentDto> UpdateAppointmentAsync(AppointmentDto appointment);
-
-        /// <summary>
         /// Method to get list of appointment by date.
         /// </summary>
         /// <param name="RequestedDate">Request Date.</param>

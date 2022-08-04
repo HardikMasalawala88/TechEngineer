@@ -25,6 +25,9 @@ namespace TechEngineer.DBEntities.Location
         public string Landmark { get; set; }
 
         [Required]
+        public string BranchITHeadEmail { get; set; }
+
+        [Required]
         public string CityId { get; set; }
 
         [Required]

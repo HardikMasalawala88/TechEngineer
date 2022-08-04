@@ -24,7 +24,7 @@ namespace TechEngineer.DBEntities.Locations
     /// <summary>
     /// Class to define Location app service.
     /// </summary>
-    [AbpAuthorize(PermissionNames.Pages_Locations)]
+    //[AbpAuthorize(PermissionNames.Pages_Locations)]
     public class LocationAppService : AsyncCrudAppService<LocationEntity, LocationDto, Guid, PagedLocationResultRequestDto, CreateLocationDto, LocationDto>, ILocationAppService
     {
         private readonly IRepository<LocationEntity, Guid> _locationRepository;
@@ -51,31 +51,13 @@ namespace TechEngineer.DBEntities.Locations
             _organizationRepository = organizationRepository;
         }
 
-        protected override IQueryable<LocationEntity> CreateFilteredQuery(PagedLocationResultRequestDto input)
-        {
-            return Repository.GetAllIncluding(x => x.Organization)
-                 .WhereIf(!input.Keyword.IsNullOrWhiteSpace(), x => x.Organization.Name.Contains(input.Keyword) || x.Address1.Contains(input.Keyword) ||
-                        x.CityId.Contains(input.Keyword) || x.Landmark.Contains(input.Keyword) || x.StateId.Contains(input.Keyword) || x.CountryId.Contains(input.Keyword))
-                 .WhereIf(input.IsActive.HasValue, x => x.IsActive == input.IsActive);
-        }
-
-        /// <summary>
-        /// Get base location of organization.
-        /// </summary>
-        /// <param name="input">Organization Id.</param>
-        /// <returns>Return location.</returns>
-        public async Task<LocationDto> GetBaseLocationByOrganizationAsync(EntityDto<Guid> input)
-        {
-            LocationEntity location = await Repository.FirstOrDefaultAsync(x => x.OrganizationId == input.Id && x.IsBaseLocation == true && x.IsActive == true);
-            LocationDto locationDto = MapToEntityDto(location);
-            return (locationDto);
-        }
 
         /// <summary>
         /// Get location 
         /// </summary>
         /// <param name="input">Location Id</param>
         /// <returns>Return location</returns>
+        [AbpAuthorize(PermissionNames.Pages_Locations_Get)]
         public override Task<LocationDto> GetAsync(EntityDto<Guid> input)
         {
             return base.GetAsync(input);
@@ -86,6 +68,7 @@ namespace TechEngineer.DBEntities.Locations
         /// </summary>
         /// <param name="input">Input location parameter.</param>
         /// <returns>Return list of location.</returns>
+        [AbpAuthorize(PermissionNames.Pages_Locations_List)]
         public override async Task<PagedResultDto<LocationDto>> GetAllAsync(PagedLocationResultRequestDto input)
         {
             var currentUser = await _userManager.GetUserByIdAsync(_abpSession.GetUserId());
@@ -109,7 +92,8 @@ namespace TechEngineer.DBEntities.Locations
                 if (input.OrganizationId is not null) {
                     t = Repository.GetAllIncluding(x => x.Organization).Where(x => x.OrganizationId == input.OrganizationId && x.IsActive == true).PageBy(input).ToList();
                 }
-                else {
+                else 
+                {
                     t = Repository.GetAllIncluding(x => x.Organization).Where(x => x.OrganizationId == currentUser.OrganizationId && x.IsActive == true).PageBy(input).ToList();
                 }
                 return new PagedResultDto<LocationDto>
@@ -118,6 +102,7 @@ namespace TechEngineer.DBEntities.Locations
                     Items = _objectMapper.Map<List<LocationDto>>(t)
                 };
             }
+            
         }
 
         /// <summary>
@@ -125,7 +110,7 @@ namespace TechEngineer.DBEntities.Locations
         /// </summary>
         /// <param name="input">Location input data.</param>
         /// <returns>Return location.</returns>
-        //[AbpAuthorize(PermissionNames.Pages_Locations_Add)]
+        [AbpAuthorize(PermissionNames.Pages_Locations_Add)]
         public override async Task<LocationDto> CreateAsync(CreateLocationDto input)
         {
             CheckCreatePermission();
@@ -137,27 +122,11 @@ namespace TechEngineer.DBEntities.Locations
         }
 
         /// <summary>
-        /// Mehtod to get locations data.
+        /// Method to update location.
         /// </summary>
-        /// <returns>Return location list.</returns>
-        public async Task<ListResultDto<LocationDto>> GetLocationsAsync()
-        {
-            var locations = await Repository.GetAllListAsync();
-            return new ListResultDto<LocationDto>(ObjectMapper.Map<List<LocationDto>>(locations));
-        }
-
-        /// <summary>
-        /// Get location by id.
-        /// </summary>
-        /// <param name="locationId">Location id.</param>
+        /// <param name="location">Location data.</param>
         /// <returns>Return location data.</returns>
-        public LocationDto GetLocationById(Guid locationId)
-        {
-            var location = Repository.Get(locationId);
-            location.Organization = _organizationRepository.Get(location.OrganizationId);
-            return ObjectMapper.Map<LocationDto>(location);
-        }
-
+        [AbpAuthorize(PermissionNames.Pages_Locations_Edit)]
         public override async Task<LocationDto> UpdateAsync(LocationDto location)
         {
             CheckUpdatePermission();
@@ -171,6 +140,56 @@ namespace TechEngineer.DBEntities.Locations
         }
 
         /// <summary>
+        /// Method to delete organization data.
+        /// </summary>
+        /// <param name="entity">Pass id as entity.</param>
+        /// <returns>Return Task.</returns>
+        [AbpAuthorize(PermissionNames.Pages_Locations_Delete)]
+        public override async Task DeleteAsync(EntityDto<Guid> entity)
+        {
+            CheckDeletePermission();
+            var location = await _locationRepository.GetAsync(entity.Id);
+            location.IsActive = false;
+            await _locationRepository.DeleteAsync(location);
+        }
+
+        /// <summary>
+        /// Mehtod to get locations data.
+        /// </summary>
+        /// <returns>Return location list.</returns>
+        public async Task<ListResultDto<LocationDto>> GetLocationsAsync()
+        {
+            var currentUser = await _userManager.GetUserByIdAsync(_abpSession.GetUserId());
+            var roles = await _userManager.GetRolesAsync(currentUser);
+            if (roles.Contains(StaticRoleNames.Tenants.SuperAdmin))
+            {
+                var locations = await Repository.GetAllListAsync();
+                return new ListResultDto<LocationDto>(ObjectMapper.Map<List<LocationDto>>(locations));
+            }
+            else
+            {
+                var locationsData = Repository.GetAllListAsync().Result.Where(x => x.OrganizationId == currentUser.OrganizationId && x.BranchITHeadEmail == currentUser.EmailAddress && x.IsActive == true).ToList();
+                return new PagedResultDto<LocationDto>
+                {
+                    TotalCount = locationsData.Count(),
+                    Items = _objectMapper.Map<List<LocationDto>>(locationsData)
+                };
+            }
+        }
+
+        /// <summary>
+        /// Get location by id.
+        /// </summary>
+        /// <param name="locationId">Location id.</param>
+        /// <returns>Return location data.</returns>
+        public LocationDto GetLocationById(Guid locationId)
+        {
+            var location = Repository.Get(locationId);
+            location.Organization = _organizationRepository.Get(location.OrganizationId);
+            return ObjectMapper.Map<LocationDto>(location);
+        }
+        
+        /// <summary>
         /// Method to get location for edit.
         /// </summary>
         /// <param name="input">Input as a parameter.</param>
@@ -179,6 +198,27 @@ namespace TechEngineer.DBEntities.Locations
         {
             var location = await GetAsync(input);
             return location;
+        }
+
+        /// <summary>
+        /// Get base location of organization.
+        /// </summary>
+        /// <param name="input">Organization Id.</param>
+        /// <returns>Return location.</returns>
+        public async Task<LocationDto> GetBaseLocationByOrganizationAsync(EntityDto<Guid> input)
+        {
+            LocationEntity location = await Repository.FirstOrDefaultAsync(x => x.OrganizationId == input.Id && x.IsBaseLocation == true && x.IsActive == true);
+            LocationDto locationDto = MapToEntityDto(location);
+            return (locationDto);
+        }
+
+        [AbpAuthorize(PermissionNames.Pages_Locations_List)]
+        protected override IQueryable<LocationEntity> CreateFilteredQuery(PagedLocationResultRequestDto input)
+        {
+            return Repository.GetAllIncluding(x => x.Organization)
+                 .WhereIf(!input.Keyword.IsNullOrWhiteSpace(), x => x.Organization.Name.Contains(input.Keyword) || x.Address1.Contains(input.Keyword) ||
+                        x.CityId.Contains(input.Keyword) || x.Landmark.Contains(input.Keyword) || x.StateId.Contains(input.Keyword) || x.CountryId.Contains(input.Keyword))
+                 .WhereIf(input.IsActive.HasValue, x => x.IsActive == input.IsActive);
         }
     }
 }

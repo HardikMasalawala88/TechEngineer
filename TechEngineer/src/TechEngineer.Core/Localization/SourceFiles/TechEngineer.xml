@@ -166,8 +166,8 @@
 		<text name="Appointments_DELETE">Appointments DELETE</text>
 		<text name="Appointments_LIST">Appointments LIST</text>
 		<text name="Appointments_GET">Appointments GET</text>
-		<text name="AddStoreItHead">Add StoreItHead</text>
-		<text name="AddStoreItHeadFromLocation">[Location] Add StoreItHead</text>
+		<text name="AddBranchITHead">Add BranchITHead</text>
+		<text name="AddBranchITHeadFromLocation">[Location] Add BranchITHead</text>
 		<text name="PleaseSelectOrganizationBeforeCreate">Please select Organization before create from dropdown in header.</text>
 		<text name="SerialNumber">Serial Number</text>
 	</texts>

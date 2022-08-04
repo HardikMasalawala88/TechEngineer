@@ -87,6 +87,7 @@
             Address1: organization['AddressLine1'],
             Address2: organization['AddressLine2'],
             Landmark: organization['Landmark'],
+            BranchITHeadEmail: organization['BranchITHeadEmail'],
             PostalCode: organization['PostalCode'],
             CityId: organization['City'],
             StateId: organization['State'],

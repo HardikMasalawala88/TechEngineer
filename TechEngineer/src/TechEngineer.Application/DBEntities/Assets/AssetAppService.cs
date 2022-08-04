@@ -63,11 +63,10 @@ namespace TechEngineer.DBEntities.Assets
         /// </summary>
         /// <param name="input">asset input data.</param>
         /// <returns>Return asset.</returns>
-        //[AbpAuthorize(PermissionNames.Pages_Assets_Add)]
+        [AbpAuthorize(PermissionNames.Pages_Assets_Add)]
         public override async Task<AssetDto> CreateAsync(CreateAssetDto input)
         {
             CheckCreatePermission();
-
             var asset = _objectMapper.Map<AssetEntity>(input);
             await _assetsRepository.InsertAsync(asset);
             CurrentUnitOfWork.SaveChanges();
@@ -75,8 +74,11 @@ namespace TechEngineer.DBEntities.Assets
             return MapToEntityDto(asset);
         }
 
+        [AbpAuthorize(PermissionNames.Pages_Assets_Edit)]
         public override async Task<AssetDto> UpdateAsync(AssetDto asset)
         {
+            CheckUpdatePermission();
+
             var assetData = await _assetsRepository.GetAsync(asset.Id);
 
             _objectMapper.Map(asset, assetData);
@@ -85,6 +87,7 @@ namespace TechEngineer.DBEntities.Assets
             return MapToEntityDto(assetData);
         }
 
+        [AbpAuthorize(PermissionNames.Pages_Assets_List)]
         public override async Task<PagedResultDto<AssetDto>> GetAllAsync(PagedAssetResultRequestDto input)
         {
             var currentUser = await _userManager.GetUserByIdAsync(_abpSession.GetUserId());
@@ -95,7 +98,7 @@ namespace TechEngineer.DBEntities.Assets
                 {
                     var t = (input.LocationId.HasValue && input.LocationId != Guid.Empty) ?
                     Repository.GetAll().Where(x => x.LocationId == input.LocationId).PageBy(input).ToList() :
-                Repository.GetAll().Where(x => x.OrganizationId == input.OrganizationId).PageBy(input).ToList();
+                    Repository.GetAll().Where(x => x.OrganizationId == input.OrganizationId).PageBy(input).ToList();
 
                     return new PagedResultDto<AssetDto>
                     {
@@ -109,7 +112,7 @@ namespace TechEngineer.DBEntities.Assets
             {
                 var t = (input.LocationId.HasValue && input.LocationId != Guid.Empty) ?
                     Repository.GetAll().Where(x => x.LocationId == input.LocationId && x.IsActive == true).PageBy(input).ToList() :
-                Repository.GetAll().Where(x => x.OrganizationId == input.OrganizationId && x.IsActive == true).PageBy(input).ToList();
+                Repository.GetAll().Where(x => x.OrganizationId == currentUser.OrganizationId && x.LocationId == currentUser.LocationId && x.IsActive == true).PageBy(input).ToList();
                 return new PagedResultDto<AssetDto>
                 {
                     TotalCount = t.Count(),
@@ -124,10 +127,25 @@ namespace TechEngineer.DBEntities.Assets
         /// <returns>Return list of assets.</returns>
         public async Task<ListResultDto<AssetDto>> GetAssetsAsync()
         {
-            var assets = await Repository.GetAllListAsync();
-            return new ListResultDto<AssetDto>(ObjectMapper.Map<List<AssetDto>>(assets));
+            var currentUser = await _userManager.GetUserByIdAsync(_abpSession.GetUserId());
+            var roles = await _userManager.GetRolesAsync(currentUser);
+            if (roles.Contains(StaticRoleNames.Tenants.SuperAdmin))
+            {
+                var assets = await Repository.GetAllListAsync();
+                return new ListResultDto<AssetDto>(ObjectMapper.Map<List<AssetDto>>(assets));
+            }
+            else
+            {
+                var assetsData = Repository.GetAllListAsync().Result.Where(x => x.OrganizationId == currentUser.OrganizationId && x.LocationId == currentUser.LocationId && x.IsActive == true).ToList();
+                return new PagedResultDto<AssetDto>
+                {
+                    TotalCount = assetsData.Count(),
+                    Items = _objectMapper.Map<List<AssetDto>>(assetsData)
+                };
+            }
         }
 
+        
         /// <summary>
         /// Get asset for edit.
         /// </summary>

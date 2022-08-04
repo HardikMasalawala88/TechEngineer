@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TechEngineer.EntityFrameworkCore;
 
@@ -11,9 +12,10 @@ using TechEngineer.EntityFrameworkCore;
 namespace TechEngineer.Migrations
 {
     [DbContext(typeof(TechEngineerDbContext))]
-    partial class TechEngineerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220804072033_Initial03_BranchITHead")]
+    partial class Initial03_BranchITHead
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1608,9 +1610,6 @@ namespace TechEngineer.Migrations
 
                     b.Property<Guid>("OrganizationId")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Remarks")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("RequestDate")
                         .HasColumnType("datetime2");

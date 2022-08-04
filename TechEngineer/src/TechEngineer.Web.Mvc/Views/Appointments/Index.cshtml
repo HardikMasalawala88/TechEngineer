@@ -38,14 +38,17 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="row">
-                                    <label class="col-md-2 col-form-label">Locations</label>
-                                    <select class="location-dropdown col-md-9 form-control" id="loc_dropdown">
-                                        <option id="All" disabled selected></option>
-                                        @foreach (var location in Model.Locations)
-                                        {
-                                            <option id="@location.Id" data-bind="@location.OrganizationId">@(string.Concat(location.Address1," ",location.Address2))</option>
-                                        }
-                                    </select>
+                                    @if (User.IsInRole(TechEngineer.Authorization.Roles.StaticRoleNames.Tenants.SuperAdmin))
+                                    {
+                                        <label class="col-md-2 col-form-label">Locations</label>
+                                        <select class="location-dropdown col-md-9 form-control" id="loc_dropdown">
+                                            <option id="All" disabled selected></option>
+                                            @foreach (var location in Model.Locations)
+                                            {
+                                                <option id="@location.Id" data-bind="@location.OrganizationId">@(string.Concat(location.Address1," ",location.Address2))</option>
+                                            }
+                                        </select>
+                                    }
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -61,6 +64,7 @@
                                         <th></th>
                                         <th>@L("Asset")</th>
                                         <th>@L("RequestDate")</th>
+                                        <th>@L("Remarks")</th>
                                         <th>@L("Location")</th>
                                         <th>@L("Organization")</th>
                                         <th>@L("Status")</th>

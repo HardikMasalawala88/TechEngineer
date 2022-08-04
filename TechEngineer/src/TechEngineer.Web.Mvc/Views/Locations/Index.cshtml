@@ -22,10 +22,14 @@
                 <h1>@L("Locations")</h1>
             </div>
             <div class="col-sm-6">
-                <a href="javascript:;" id="LocationCreateBtn" data-toggle="modal" class="btn bg-blue float-sm-right">
-                    <i class="fa fa-plus-square"></i>
-                    @L("Create")
-                </a>
+                @if (PermissionChecker.IsGranted(TechEngineer.Authorization.PermissionNames.Pages_Locations_Add))
+                {
+                    <a href="javascript:;" id="LocationCreateBtn" data-toggle="modal" class="btn bg-blue float-sm-right">
+                        <i class="fa fa-plus-square"></i>
+                        @L("Create")
+                    </a>
+                }
+                
             </div>
         </div>
     </div>
@@ -52,6 +56,7 @@
                                     <tr>
                                         <th></th>
                                         <th>@L("AddressLine1")</th>
+                                        <th>@L("BranchITHeadEmail")</th>
                                         <th>@L("Landmark")</th>
                                         <th>@L("cityId")</th>
                                         <th>@L("stateId")</th>

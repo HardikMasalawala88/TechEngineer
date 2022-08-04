@@ -23,13 +23,13 @@
 
         public const string Pages_Locations = "Pages.Locations";
         public const string Pages_Locations_Add = "Pages.Locations.Add";
-        public const string Pages_Locations_Add_StoreItHead = "Pages.Locations.Add.StoreItHead";
-        public const string Pages_Locations_Add_StoreUser = "Pages.Locations.Add.StoreUser";
-        public const string Pages_Locations_Add_StoreAdmin = "Pages.Locations.Add.StoreAdmin";
         public const string Pages_Locations_Edit = "Pages.Locations.Edit";
         public const string Pages_Locations_Delete = "Pages.Locations.Delete";
         public const string Pages_Locations_List = "Pages.Locations.List";
         public const string Pages_Locations_Get = "Pages.Locations.Get";
+        public const string Pages_Locations_Add_BranchITHead = "Pages.Locations.Add.BranchITHead";
+        public const string Pages_Locations_Add_StoreUser = "Pages.Locations.Add.StoreUser";
+        public const string Pages_Locations_Add_StoreAdmin = "Pages.Locations.Add.StoreAdmin";
 
         public const string Pages_Assets = "Pages.Assets";
         public const string Pages_Assets_Add = "Pages.Assets.Add";
@@ -44,5 +44,7 @@
         public const string Pages_Appointments_Delete = "Pages.Appointments.Delete";
         public const string Pages_Appointments_List = "Pages.Appointments.List";
         public const string Pages_Appointments_Get = "Pages.Appointments.Get";
+
+        public const string Pages_Master_Organizations_Dropdown = "Pages.Master.Organizations.Dropdown";
     }
 }

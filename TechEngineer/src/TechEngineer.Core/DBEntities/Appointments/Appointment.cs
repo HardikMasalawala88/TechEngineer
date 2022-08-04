@@ -22,6 +22,8 @@ namespace TechEngineer.DBEntities.Appointments
 
         public string Status { get; set; }
 
+        public string Remarks { get; set; }
+
         [Required]
         [ForeignKey("Users")]
         public long UserId { get; set; }

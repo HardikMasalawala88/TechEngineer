@@ -9,11 +9,12 @@
         <div class="modal-content">
             @await Html.PartialAsync("~/Views/Shared/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel(L("CreateNewAppointment")))
             <form name="appointmentCreateForm" role="form" class="form-horizontal">
+                <input type="hidden" name="userId" id="userId" />
                 <div class="modal-body">
                     <div class="form-group row required">
                         <label class="col-md-3 col-form-label" for="assetId">@L("Asset")</label>
                         <div class="col-md-9">
-                            <select class="form-control asset_dd" name="assetId" id="asset_data">
+                            <select class="form-control asset_dd" required name="assetId" id="asset_data">
                                 @foreach (var asset in Model.Assets)
                                 {
                                     <option id="@asset.Id" data-bind="@asset.LocationId">@asset.Name</option>
@@ -32,6 +33,12 @@
                                     <option id="@status">@status</option>
                                 }
                             </select>
+                        </div>
+                    </div>
+                    <div class="form-group row required">
+                        <label class="col-md-3 col-form-label" for="remarks">@L("Remarks")</label>
+                        <div class="col-md-9">
+                            <textarea id="remarks" name="Remarks" class="form-control" required maxlength="50"></textarea>
                         </div>
                     </div>
                 </div>

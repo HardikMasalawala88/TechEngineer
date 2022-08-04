@@ -39,51 +39,65 @@
             },
             {
                 targets: 2,
-                data: 'landmark',
+                data: 'branchITHeadEmail',
                 sortable: false
             },
             {
                 targets: 3,
-                data: 'cityId',
+                data: 'landmark',
                 sortable: false
             },
             {
                 targets: 4,
-                data: 'stateId',
+                data: 'cityId',
                 sortable: false
             },
             {
                 targets: 5,
-                data: 'countryId',
+                data: 'stateId',
                 sortable: false
             },
             {
                 targets: 6,
-                data: 'organization.name',
+                data: 'countryId',
                 sortable: false
             },
             {
                 targets: 7,
+                data: 'organization.name',
+                sortable: false
+            },
+            {
+                targets: 8,
                 data: 'isActive',
                 sortable: false,
                 render: data => `<input type="checkbox" disabled ${data ? 'checked' : ''}>`
             },
             {
-                targets: 8,
+                targets: 9,
                 data: null,
                 sortable: false,
                 autoWidth: false,
                 defaultContent: '',
                 render: (data, type, row, meta) => {
-                    debugger
-                    return [
-                        `   <button type="button" class="btn btn-sm bg-secondary edit-location" data-location-id="${row.id}" data-toggle="modal" data-target="#LocationEditModal">`,
-                        `       <i class="fas fa-pencil-alt"></i> ${l('Edit')}`,
-                        '   </button>',
-                        `   <button type="button" class="btn btn-sm bg-danger delete-location" data-location-id="${row.id}" data-location-name="${row.name}">`,
-                        `       <i class="fas fa-trash"></i> ${l('Delete')}`,
-                        '   </button>'
-                    ].join('');
+                    if (abp.auth.grantedPermissions['Pages.Locations.Delete'] == true) {
+                        return [
+                            `   <button type="button" class="btn btn-sm bg-secondary edit-location" data-location-id="${row.id}" data-toggle="modal" data-target="#LocationEditModal">`,
+                            `       <i class="fas fa-pencil-alt"></i> ${l('Edit')}`,
+                            '   </button>',
+                            `   <button type="button" class="btn btn-sm bg-danger delete-location" data-location-id="${row.id}" data-location-name="${row.name}">`,
+                            `       <i class="fas fa-trash"></i> ${l('Delete')}`,
+                            '   </button>'
+                        ].join('');
+                    }
+                    else {
+                        return [
+                            `   <button type="button" class="btn btn-sm bg-secondary edit-location" data-location-id="${row.id}" data-toggle="modal" data-target="#LocationEditModal">`,
+                            `       <i class="fas fa-pencil-alt"></i> ${l('Edit')}`,
+                            '   </button>',
+                        ].join('');
+                    }
+                    
                 }
             }
         ]

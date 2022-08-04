@@ -116,7 +116,7 @@ namespace TechEngineer.DBEntities.Organizations
         }
 
         /// <summary>
-        /// Method to get list of organizations.
+        /// Method to get list of organizations for header Org selector.
         /// </summary>
         /// <returns>Return list of organization.</returns>
         [UnitOfWork]
@@ -136,12 +136,11 @@ namespace TechEngineer.DBEntities.Organizations
         public override async Task<OrganizationDto> CreateAsync(CreateOrganizationDto input)
         {
             CheckCreatePermission();
-
             var organization = _objectMapper.Map<OrganizationEntity>(input);
             organization.PrimaryEmailAddress = organization.PrimaryEmailAddress.ToLower();
             await _organizationRepository.InsertAsync(organization);
             CurrentUnitOfWork.SaveChanges();
-            
+
             if (organization.Id != default)
             {
                 CreateLocationDto locationDto = _objectMapper.Map<CreateLocationDto>(input.Location);
@@ -149,6 +148,8 @@ namespace TechEngineer.DBEntities.Organizations
                 locationDto.IsActive = true;
                 locationDto.IsBaseLocation = true;
                 LocationDto createdLocation = await _locationAppService.CreateAsync(locationDto);
+                CurrentUnitOfWork.SaveChanges();
+
                 if (organization.Id != default)
                 {
                     await _userAppService.CreateAsync(new CreateUserDto()
@@ -161,8 +162,26 @@ namespace TechEngineer.DBEntities.Organizations
                         RoleNames = new string[] { StaticRoleNames.Host.OrganizationITHead.ToUpper() },
                         Password = "123qwe",
                         OrganizationId = organization.Id,
-                        LocationId = createdLocation.Id,
+                        LocationId = createdLocation.Id
                     });
+                    CurrentUnitOfWork.SaveChanges();
+                }
+
+                if(createdLocation.Id != default)
+                {
+                    await _userAppService.CreateAsync(new CreateUserDto()
+                    {
+                        UserName = createdLocation.BranchITHeadEmail.ToLower(),
+                        Name = createdLocation.Address1,
+                        Surname = string.Concat("[", StaticRoleNames.Host.BranchITHead, "]"),
+                        EmailAddress = createdLocation.BranchITHeadEmail.ToLower(),
+                        IsActive = true,
+                        RoleNames = new string[] { StaticRoleNames.Host.BranchITHead.ToUpper() },
+                        Password = "123qwe",
+                        OrganizationId = organization.Id,
+                        LocationId = createdLocation.Id
+                    });
+                    CurrentUnitOfWork.SaveChanges();
                 }
                 return MapToEntityDto(organization);
             }

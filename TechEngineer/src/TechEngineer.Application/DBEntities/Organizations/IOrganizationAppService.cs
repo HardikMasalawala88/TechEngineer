@@ -24,5 +24,6 @@ namespace TechEngineer.DBEntities.Organizations
         /// <param name="input">Organization Id.</param>
         /// <returns>Return organization data.</returns>
         Task<OrganizationDto> GetOrganizationForEdit(EntityDto<Guid> input);
+
     }
 }

@@ -63,8 +63,6 @@ namespace TechEngineer.Users
             var user = ObjectMapper.Map<User>(input);
 
             user.TenantId = AbpSession.TenantId;
-            user.OrganizationId = Guid.NewGuid();
-            user.LocationId = Guid.NewGuid();
             user.IsEmailConfirmed = true;
 
             await _userManager.InitializeOptionsAsync(AbpSession.TenantId);

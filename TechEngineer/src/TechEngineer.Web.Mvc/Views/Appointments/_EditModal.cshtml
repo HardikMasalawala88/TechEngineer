@@ -6,6 +6,10 @@
 
 @await Html.PartialAsync("~/Views/Shared/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel(L("EditAppointment")))
 <form name="appointmentEditForm" role="form" class="form-horizontal">
+    <input type="hidden" name="Id" value="@Model.Appointment.Id" />
+    <input type="hidden" name="userId" id="userId" />
+    <input type="hidden" name="Remarks" value="@Model.Appointment.Remarks" />
+    <input type="hidden" name="RequestDate" value="@Model.Appointment.RequestDate" />
     <div class="modal-body">
         <div class="form-group row required">
             <label class="col-md-3 col-form-label" for="assetId">@L("Asset")</label>
@@ -21,10 +25,16 @@
             <label class="col-md-3 col-form-label" for="status">@L("Status")</label>
             <div class="col-md-9">
                 <select class="form-control status_dd" name="status" id="status_data">
-                    <option selected>@Model.Appointment.Status</option>
                     @foreach (var status in StatusList)
                     {
-                        <option id="@status">@status</option>
+                        @if (Model.Appointment.Status == status)
+                        {
+                            <option id="@status" selected>@status</option>
+                        }
+                        else
+                        {
+                            <option id="@status" >@status</option>   
+                        }
                     }
                 </select>
             </div>

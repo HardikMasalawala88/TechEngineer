@@ -1,5 +1,6 @@
 ﻿using Abp.Application.Services;
 using Abp.Application.Services.Dto;
+using Abp.Authorization;
 using Abp.Domain.Repositories;
 using Abp.Extensions;
 using Abp.Linq.Extensions;
@@ -10,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TechEngineer.Authorization;
 using TechEngineer.Authorization.Roles;
 using TechEngineer.Authorization.Users;
 using TechEngineer.DBEntities.Appointments.Dto;
@@ -22,10 +24,14 @@ namespace TechEngineer.DBEntities.Appointments
     /// <summary>
     /// Class to define appointment app service.
     /// </summary>
+    [AbpAuthorize(PermissionNames.Pages_Appointments)]
     public class AppointmentAppService : AsyncCrudAppService<AppointmentEntity, AppointmentDto, Guid, PagedAppointmentResultRequestDto, CreateAppointmentDto, AppointmentDto>, IAppointmentAppService
     {
         private readonly IObjectMapper _objectMapper;
         private readonly IRepository<AppointmentEntity, Guid> _appointmentRepository;
+        private readonly IRepository<AssetEntity, Guid> _assetsRepository;
+        private readonly IRepository<LocationEntity, Guid> _locationsRepository;
+        private readonly IRepository<OrganizationEntity, Guid> _orgRepository;
         private readonly UserManager _userManager;
         private readonly IAbpSession _abpSession;
 
@@ -35,14 +41,23 @@ namespace TechEngineer.DBEntities.Appointments
         /// <param name="repository">Repository for appointment entity.</param>
         /// <param name="abpSession">abpSession.</param>
         /// <param name="userManager">User Manager.</param>
+        /// <param name="assetsRepository">Assets repository.</param>
+        /// <param name="locationsRepository">Locations repository.</param>
+        /// <param name="orgRepository">Organizations repository.</param>
         /// <param name="objectMapper">Object mapper.</param>
         public AppointmentAppService(IRepository<AppointmentEntity, Guid> repository,
+            IRepository<AssetEntity, Guid> assetsRepository,
+            IRepository<LocationEntity, Guid> locationsRepository,
+            IRepository<OrganizationEntity, Guid> orgRepository,
             IAbpSession abpSession,
             UserManager userManager,
             IObjectMapper objectMapper) : base(repository)
         {
             _objectMapper = objectMapper;
+            _assetsRepository = assetsRepository;
+            _locationsRepository = locationsRepository;
             _appointmentRepository = repository;
+            _orgRepository = orgRepository;
             _userManager = userManager;
             _abpSession = abpSession;
         }
@@ -52,12 +67,12 @@ namespace TechEngineer.DBEntities.Appointments
         /// </summary>
         /// <param name="input">appointment input data.</param>
         /// <returns>Return appointment.</returns>
+        [AbpAuthorize(PermissionNames.Pages_Appointments_Add)]
         public override async Task<AppointmentDto> CreateAsync(CreateAppointmentDto input)
         {
             CheckCreatePermission();
 
             input.RequestDate = DateTime.UtcNow;
-            input.UserId = _abpSession.GetUserId();
             var appointment = _objectMapper.Map<AppointmentEntity>(input);
             await _appointmentRepository.InsertAsync(appointment);
             CurrentUnitOfWork.SaveChanges();
@@ -65,12 +80,13 @@ namespace TechEngineer.DBEntities.Appointments
             return MapToEntityDto(appointment);
         }
 
+        [AbpAuthorize(PermissionNames.Pages_Appointments_List)]
         protected override IQueryable<AppointmentEntity> CreateFilteredQuery(PagedAppointmentResultRequestDto input)
         {
-            // Appointment data searching through "Status" field only.
+            // Appointment data searching through "Status" and "Remarks" field only.
 
             return Repository.GetAllIncluding(x => x.Organization, x => x.Asset, x => x.Location)
-            .WhereIf(!input.Keyword.IsNullOrWhiteSpace(), x => x.Status.Contains(input.Keyword));
+            .WhereIf(!input.Keyword.IsNullOrWhiteSpace(), x => x.Status.Contains(input.Keyword) && x.Remarks.Contains(input.Keyword));
         }
 
         /// <summary>
@@ -78,10 +94,12 @@ namespace TechEngineer.DBEntities.Appointments
         /// </summary>
         /// <param name="appointment">Appointment data.</param>
         /// <returns>Return appointment dto.</returns>
-        public async Task<AppointmentDto> UpdateAppointmentAsync(AppointmentDto appointment)
+        [AbpAuthorize(PermissionNames.Pages_Appointments_Edit)]
+        public override async Task<AppointmentDto> UpdateAsync(AppointmentDto appointment)
         {
-            var appointmentData = await _appointmentRepository.GetAsync(appointment.Id);
+            CheckUpdatePermission();
 
+            var appointmentData = await _appointmentRepository.GetAsync(appointment.Id);
             _objectMapper.Map(appointment, appointmentData);
             await _appointmentRepository.UpdateAsync(appointmentData);
 
@@ -93,6 +111,7 @@ namespace TechEngineer.DBEntities.Appointments
         /// </summary>
         /// <param name="input">Paged appointment result request dto.</param>
         /// <returns>Return appointments.</returns>
+        [AbpAuthorize(PermissionNames.Pages_Appointments_List)]
         public override async Task<PagedResultDto<AppointmentDto>> GetAllAsync(PagedAppointmentResultRequestDto input)
         {
             var currentUser = await _userManager.GetUserByIdAsync(_abpSession.GetUserId());
@@ -116,8 +135,11 @@ namespace TechEngineer.DBEntities.Appointments
             else
             {
                 var t = (input.AssetId.HasValue && input.AssetId != Guid.Empty) ?
-                    Repository.GetAll().Where(x => x.AssetId == input.AssetId).PageBy(input).ToList() :
-                Repository.GetAll().Where(x => x.UserId == input.UserId && x.OrganizationId == input.OrganizationId && x.LocationId == input.LocationId).PageBy(input).ToList();
+                    Repository.GetAllIncluding(x => x.Organization, x => x.Asset, x => x.Location)
+                        .Where(x => x.AssetId == input.AssetId).PageBy(input).ToList() :
+                    Repository.GetAllIncluding(x => x.Organization, x => x.Asset, x => x.Location)
+                        .Where(x => x.UserId == currentUser.Id && x.OrganizationId == currentUser.OrganizationId && x.LocationId == currentUser.LocationId).PageBy(input).ToList();
+                
                 return new PagedResultDto<AppointmentDto>
                 {
                     TotalCount = t.Count(),

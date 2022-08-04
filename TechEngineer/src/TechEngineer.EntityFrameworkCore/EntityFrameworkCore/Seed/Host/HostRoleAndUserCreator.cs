@@ -37,10 +37,10 @@ namespace TechEngineer.EntityFrameworkCore.Seed.Host
                 _context.Roles.Add(new Role(null, StaticRoleNames.Host.OrganizationITHead, StaticRoleNames.Host.OrganizationITHead) { IsStatic = false, IsDefault = false });
             }
 
-            var storeITHeadRoleForHost = _context.Roles.IgnoreQueryFilters().FirstOrDefault(r => r.TenantId == null && r.Name == StaticRoleNames.Host.StoreITHead);
-            if (storeITHeadRoleForHost == null)
+            var branchITHeadRoleForHost = _context.Roles.IgnoreQueryFilters().FirstOrDefault(r => r.TenantId == null && r.Name == StaticRoleNames.Host.BranchITHead);
+            if (branchITHeadRoleForHost == null)
             {
-                _context.Roles.Add(new Role(null, StaticRoleNames.Host.StoreITHead, StaticRoleNames.Host.StoreITHead) { IsStatic = false, IsDefault = false });
+                _context.Roles.Add(new Role(null, StaticRoleNames.Host.BranchITHead, StaticRoleNames.Host.BranchITHead) { IsStatic = false, IsDefault = false });
             }
 
             var storeUserRoleForHost = _context.Roles.IgnoreQueryFilters().FirstOrDefault(r => r.TenantId == null && r.Name == StaticRoleNames.Host.StoreUser);

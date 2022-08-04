@@ -2,13 +2,11 @@
 using Abp.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using TechEngineer.Authorization;
 using TechEngineer.Controllers;
 using TechEngineer.DBEntities.Appointments;
 using TechEngineer.DBEntities.Assets;
-using TechEngineer.DBEntities.Assets.Dto;
 using TechEngineer.DBEntities.Locations;
 using TechEngineer.DBEntities.Organizations;
 using TechEngineer.Web.Models.Appointments;
@@ -21,15 +19,13 @@ namespace TechEngineer.Web.Controllers
         private readonly IAppointmentAppService _appointmentAppService;
         private readonly IAssetAppService _assetAppService;
         private readonly ILocationAppService _locationAppService;
-        private readonly IOrganizationAppService _orgAppService;
 
         public AppointmentsController(IAppointmentAppService appointmentAppService, IAssetAppService assetAppService,
-                ILocationAppService locationAppService, IOrganizationAppService orgAppService)
+                ILocationAppService locationAppService)
         {
             _appointmentAppService = appointmentAppService;
             _assetAppService = assetAppService;
             _locationAppService = locationAppService;
-            _orgAppService = orgAppService;
         }
 
         public IActionResult Index()

@@ -8,11 +8,10 @@
         if (!_$form.valid()) {
             return;
         }
-
+        debugger;   
         var asset = _$form.serializeFormToObject();
-        debugger;
-        asset.organizationId = $('.selected-organization').attr("id");
         asset.locationId = $('.location_dd').children(":selected").attr("id");
+        asset.organizationId = $('.selected-organization')[0].id;
 
         abp.ui.setBusy(_$form);
         _assetService.update(asset).done(function () {

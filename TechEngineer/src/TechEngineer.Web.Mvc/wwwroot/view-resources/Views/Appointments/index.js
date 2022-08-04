@@ -1,10 +1,17 @@
 ﻿(function ($) {
+    var defaultGuid = "00000000-0000-0000-0000-000000000000";
     var _appointmentService = abp.services.app.appointment,
+        _userLogSession = ""
         l = abp.localization.getSource('TechEngineer'),
         _$modal = $('#AppointmentCreateModal'),
         _$form = _$modal.find('form'),
-        _$table = $('#AppointmentsTable');
-    debugger
+            _$table = $('#AppointmentsTable');
+    if (!_userLogSession) {
+        abp.services.app.session.getCurrentLoginInformations().then(data => {
+            _userLogSession = data.user;
+        });
+    }
+    
     var _$appointmentsTable = _$table.DataTable({
         paging: true,
         serverSide: true,
@@ -40,39 +47,58 @@
             {
                 targets: 2,
                 data: 'requestDate',
-                sortable: false
+                sortable: false,
+                render: function (data, type, row) {
+                    if (type === "sort" || type === "type") {
+                        return data;
+                    }
+                    return moment(data).format("YYYY-MM-DD");
+                }
             },
             {
                 targets: 3,
-                data: 'location.address1',
+                data: 'remarks',
                 sortable: false
             },
             {
                 targets: 4,
-                data: 'organization.name',
+                data: 'location.address1',
                 sortable: false
             },
             {
                 targets: 5,
+                data: 'organization.name',
+                sortable: false
+            },
+            {
+                targets: 6,
                 data: 'status',
                 sortable: false,
             },
             {
-                targets: 6,
+                targets: 7,
                 data: null,
                 sortable: false,
                 autoWidth: false,
                 defaultContent: '',
                 render: (data, type, row, meta) => {
-                    debugger
-                    return [
-                        `   <button type="button" class="btn btn-sm bg-secondary edit-appointment" data-appointment-id="${row.id}" data-toggle="modal" data-target="#AppointmentEditModal">`,
-                        `       <i class="fas fa-pencil-alt"></i> ${l('Edit')}`,
-                        '   </button>',
-                        `   <button type="button" class="btn btn-sm bg-danger delete-appointment" data-appointment-id="${row.id}" data-appointment-name="${row.name}">`,
-                        `       <i class="fas fa-trash"></i> ${l('Delete')}`,
-                        '   </button>'
-                    ].join('');
+                    if (abp.auth.grantedPermissions['Pages.Appointments.Delete'] == true) {
+                        return [
+                            `   <button type="button" class="btn btn-sm bg-secondary edit-appointment" data-appointment-id="${row.id}" data-toggle="modal" data-target="#AppointmentEditModal">`,
+                            `       <i class="fas fa-pencil-alt"></i> ${l('Edit')}`,
+                            '   </button>',
+                            `   <button type="button" class="btn btn-sm bg-danger delete-appointment" data-appointment-id="${row.id}" data-appointment-name="${row.name}">`,
+                            `       <i class="fas fa-trash"></i> ${l('Delete')}`,
+                            '   </button>'
+                        ].join('');
+                    }
+                    else {
+                        return [
+                            `   <button type="button" class="btn btn-sm bg-secondary edit-appointment" data-appointment-id="${row.id}" data-toggle="modal" data-target="#AppointmentEditModal">`,
+                            `       <i class="fas fa-pencil-alt"></i> ${l('Edit')}`,
+                            '   </button>',
+                        ].join('');
+                    }
                 }
             }
         ]
@@ -93,11 +119,22 @@
         if (!_$form.valid()) {
             return;
         }
-        debugger;
         var appointment = _$form.serializeFormToObject();
-        appointment.organizationId = $('.organization-dropdown').children(":selected").attr("id");
-        appointment.locationId = $('.location-dropdown').children(":selected").attr("id");
+        debugger;
+        if (abp.auth.grantedPermissions['Pages.Master.Organizations.Dropdown'] == true)//Super admin or Admin 
+        {
+            appointment.organizationId = $('.organization-dropdown').children(":selected").attr("id");
+            appointment.locationId = $('.location-dropdown').children(":selected").attr("id");
+        }
+        else if (_userLogSession.organizationId) {
+            appointment.organizationId = _userLogSession.organizationId;
+            appointment.locationId = _userLogSession.locationId;
+        }
+        else {
+            abp.message.error(abp.utils.formatString(l('Please select Organization before create from dropdown in header.')));
+        }
         appointment.assetId = $('.asset_dd').children(":selected").attr("id");
+        appointment.userId = _userLogSession.id;
 
         abp.ui.setBusy(_$modal);
         _appointmentService.create(appointment).done(function () {
@@ -152,9 +189,13 @@
     });
 
     $(document).on('click', 'a[id="CreateAppointmentsBtn"]', (e) => {
-        if ($('.organization-dropdown')[0].value != "All Organization")
+        if (abp.auth.grantedPermissions['Pages.Master.Organizations.Dropdown'] == true && $('.organization-dropdown')[0].value != "All Organization")
         {
-            debugger;
+            $("#AppointmentCreateModal").addClass('show');
+            $("#AppointmentCreateModal").show();
+            $('.nav-tabs a[href="#appointment-details"]').tab('show');
+        }
+        else if (_userLogSession.organizationId != defaultGuid) {
             $("#AppointmentCreateModal").addClass('show');
             $("#AppointmentCreateModal").show();
             $('.nav-tabs a[href="#appointment-details"]').tab('show');
@@ -175,10 +216,12 @@
         _$form.clearForm();
     });
 
-    document.getElementById('org_dropdown').addEventListener("change",
-        function () {
-            organization_selection();
-        });
+    if (abp.auth.grantedPermissions['Pages.Master.Organizations.Dropdown'] == true) {
+        document.getElementById('org_dropdown').addEventListener("change",
+            function () {
+                organization_selection();
+            });
+    }
 
     function organization_selection() {
         let org_ = document.getElementById('org_dropdown');

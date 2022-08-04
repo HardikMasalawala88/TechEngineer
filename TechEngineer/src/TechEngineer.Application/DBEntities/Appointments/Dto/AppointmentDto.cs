@@ -28,6 +28,11 @@ namespace TechEngineer.DBEntities.Appointments.Dto
         public string Status { get; set; }
 
         /// <summary>
+        /// Gets or sets appointment remarks.
+        /// </summary>
+        public string Remarks { get; set; }
+
+        /// <summary>
         /// Gets or sets user id.
         /// </summary>
         public long UserId { get; set; }

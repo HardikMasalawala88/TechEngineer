@@ -1,5 +1,6 @@
 ﻿using Abp.Application.Services.Dto;
 using Abp.AutoMapper;
+using System;
 using TechEngineer.Authorization.Users;
 
 namespace TechEngineer.Sessions.Dto
@@ -14,5 +15,9 @@ namespace TechEngineer.Sessions.Dto
         public string UserName { get; set; }
 
         public string EmailAddress { get; set; }
+
+        public Guid OrganizationId { get; set; }
+
+        public Guid LocationId { get; set; }
     }
 }

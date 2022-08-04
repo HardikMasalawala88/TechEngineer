@@ -1,9 +1,17 @@
 ﻿(function ($) {
+    var defaultGuid = "00000000-0000-0000-0000-000000000000";
     var _assetService = abp.services.app.asset,
+        _userLogSession = ""
         l = abp.localization.getSource('TechEngineer'),
         _$modal = $('#AssetCreateModal'),
         _$form = _$modal.find('form'),
         _$table = $('#AssetsTable');
+
+    if (!_userLogSession) {
+        abp.services.app.session.getCurrentLoginInformations().then(data => {
+            _userLogSession = data.user;
+        });
+    }
 
     var _$assetsTable = _$table.DataTable({
         paging: true,
@@ -65,14 +73,24 @@
                 autoWidth: false,
                 defaultContent: '',
                 render: (data, type, row, meta) => {
-                    return [
-                        `   <button type="button" class="btn btn-sm bg-secondary edit-asset" data-asset-id="${row.id}" data-toggle="modal" data-target="#AssetEditModal">`,
-                        `       <i class="fas fa-pencil-alt"></i> ${l('Edit')}`,
-                        '   </button>',
-                        `   <button type="button" class="btn btn-sm bg-danger delete-asset" data-asset-id="${row.id}" data-asset-name="${row.name}">`,
-                        `       <i class="fas fa-trash"></i> ${l('Delete')}`,
-                        '   </button>'
-                    ].join('');
+                    if (abp.auth.grantedPermissions['Pages.Assets.Edit'] == true)
+                    {
+                        return [
+                            `   <button type="button" class="btn btn-sm bg-secondary edit-asset" data-asset-id="${row.id}" data-toggle="modal" data-target="#AssetEditModal">`,
+                            `       <i class="fas fa-pencil-alt"></i> ${l('Edit')}`,
+                            '   </button>',
+                        ].join('');
+                    }
+                    else{
+                        return [
+                            `   <button type="button" class="btn btn-sm bg-secondary edit-asset" data-asset-id="${row.id}" data-toggle="modal" data-target="#AssetEditModal">`,
+                            `       <i class="fas fa-pencil-alt"></i> ${l('Edit')}`,
+                            '   </button>',
+                            `   <button type="button" class="btn btn-sm bg-danger delete-asset" data-asset-id="${row.id}" data-asset-name="${row.name}">`,
+                            `       <i class="fas fa-trash"></i> ${l('Delete')}`,
+                            '   </button>'
+                        ].join('');
+                    }
                 }
             }
         ]
@@ -95,8 +113,18 @@
         }
         debugger;
         var asset = _$form.serializeFormToObject();
-        asset.organizationId = $('.organization-dropdown').children(":selected").attr("id");
-        asset.locationId = $('.location_dd').children(":selected").attr("id");
+        if (abp.auth.grantedPermissions['Pages.Master.Organizations.Dropdown'] == true)//Super admin or Admin 
+        {
+            asset.organizationId = $('.organization-dropdown').children(":selected").attr("id");
+            asset.locationId = $('.location_dd').children(":selected").attr("id");
+        }
+        else if (_userLogSession.organizationId) {
+            asset.organizationId = _userLogSession.organizationId;
+            asset.locationId = _userLogSession.locationId;
+        }
+        else {
+            abp.message.error(abp.utils.formatString(l('Please select Organization before create from dropdown in header.')));
+        }
 
         abp.ui.setBusy(_$modal);
         _assetService.create(asset).done(function () {
@@ -150,15 +178,22 @@
             error: function (e) {
             }
         });
-    });
+    }); 
 
     $(document).on('click', 'a[id="CreateAssetsBtn"]', (e) => {
-        if ($('.organization-dropdown')[0].value != "All Organization")
+        debugger;
+        if (abp.auth.grantedPermissions['Pages.Master.Organizations.Dropdown'] == true && $('.organization-dropdown')[0].value != "All Organization")
         {
             $("#AssetCreateModal").addClass('show');
             $("#AssetCreateModal").show();
             $('.nav-tabs a[href="#asset-details"]').tab('show');
             $("#location_dropdown")[0].value = $("#loc_dropdown")[0].value;
+        }
+        else if (_userLogSession.organizationId != defaultGuid)
+        {          
+            $("#AssetCreateModal").addClass('show');
+            $("#AssetCreateModal").show();
+            $('.nav-tabs a[href="#asset-details"]').tab('show');
         }
         else {
             $("#AssetCreateModal").removeClass('show');
@@ -176,10 +211,11 @@
         _$form.clearForm();
     });
 
-    document.getElementById('org_dropdown').addEventListener("change",
-        function () {
+    if (abp.auth.grantedPermissions['Pages.Master.Organizations.Dropdown'] == true) {
+        document.getElementById('org_dropdown').addEventListener("change", function () {
             organization_selection();
-    });
+        });
+    }
 
     function organization_selection() {
         let org_ = document.getElementById('org_dropdown');
@@ -195,7 +231,8 @@
                 $("#loc_dropdown")[0].value = locations.options[i].value;
             }
             else {
-                //$("#loc_dropdown")[0].remove(locations.options[i]);
+                //$("#loc_dropdown option[value=locations.options[i].value").remove();
+                //locations.options[i].remove();
             }
         }
 
@@ -208,7 +245,6 @@
                 //$("#loc_dropdown")[0].remove(locations.options[i]);
             }
         }
-
     }
 
     abp.event.on('asset.edited', (data) => {

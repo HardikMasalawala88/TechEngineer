@@ -32,6 +32,11 @@ namespace TechEngineer.DBEntities.Locations.Dto
         public string Landmark { get; set; }
 
         /// <summary>
+        /// Gets or sets branch ITHead email address
+        /// </summary>
+        public string BranchITHeadEmail { get; set; }
+
+        /// <summary>
         /// Gets or sets city id.
         /// </summary>
         public string CityId { get; set; }
