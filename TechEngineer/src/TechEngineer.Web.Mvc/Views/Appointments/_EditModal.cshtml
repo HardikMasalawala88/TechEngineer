@@ -14,11 +14,11 @@
         <div class="form-group row required">
             <label class="col-md-3 col-form-label" for="assetId">@L("Asset")</label>
             <div class="col-md-9">
-                <select class="form-control asset_dd" name="assetId" disabled id="asset_data">
+                <select class="form-control asset_edit_dd" name="assetId" disabled id="asset_data">
                     <option id="@Model.Asset.Id" selected>@Model.Asset.Name</option>
                 </select>
-                <input type="hidden" name="locationId" id="locationId" />
-                <input type="hidden" name="organizationId" id="organizationId" />
+                <input type="hidden" name="locationId" id="locationId" value="@Model.Location.Id" />
+                <input type="hidden" name="organizationId" id="organizationId" value="@Model.Location.OrganizationId" />
             </div>
         </div>
         <div class="form-group row required">
@@ -37,6 +37,12 @@
                         }
                     }
                 </select>
+            </div>
+        </div>
+        <div class="form-group row required">
+            <label class="col-md-3 col-form-label" for="remarks">@L("Remarks")</label>
+            <div class="col-md-9">
+                <textarea id="remarks" name="Remarks" class="form-control" required maxlength="50">@Model.Appointment.Remarks</textarea>
             </div>
         </div>
     </div>

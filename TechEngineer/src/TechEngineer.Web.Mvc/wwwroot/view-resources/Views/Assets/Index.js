@@ -2,7 +2,7 @@
     var defaultGuid = "00000000-0000-0000-0000-000000000000";
     var _assetService = abp.services.app.asset,
         _userLogSession = ""
-        l = abp.localization.getSource('TechEngineer'),
+    l = abp.localization.getSource('TechEngineer'),
         _$modal = $('#AssetCreateModal'),
         _$form = _$modal.find('form'),
         _$table = $('#AssetsTable');
@@ -47,41 +47,43 @@
             },
             {
                 targets: 2,
-                data: 'category',
+                data: 'department',
                 sortable: false
             },
             {
                 targets: 3,
-                data: 'serialNumber',
+                data: 'category',
                 sortable: false
             },
             {
                 targets: 4,
-                data: 'modelNumber',
+                data: 'system_Username',
                 sortable: false
             },
             {
                 targets: 5,
+                data: 'monitor',
+                sortable: false
+            },
+            {
+                targets: 6,
+                data: 'monitor_SerialNo',
+                sortable: false
+            },
+            {
+                targets: 7,
                 data: 'isActive',
                 sortable: false,
                 render: data => `<input type="checkbox" disabled ${data ? 'checked' : ''}>`
             },
             {
-                targets: 6,
+                targets: 8,
                 data: null,
                 sortable: false,
                 autoWidth: false,
                 defaultContent: '',
                 render: (data, type, row, meta) => {
-                    if (abp.auth.grantedPermissions['Pages.Assets.Edit'] == true)
-                    {
-                        return [
-                            `   <button type="button" class="btn btn-sm bg-secondary edit-asset" data-asset-id="${row.id}" data-toggle="modal" data-target="#AssetEditModal">`,
-                            `       <i class="fas fa-pencil-alt"></i> ${l('Edit')}`,
-                            '   </button>',
-                        ].join('');
-                    }
-                    else{
+                    if (abp.auth.grantedPermissions['Pages.Assets.Delete'] == true) {
                         return [
                             `   <button type="button" class="btn btn-sm bg-secondary edit-asset" data-asset-id="${row.id}" data-toggle="modal" data-target="#AssetEditModal">`,
                             `       <i class="fas fa-pencil-alt"></i> ${l('Edit')}`,
@@ -89,6 +91,13 @@
                             `   <button type="button" class="btn btn-sm bg-danger delete-asset" data-asset-id="${row.id}" data-asset-name="${row.name}">`,
                             `       <i class="fas fa-trash"></i> ${l('Delete')}`,
                             '   </button>'
+                        ].join('');
+                    }
+                    else {
+                        return [
+                            `   <button type="button" class="btn btn-sm bg-secondary edit-asset" data-asset-id="${row.id}" data-toggle="modal" data-target="#AssetEditModal">`,
+                            `       <i class="fas fa-pencil-alt"></i> ${l('Edit')}`,
+                            '   </button>',
                         ].join('');
                     }
                 }
@@ -111,12 +120,11 @@
         if (!_$form.valid()) {
             return;
         }
-        debugger;
         var asset = _$form.serializeFormToObject();
-        if (abp.auth.grantedPermissions['Pages.Master.Organizations.Dropdown'] == true)//Super admin or Admin 
+        if (abp.auth.grantedPermissions['Pages.Master.Organizations.Dropdown'] == true) //Super admin or Admin 
         {
             asset.organizationId = $('.organization-dropdown').children(":selected").attr("id");
-            asset.locationId = $('.location_dd').children(":selected").attr("id");
+            asset.locationId = $('.location_dd').children(":selected").attr("value");
         }
         else if (_userLogSession.organizationId) {
             asset.organizationId = _userLogSession.organizationId;
@@ -178,19 +186,15 @@
             error: function (e) {
             }
         });
-    }); 
+    });
 
     $(document).on('click', 'a[id="CreateAssetsBtn"]', (e) => {
-        debugger;
-        if (abp.auth.grantedPermissions['Pages.Master.Organizations.Dropdown'] == true && $('.organization-dropdown')[0].value != "All Organization")
-        {
+        if (abp.auth.grantedPermissions['Pages.Master.Organizations.Dropdown'] == true && $('.organization-dropdown')[0].value != "All Organization") {
             $("#AssetCreateModal").addClass('show');
             $("#AssetCreateModal").show();
             $('.nav-tabs a[href="#asset-details"]').tab('show');
-            $("#location_dropdown")[0].value = $("#loc_dropdown")[0].value;
         }
-        else if (_userLogSession.organizationId != defaultGuid)
-        {          
+        else if (_userLogSession.organizationId != defaultGuid) {
             $("#AssetCreateModal").addClass('show');
             $("#AssetCreateModal").show();
             $('.nav-tabs a[href="#asset-details"]').tab('show');
@@ -212,39 +216,51 @@
     });
 
     if (abp.auth.grantedPermissions['Pages.Master.Organizations.Dropdown'] == true) {
-        document.getElementById('org_dropdown').addEventListener("change", function () {
-            organization_selection();
+        document.getElementById('org_dropdown').addEventListener("change", function (e) {
+            let org_ = document.getElementById('org_dropdown');
+            let organization_id = org_.options[org_.selectedIndex].id;
+
+            e.preventDefault();
+            abp.ajax({
+                url: abp.appPath + 'Assets/FillLocation?orgId=' + organization_id,
+                type: 'GET',
+                dataType: 'JSON',
+                success: function (locations) {
+                    // clear before appending new list 
+                    $("#loc_dropdown").html("");
+                    $("#location_data").html("");
+
+                    $.each(locations.Result, function (i, loc) {
+                        $element1 = $('<option></option>').val(loc.Id).html(loc.Address1 + ' ' + loc.Address2);
+                        $element2 = $('<option></option>').val(loc.Id).html(loc.Address1 + ' ' + loc.Address2);
+
+                        if (i === 0) {
+                            $element1 = $element1.attr("selected", "selected");
+                            $element2 = $element2.attr("selected", "selected");
+                        }
+                        $("#loc_dropdown").append($element1);
+                        $("#location_data").append($element2);
+                    });
+                },
+                error: function (e) {
+                    console.log(e.message);
+                }
+            });
         });
-    }
 
-    function organization_selection() {
-        let org_ = document.getElementById('org_dropdown');
-        let organization_id = org_.options[org_.selectedIndex].id;
-        location_(organization_id);
-    }
+        document.getElementById('loc_dropdown').addEventListener("change", function () {
+            if (!$("#loc_dropdown option")[0].selected) {
+                $("#loc_dropdown option")[0].removeAttribute("selected", "selected");
+                $("#loc_dropdown option:selected")[0].setAttribute("selected", "selected");
+            }
+        });
 
-    function location_(organization_id) {
-        let locations = document.getElementById('loc_dropdown');
-        for (var i = 0; i < locations.options.length; i++)
-        {
-            if (locations.options[i].dataset.bind == organization_id) {
-                $("#loc_dropdown")[0].value = locations.options[i].value;
+        document.getElementById('location_data').addEventListener("change", function () {
+            if (!$("#location_data option")[0].selected) {
+                $("#location_data option")[0].removeAttribute("selected", "selected");
+                $("#location_data option:selected")[0].setAttribute("selected", "selected");
             }
-            else {
-                //$("#loc_dropdown option[value=locations.options[i].value").remove();
-                //locations.options[i].remove();
-            }
-        }
-
-        let location_dd = document.getElementById('location_data');
-        for (var i = 0; i < location_dd.options.length; i++) {
-            if (location_dd.options[i].dataset.bind == organization_id) {
-                $("#location_data")[0].value = $("#loc_dropdown")[0].value;
-            }
-            else {
-                //$("#loc_dropdown")[0].remove(locations.options[i]);
-            }
-        }
+        });
     }
 
     abp.event.on('asset.edited', (data) => {
@@ -257,14 +273,17 @@
         _$form.clearForm();
     });
 
-    $('.btn-search').on('click', (e) => {
-        _$assetsTable.ajax.reload();
-    });
-
-    $('.txt-search').on('keypress', (e) => {
-        if (e.which == 13) {
+    if (abp.auth.grantedPermissions['Pages.Master.Organizations.Dropdown'] == true ||
+        abp.auth.grantedPermissions['Pages.Search.Records'] == true) {
+        $('.btn-search').on('click', (e) => {
             _$assetsTable.ajax.reload();
-            return false;
-        }
-    });
+        });
+
+        $('.txt-search').on('keypress', (e) => {
+            if (e.which == 13) {
+                _$assetsTable.ajax.reload();
+                return false;
+            }
+        });
+    }
 })(jQuery);

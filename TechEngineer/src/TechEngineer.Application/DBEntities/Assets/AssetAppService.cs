@@ -108,6 +108,17 @@ namespace TechEngineer.DBEntities.Assets
                 }
                 return await base.GetAllAsync(input);
             }
+            else if (roles.Contains(StaticRoleNames.Tenants.OrganizationITHead))
+            {
+                var t = (input.LocationId.HasValue && input.LocationId != Guid.Empty) ?
+                    Repository.GetAll().Where(x => x.LocationId == input.LocationId && x.IsActive == true).PageBy(input).ToList() :
+                Repository.GetAll().Where(x => x.OrganizationId == currentUser.OrganizationId || x.LocationId == currentUser.LocationId && x.IsActive == true).PageBy(input).ToList();
+                return new PagedResultDto<AssetDto>
+                {
+                    TotalCount = t.Count(),
+                    Items = _objectMapper.Map<List<AssetDto>>(t)
+                };
+            }
             else
             {
                 var t = (input.LocationId.HasValue && input.LocationId != Guid.Empty) ?
@@ -134,6 +145,15 @@ namespace TechEngineer.DBEntities.Assets
                 var assets = await Repository.GetAllListAsync();
                 return new ListResultDto<AssetDto>(ObjectMapper.Map<List<AssetDto>>(assets));
             }
+            else if (roles.Contains(StaticRoleNames.Tenants.OrganizationITHead))
+            {
+                var assetsData = Repository.GetAllListAsync().Result.Where(x => x.OrganizationId == currentUser.OrganizationId || x.LocationId == currentUser.LocationId && x.IsActive == true).ToList();
+                return new PagedResultDto<AssetDto>
+                {
+                    TotalCount = assetsData.Count(),
+                    Items = _objectMapper.Map<List<AssetDto>>(assetsData)
+                };
+            }
             else
             {
                 var assetsData = Repository.GetAllListAsync().Result.Where(x => x.OrganizationId == currentUser.OrganizationId && x.LocationId == currentUser.LocationId && x.IsActive == true).ToList();
@@ -145,7 +165,7 @@ namespace TechEngineer.DBEntities.Assets
             }
         }
 
-        
+
         /// <summary>
         /// Get asset for edit.
         /// </summary>
@@ -166,15 +186,15 @@ namespace TechEngineer.DBEntities.Assets
         }
 
         /// <summary>
-        /// Method to get list of asset by using location id and organization id.
+        /// Method to get assets from location id.
         /// </summary>
         /// <param name="locationId">Location id.</param>
-        /// <param name="organizationId">organization id.</param>
-        /// <returns>Return list of assets.</returns>
-        public List<AssetDto> GetAssetsForSpecificLocAndOrg(Guid locationId, Guid organizationId)
+        /// <returns>Returns list of assets.</returns>
+        public List<AssetDto> GetAssetsUsingLocationId(Guid locationId)
         {
-            var assets = Repository.GetAll().Where(ass => ass.OrganizationId == organizationId && ass.LocationId == locationId).ToList();
-            return _objectMapper.Map<List<AssetDto>>(assets);
+            var assets = Repository.GetAllList().Where(x => x.LocationId == locationId).ToList();
+
+            return ObjectMapper.Map<List<AssetDto>>(assets);
         }
     }
 }

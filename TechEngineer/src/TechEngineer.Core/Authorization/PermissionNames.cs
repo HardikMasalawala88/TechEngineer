@@ -46,5 +46,6 @@
         public const string Pages_Appointments_Get = "Pages.Appointments.Get";
 
         public const string Pages_Master_Organizations_Dropdown = "Pages.Master.Organizations.Dropdown";
+        public const string Pages_Search_Records = "Pages.Search.Records";
     }
 }

@@ -100,6 +100,7 @@
             _$form[0].reset();
             abp.notify.info(l('SavedSuccessfully'));
             _$organizationsTable.ajax.reload();
+            location.reload();
         }).always(function () {
             abp.ui.clearBusy(_$modal);
         });

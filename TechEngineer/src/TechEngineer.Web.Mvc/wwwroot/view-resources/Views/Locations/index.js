@@ -90,14 +90,18 @@
                             '   </button>'
                         ].join('');
                     }
-                    else {
+                    else if (abp.auth.grantedPermissions['Pages.Locations.Edit'] == true) {
                         return [
                             `   <button type="button" class="btn btn-sm bg-secondary edit-location" data-location-id="${row.id}" data-toggle="modal" data-target="#LocationEditModal">`,
                             `       <i class="fas fa-pencil-alt"></i> ${l('Edit')}`,
                             '   </button>',
                         ].join('');
                     }
-                    
+                    else {
+                        return [
+                            `<span></span>`
+                        ].join('');
+                    }
                 }
             }
         ]
@@ -141,7 +145,7 @@
         deleteLocation(locationId, locationName);
     });
 
-    function deleteLocation(locationId, locationName){
+    function deleteLocation(locationId, locationName) {
         abp.message.confirm(
             abp.utils.formatString(
                 l('AreYouSureWantToDelete'),
@@ -176,7 +180,7 @@
     });
 
     $(document).on('click', 'a[id="LocationCreateBtn"]', (e) => {
-        if ($('.organization-dropdown')[0].value != "All Organization"){
+        if ($('.organization-dropdown')[0].value != "All Organization") {
             $("#LocationCreateModal").addClass('show');
             $("#LocationCreateModal").show();
             $('.nav-tabs a[href="#location-details"]').tab('show');

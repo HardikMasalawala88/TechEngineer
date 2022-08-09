@@ -40,7 +40,7 @@ namespace TechEngineer.DBEntities.Appointments
         [ForeignKey("Locations")]
         public Guid LocationId { get; set; }
 
-        public virtual User Users { get; set; }
+        public virtual User User { get; set; }
 
         public virtual AssetEntity Asset { get; set; }
 

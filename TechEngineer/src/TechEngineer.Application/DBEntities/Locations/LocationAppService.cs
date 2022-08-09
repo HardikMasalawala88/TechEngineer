@@ -10,11 +10,11 @@ using Abp.Runtime.Session;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using TechEngineer.Authorization;
 using TechEngineer.Authorization.Roles;
 using TechEngineer.Authorization.Users;
+using TechEngineer.DBEntities.Assets.Dto;
 using TechEngineer.DBEntities.Location;
 using TechEngineer.DBEntities.Locations.Dto;
 using TechEngineer.DBEntities.Organization;
@@ -89,10 +89,11 @@ namespace TechEngineer.DBEntities.Locations
             else
             {
                 List<LocationEntity> t = new List<LocationEntity>();
-                if (input.OrganizationId is not null) {
+                if (input.OrganizationId is not null)
+                {
                     t = Repository.GetAllIncluding(x => x.Organization).Where(x => x.OrganizationId == input.OrganizationId && x.IsActive == true).PageBy(input).ToList();
                 }
-                else 
+                else
                 {
                     t = Repository.GetAllIncluding(x => x.Organization).Where(x => x.OrganizationId == currentUser.OrganizationId && x.IsActive == true).PageBy(input).ToList();
                 }
@@ -102,7 +103,7 @@ namespace TechEngineer.DBEntities.Locations
                     Items = _objectMapper.Map<List<LocationDto>>(t)
                 };
             }
-            
+
         }
 
         /// <summary>
@@ -166,6 +167,15 @@ namespace TechEngineer.DBEntities.Locations
                 var locations = await Repository.GetAllListAsync();
                 return new ListResultDto<LocationDto>(ObjectMapper.Map<List<LocationDto>>(locations));
             }
+            else if (roles.Contains(StaticRoleNames.Tenants.OrganizationITHead))
+            {
+                var locationsData = Repository.GetAllListAsync().Result.Where(x => x.OrganizationId == currentUser.OrganizationId || x.BranchITHeadEmail == currentUser.EmailAddress && x.IsActive == true).ToList();
+                return new PagedResultDto<LocationDto>
+                {
+                    TotalCount = locationsData.Count(),
+                    Items = _objectMapper.Map<List<LocationDto>>(locationsData)
+                };
+            }
             else
             {
                 var locationsData = Repository.GetAllListAsync().Result.Where(x => x.OrganizationId == currentUser.OrganizationId && x.BranchITHeadEmail == currentUser.EmailAddress && x.IsActive == true).ToList();
@@ -175,6 +185,18 @@ namespace TechEngineer.DBEntities.Locations
                     Items = _objectMapper.Map<List<LocationDto>>(locationsData)
                 };
             }
+        }
+
+        /// <summary>
+        /// Method to get locations from organization id.
+        /// </summary>
+        /// <param name="orgId">Organization id.</param>
+        /// <returns>Returns list of location.</returns>
+        public List<LocationDto> GetLocationUsingOrgId(Guid orgId)
+        {
+            var locationData = Repository.GetAllList().Where(x => x.OrganizationId == orgId).ToList();
+
+            return ObjectMapper.Map<List<LocationDto>>(locationData);
         }
 
         /// <summary>
@@ -188,7 +210,7 @@ namespace TechEngineer.DBEntities.Locations
             location.Organization = _organizationRepository.Get(location.OrganizationId);
             return ObjectMapper.Map<LocationDto>(location);
         }
-        
+
         /// <summary>
         /// Method to get location for edit.
         /// </summary>
@@ -212,7 +234,6 @@ namespace TechEngineer.DBEntities.Locations
             return (locationDto);
         }
 
-        [AbpAuthorize(PermissionNames.Pages_Locations_List)]
         protected override IQueryable<LocationEntity> CreateFilteredQuery(PagedLocationResultRequestDto input)
         {
             return Repository.GetAllIncluding(x => x.Organization)

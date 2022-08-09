@@ -8,7 +8,6 @@
         if (!_$form.valid()) {
             return;
         }
-        debugger;   
         var asset = _$form.serializeFormToObject();
         asset.locationId = $('.location_dd').children(":selected").attr("id");
         asset.organizationId = $('.selected-organization')[0].id;
@@ -36,8 +35,6 @@
     });
 
     _$modal.on('shown.bs.modal', function () {
-        debugger;
         _$form.find('input[type=text]:first').focus();
-        var date = document.getElementById("startWarrentyDate");
     });
 })(jQuery);

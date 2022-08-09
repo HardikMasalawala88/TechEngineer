@@ -1,6 +1,7 @@
 ﻿using Abp.Application.Services.Dto;
 using Abp.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System;
 using System.Threading.Tasks;
 using TechEngineer.Authorization;
@@ -46,6 +47,13 @@ namespace TechEngineer.Web.Controllers
             };
 
             return PartialView("_EditModal", model);
+        }
+
+        public ActionResult FillLocation(Guid orgId)
+        {
+            var locations = _locationAppService.GetLocationUsingOrgId(orgId);
+
+            return Json(locations, new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.None });
         }
     }
 }

@@ -15,6 +15,7 @@
                         <label class="col-md-3 col-form-label" for="assetId">@L("Asset")</label>
                         <div class="col-md-9">
                             <select class="form-control asset_dd" required name="assetId" id="asset_data">
+                                <option disabled>Select Asset</option>
                                 @foreach (var asset in Model.Assets)
                                 {
                                     <option id="@asset.Id" data-bind="@asset.LocationId">@asset.Name</option>

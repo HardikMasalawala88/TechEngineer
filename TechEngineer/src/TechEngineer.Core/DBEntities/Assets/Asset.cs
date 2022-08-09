@@ -22,6 +22,7 @@ namespace TechEngineer.DBEntities.Assets
 
         [Required]
         public string Name { get; set; }
+
         public string Details { get; set; }
 
         [Required]
@@ -32,6 +33,48 @@ namespace TechEngineer.DBEntities.Assets
 
         [Required]
         public string ModelNumber { get; set; }
+
+        [Required]
+        public string Department { get; set; }
+
+        [Required]
+        public string IPAddress { get; set; }
+
+        [Required]
+        public string System_Username { get; set; }
+
+        [Required]
+        public string CPU { get; set; }
+
+        [Required]
+        public string MotherBoard { get; set; }
+
+        [Required]
+        public string RAM { get; set; }
+
+        [Required]
+        public string HDD { get; set; }
+
+        [Required]
+        public string Monitor { get; set; }
+
+        [Required]
+        public string Monitor_SerialNo { get; set; }
+
+        [Required]
+        public string KeyBoard { get; set; }
+
+        [Required]
+        public string Mouse { get; set; }
+
+        [Required]
+        public string OperatingSystem { get; set; }
+
+        [Required]
+        public string MSOffice { get; set; }
+
+        [Required]
+        public DateTime PurchaseDate { get; set; }
 
         public bool IsActive { get; set; }
 

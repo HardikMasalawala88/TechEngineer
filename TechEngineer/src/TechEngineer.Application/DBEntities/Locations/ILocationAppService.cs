@@ -40,5 +40,12 @@ namespace TechEngineer.DBEntities.Locations
         /// <param name="locationId">Location id.</param>
         /// <returns>Return location data.</returns>
         LocationDto GetLocationById(Guid locationId);
+
+        /// <summary>
+        /// Method to get locations from organization id.
+        /// </summary>
+        /// <param name="orgId">Organization id.</param>
+        /// <returns>Returns list of location.</returns>
+        List<LocationDto> GetLocationUsingOrgId(Guid orgId);
     }
 }

@@ -50,6 +50,7 @@ namespace TechEngineer.Authorization
             context.CreatePermission(PermissionNames.Pages_Appointments_Get, L("Appointments" + PA(5)));
 
             context.CreatePermission(PermissionNames.Pages_Master_Organizations_Dropdown, L("OrganizationsDropdown"));
+            context.CreatePermission(PermissionNames.Pages_Search_Records, L("SearchRecords"));
         }
 
         private static ILocalizableString L(string name)

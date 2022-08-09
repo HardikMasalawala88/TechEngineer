@@ -1,6 +1,7 @@
 ﻿using Abp.Application.Services.Dto;
 using Abp.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System;
 using System.Threading.Tasks;
 using TechEngineer.Authorization;
@@ -8,7 +9,6 @@ using TechEngineer.Controllers;
 using TechEngineer.DBEntities.Appointments;
 using TechEngineer.DBEntities.Assets;
 using TechEngineer.DBEntities.Locations;
-using TechEngineer.DBEntities.Organizations;
 using TechEngineer.Web.Models.Appointments;
 
 namespace TechEngineer.Web.Controllers
@@ -47,14 +47,30 @@ namespace TechEngineer.Web.Controllers
         public async Task<ActionResult> EditModal(Guid appointmentId)
         {
             var output = await _appointmentAppService.GetAppointmentForEdit(new EntityDto<Guid>(appointmentId));
-            var asset = _assetAppService.GetAssetForEdit(new EntityDto<Guid>(output.AssetId));
+            var asset = _assetAppService.GetAssetForEdit(new EntityDto<Guid>(output.AssetId)).Result;
+            var location = _locationAppService.GetLocationForEdit(new EntityDto<Guid>(asset.LocationId)).Result;
             var model = new EditAppointmentViewModel
             {
                 Appointment = output,
-                Asset = await asset
+                Asset = asset,
+                Location = location
             };
 
             return PartialView("_EditModal", model);
+        }
+
+        public ActionResult FillLocation(Guid orgId)
+        {
+            var locations = _locationAppService.GetLocationUsingOrgId(orgId);
+
+            return Json(locations, new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.None });
+        }
+
+        public ActionResult FillAsset(Guid locationId)
+        {
+            var assets = _assetAppService.GetAssetsUsingLocationId(locationId);
+
+            return Json(assets, new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.None });
         }
     }
 }

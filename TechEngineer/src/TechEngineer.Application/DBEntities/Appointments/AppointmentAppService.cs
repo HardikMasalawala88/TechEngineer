@@ -80,13 +80,18 @@ namespace TechEngineer.DBEntities.Appointments
             return MapToEntityDto(appointment);
         }
 
-        [AbpAuthorize(PermissionNames.Pages_Appointments_List)]
+        /// <summary>
+        /// Method to create filtered query.
+        /// </summary>
+        /// <param name="input">input parameter.</param>
+        /// <returns>Return appointment entity.</returns>
+        [AbpAuthorize(PermissionNames.Pages_Search_Records)]
         protected override IQueryable<AppointmentEntity> CreateFilteredQuery(PagedAppointmentResultRequestDto input)
         {
             // Appointment data searching through "Status" and "Remarks" field only.
 
-            return Repository.GetAllIncluding(x => x.Organization, x => x.Asset, x => x.Location)
-            .WhereIf(!input.Keyword.IsNullOrWhiteSpace(), x => x.Status.Contains(input.Keyword) && x.Remarks.Contains(input.Keyword));
+            return Repository.GetAllIncluding(x => x.Organization, x => x.Asset, x => x.Location, x => x.User)
+            .WhereIf(!input.Keyword.IsNullOrWhiteSpace(), x => x.Status.Contains(input.Keyword) || x.Remarks.Contains(input.Keyword));
         }
 
         /// <summary>
@@ -132,14 +137,28 @@ namespace TechEngineer.DBEntities.Appointments
                 }
                 return await base.GetAllAsync(input);
             }
+            else if (roles.Contains(StaticRoleNames.Tenants.OrganizationITHead))
+            {
+                var t = (input.AssetId.HasValue && input.AssetId != Guid.Empty) ?
+                    Repository.GetAllIncluding(x => x.Organization, x => x.Asset, x => x.Location)
+                        .Where(x => x.AssetId == input.AssetId).PageBy(input).ToList() :
+                    Repository.GetAllIncluding(x => x.Organization, x => x.Asset, x => x.Location, x => x.User)
+                        .Where(x => x.OrganizationId == currentUser.OrganizationId || x.LocationId == currentUser.LocationId).PageBy(input).ToList();
+
+                return new PagedResultDto<AppointmentDto>
+                {
+                    TotalCount = t.Count(),
+                    Items = _objectMapper.Map<List<AppointmentDto>>(t)
+                };
+            }
             else
             {
                 var t = (input.AssetId.HasValue && input.AssetId != Guid.Empty) ?
                     Repository.GetAllIncluding(x => x.Organization, x => x.Asset, x => x.Location)
                         .Where(x => x.AssetId == input.AssetId).PageBy(input).ToList() :
-                    Repository.GetAllIncluding(x => x.Organization, x => x.Asset, x => x.Location)
+                    Repository.GetAllIncluding(x => x.Organization, x => x.Asset, x => x.Location, x => x.User)
                         .Where(x => x.UserId == currentUser.Id && x.OrganizationId == currentUser.OrganizationId && x.LocationId == currentUser.LocationId).PageBy(input).ToList();
-                
+
                 return new PagedResultDto<AppointmentDto>
                 {
                     TotalCount = t.Count(),

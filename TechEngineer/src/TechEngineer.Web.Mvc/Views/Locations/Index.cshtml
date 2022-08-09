@@ -63,7 +63,11 @@
                                         <th>@L("countryId")</th>
                                         <th>@L("Organization")</th>
                                         <th>@L("IsActive")</th>
-                                        <th style="width: 150px">@L("Actions")</th>
+                                        @if (PermissionChecker.IsGranted(TechEngineer.Authorization.PermissionNames.Pages_Locations_Edit) ||
+                                             PermissionChecker.IsGranted(TechEngineer.Authorization.PermissionNames.Pages_Locations_Delete))
+                                        {
+                                            <th style="width: 150px">@L("Actions")</th>
+                                        }
                                     </tr>
                                 </thead>
                                 <tbody>

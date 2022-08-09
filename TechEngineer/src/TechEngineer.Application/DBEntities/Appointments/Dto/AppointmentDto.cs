@@ -1,10 +1,7 @@
 ﻿using Abp.Application.Services.Dto;
 using Abp.AutoMapper;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using TechEngineer.Authorization.Users;
 using TechEngineer.DBEntities.Assets.Dto;
 using TechEngineer.DBEntities.Locations.Dto;
 using TechEngineer.DBEntities.Organizations.Dto;
@@ -66,5 +63,10 @@ namespace TechEngineer.DBEntities.Appointments.Dto
         /// Gets location object.
         /// </summary>
         public virtual AssetDto Asset { get; set; }
+
+        /// <summary>
+        /// Gets location object.
+        /// </summary>
+        public virtual User User { get; set; }
     }
 }

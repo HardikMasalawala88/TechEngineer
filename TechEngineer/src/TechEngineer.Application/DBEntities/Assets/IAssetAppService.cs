@@ -26,11 +26,10 @@ namespace TechEngineer.DBEntities.Assets
         Task<AssetDto> GetAssetForEdit(EntityDto<Guid> input);
 
         /// <summary>
-        /// Method to get list of asset by using location id and organization id.
+        /// Method to get assets from location id.
         /// </summary>
         /// <param name="locationId">Location id.</param>
-        /// <param name="organizationId">organization id.</param>
-        /// <returns>Return list of assets.</returns>
-        List<AssetDto> GetAssetsForSpecificLocAndOrg(Guid locationId, Guid organizationId);
+        /// <returns>Returns list of assets.</returns>
+        List<AssetDto> GetAssetsUsingLocationId(Guid locationId);
     }
 }
