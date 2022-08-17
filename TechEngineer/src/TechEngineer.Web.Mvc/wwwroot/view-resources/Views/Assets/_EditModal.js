@@ -9,9 +9,9 @@
             return;
         }
         var asset = _$form.serializeFormToObject();
-        asset.locationId = $('.location_dd').children(":selected").attr("id");
+        asset.locationId = $('.location_dd_modal').children(":selected").attr("id");
         asset.organizationId = $('.selected-organization')[0].id;
-
+        debugger;
         abp.ui.setBusy(_$form);
         _assetService.update(asset).done(function () {
             _$modal.modal('hide');

@@ -16,7 +16,7 @@
                 <div class="form-group row required">
                         <label class="col-md-3 col-form-label" for="locationId">@L("Location")</label>
                         <div class="col-md-9">
-                            <select class="form-control location_dd" disabled name="locationId" id="location_data">
+                            <select class="form-control location_dd_modal" disabled name="locationId" id="location_data">
                                 <option id="@Model.Asset.LocationId" selected>@(string.Concat(Model.Location.Address1, " ", Model.Location.Address2))</option>
                             </select>
                             <input type="hidden" class="selected-organization" name="organizationId" id="@Model.Location.Organization.Id" value="@Model.Location.Organization.Name" />

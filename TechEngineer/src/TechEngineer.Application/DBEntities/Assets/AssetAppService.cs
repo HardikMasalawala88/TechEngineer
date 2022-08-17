@@ -30,9 +30,6 @@ namespace TechEngineer.DBEntities.Assets
     {
         private readonly IObjectMapper _objectMapper;
         private readonly IRepository<AssetEntity, Guid> _assetsRepository;
-        private readonly IOrganizationAppService _organizationAppService;
-        private readonly ILocationAppService _locationAppService;
-        private readonly IUserAppService _userAppService;
         private readonly UserManager _userManager;
         private readonly IAbpSession _abpSession;
 
@@ -42,19 +39,13 @@ namespace TechEngineer.DBEntities.Assets
         /// <param name="repository">Repository for asset entity.</param>
         /// <param name="objectMapper">Object mapper.</param>
         public AssetAppService(IRepository<AssetEntity, Guid> repository,
-            IOrganizationAppService organizationAppService,
-            ILocationAppService locationAppService,
-            IUserAppService userAppService,
             IAbpSession abpSession,
             UserManager userManager,
             IObjectMapper objectMapper) : base(repository)
         {
             _objectMapper = objectMapper;
-            _organizationAppService = organizationAppService;
-            _locationAppService = locationAppService;
             _assetsRepository = repository;
             _userManager = userManager;
-            _userAppService = userAppService;
             _abpSession = abpSession;
         }
 
@@ -164,7 +155,6 @@ namespace TechEngineer.DBEntities.Assets
                 };
             }
         }
-
 
         /// <summary>
         /// Get asset for edit.
