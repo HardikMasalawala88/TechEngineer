@@ -3,166 +3,137 @@
 @model EditAssetViewModel
 
 @await Html.PartialAsync("~/Views/Shared/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel(L("EditAsset")))
-<form name="assetEditForm" role="form" class="form-horizontal" style="overflow-y:scroll;height:85vh;">
+<form name="assetEditForm" role="form" class="form-horizontal">
     <input type="hidden" name="Id" value="@Model.Asset.Id" />
     <div class="modal-body">
-        <ul class="nav nav-tabs" role="tablist">
-            <li class="nav-item">
-                <a class="nav-link active" data-toggle="tab" role="tab" href="#edit-asset-details">@L("AssetDetails")</a>
-            </li>
-        </ul>
-        <div class="tab-content mt-4">
-            <div role="tabpanel" class="tab-pane container active" id="edit-location-details">
+            <div class="container" id="edit-location-details">
                 <div class="form-group row required">
-                        <label class="col-md-3 col-form-label" for="locationId">@L("Location")</label>
-                        <div class="col-md-9">
-                            <select class="form-control location_dd_modal" disabled name="locationId" id="location_data">
-                                <option id="@Model.Asset.LocationId" selected>@(string.Concat(Model.Location.Address1, " ", Model.Location.Address2))</option>
-                            </select>
-                            <input type="hidden" class="selected-organization" name="organizationId" id="@Model.Location.Organization.Id" value="@Model.Location.Organization.Name" />
-                        </div>
+                    <label class="col-md-3 col-form-label" for="locationId">@L("Location")</label>
+                    <div class="col-md-9">
+                        <select class="form-control location_dd_modal" disabled name="locationId" id="location_data">
+                            <option id="@Model.Asset.LocationId" selected>@(string.Concat(Model.Location.Address1, " ", Model.Location.Address2))</option>
+                        </select>
+                        <input type="hidden" class="selected-organization" name="organizationId" id="@Model.Location.Organization.Id" value="@Model.Location.Organization.Name" />
                     </div>
-                    <div class="form-group row required">
-                        <label class="col-md-3 col-form-label" for="assetName">@L("Name")</label>
-                        <div class="col-md-9">
-                            <input id="assetName" type="text" name="Name" class="form-control" value="@Model.Asset.Name" required maxlength="32" minlength="2">
-                        </div>
+                </div>
+                <div class="form-group row required">
+                    <label class="col-md-3 col-form-label" for="systemUsername">@L("System_Username")</label>
+                    <div class="col-md-3">
+                        <input id="systemUsername" type="text" name="System_Username" class="form-control" value="@Model.Asset.System_Username" required maxlength="32" minlength="2">
                     </div>
-                    <div class="form-group row required">
-                        <label class="col-md-3 col-form-label" for="category">@L("Category")</label>
-                        <div class="col-md-9">
-                            <input id="category" type="text" name="Category" class="form-control" value="@Model.Asset.Category" required maxlength="32" minlength="2">
-                        </div>
+                    <label class="col-md-3 col-form-label" for="assetName">@L("Name")</label>
+                    <div class="col-md-3">
+                        <input id="assetName" type="text" name="Name" class="form-control" value="@Model.Asset.Name" required maxlength="32" minlength="2">
                     </div>
-                    <div class="form-group row required">
-                        <label class="col-md-3 col-form-label" for="serialNumber">@L("SerialNumber")</label>
-                        <div class="col-md-9">
-                            <input id="serialNumber" type="text" name="SerialNumber" class="form-control" value="@Model.Asset.SerialNumber" required maxlength="32" minlength="2">
-                        </div>
+                </div>
+                <div class="form-group row required">
+                    <label class="col-md-3 col-form-label" for="category">@L("Category")</label>
+                    <div class="col-md-3">
+                        <input id="category" type="text" name="Category" class="form-control" value="@Model.Asset.Category" required maxlength="32" minlength="2">
                     </div>
-                    <div class="form-group row required">
-                        <label class="col-md-3 col-form-label" for="departmentName">@L("Department")</label>
-                        <div class="col-md-9">
-                            <input id="departmentName" type="text" name="Department" class="form-control" value="@Model.Asset.Department" required maxlength="32" minlength="2">
-                        </div>
+                    <label class="col-md-3 col-form-label" for="serialNumber">@L("SerialNumber")</label>
+                    <div class="col-md-3">
+                        <input id="serialNumber" type="text" name="SerialNumber" class="form-control" value="@Model.Asset.SerialNumber" required maxlength="32" minlength="2">
                     </div>
-                    <div class="form-group row required">
-                        <label class="col-md-3 col-form-label" for="ipAddress">@L("IPAddress")</label>
-                        <div class="col-md-9">
-                            <input id="ipAddress" type="text" name="IPAddress" class="form-control" value="@Model.Asset.IPAddress" required maxlength="32" minlength="2">
-                        </div>
+                </div>
+                <div class="form-group row required">
+                    <label class="col-md-3 col-form-label" for="departmentName">@L("Department")</label>
+                    <div class="col-md-3">
+                        <input id="departmentName" type="text" name="Department" class="form-control" value="@Model.Asset.Department" required maxlength="32" minlength="2">
                     </div>
-                    <div class="form-group row required">
-                        <label class="col-md-3 col-form-label" for="systemUsername">@L("System_Username")</label>
-                        <div class="col-md-9">
-                            <input id="systemUsername" type="text" name="System_Username" class="form-control" value="@Model.Asset.System_Username" required maxlength="32" minlength="2">
-                        </div>
+                    <label class="col-md-3 col-form-label" for="ipAddress">@L("IPAddress")</label>
+                    <div class="col-md-3">
+                        <input id="ipAddress" type="text" name="IPAddress" class="form-control" value="@Model.Asset.IPAddress" required maxlength="32" minlength="2">
                     </div>
-                    <div class="form-group row required">
-                        <label class="col-md-3 col-form-label" for="cpu">@L("CPU")</label>
-                        <div class="col-md-9">
-                            <input id="cpu" type="text" name="CPU" class="form-control" value="@Model.Asset.CPU" required maxlength="32" minlength="2">
-                        </div>
+                </div>
+                <div class="form-group row required">
+                    <label class="col-md-3 col-form-label" for="cpu">@L("CPU")</label>
+                    <div class="col-md-3">
+                        <input id="cpu" type="text" name="CPU" class="form-control" value="@Model.Asset.CPU" required maxlength="32" minlength="2">
                     </div>
-                    <div class="form-group row required">
-                        <label class="col-md-3 col-form-label" for="motherBoard">@L("MotherBoard")</label>
-                        <div class="col-md-9">
-                            <input id="motherBoard" type="text" name="MotherBoard" class="form-control" value="@Model.Asset.MotherBoard" required maxlength="32" minlength="2">
-                        </div>
+                    <label class="col-md-3 col-form-label" for="motherBoard">@L("MotherBoard")</label>
+                    <div class="col-md-3">
+                        <input id="motherBoard" type="text" name="MotherBoard" class="form-control" value="@Model.Asset.MotherBoard" required maxlength="32" minlength="2">
                     </div>
-                    <div class="form-group row required">
-                        <label class="col-md-3 col-form-label" for="ram">@L("RAM")</label>
-                        <div class="col-md-9">
-                            <input id="ram" type="text" name="RAM" class="form-control" value="@Model.Asset.RAM" required maxlength="32" minlength="2">
-                        </div>
+                </div>
+                <div class="form-group row required">
+                    <label class="col-md-3 col-form-label" for="ram">@L("RAM")</label>
+                    <div class="col-md-3">
+                        <input id="ram" type="text" name="RAM" class="form-control" value="@Model.Asset.RAM" required maxlength="32" minlength="2">
                     </div>
-                    <div class="form-group row required">
-                        <label class="col-md-3 col-form-label" for="hdd">@L("HDD")</label>
-                        <div class="col-md-9">
-                            <input id="hdd" type="text" name="HDD" class="form-control" value="@Model.Asset.HDD" required maxlength="32" minlength="2">
-                        </div>
+                    <label class="col-md-3 col-form-label" for="hdd">@L("HDD")</label>
+                    <div class="col-md-3">
+                        <input id="hdd" type="text" name="HDD" class="form-control" value="@Model.Asset.HDD" required maxlength="32" minlength="2">
                     </div>
-                    <div class="form-group row required">
-                        <label class="col-md-3 col-form-label" for="monitor">@L("Monitor")</label>
-                        <div class="col-md-9">
-                            <input id="monitor" type="text" name="Monitor" class="form-control" value="@Model.Asset.Monitor" required maxlength="32" minlength="2">
-                        </div>
+                </div>
+                <div class="form-group row required">
+                    <label class="col-md-3 col-form-label" for="monitor">@L("Monitor")</label>
+                    <div class="col-md-3">
+                        <input id="monitor" type="text" name="Monitor" class="form-control" value="@Model.Asset.Monitor" required maxlength="32" minlength="2">
                     </div>
-                    <div class="form-group row required">
-                        <label class="col-md-3 col-form-label" for="monitor_SerialNo">@L("Monitor_SerialNo")</label>
-                        <div class="col-md-9">
-                            <input id="monitor_SerialNo" type="text" name="Monitor_SerialNo" class="form-control" value="@Model.Asset.Monitor_SerialNo" required maxlength="32" minlength="2">
-                        </div>
+                    <label class="col-md-3 col-form-label" for="monitor_SerialNo">@L("Monitor_SerialNo")</label>
+                    <div class="col-md-3">
+                        <input id="monitor_SerialNo" type="text" name="Monitor_SerialNo" class="form-control" value="@Model.Asset.Monitor_SerialNo" required maxlength="32" minlength="2">
                     </div>
-                    <div class="form-group row required">
-                        <label class="col-md-3 col-form-label" for="keyBoard">@L("KeyBoard")</label>
-                        <div class="col-md-9">
-                            <input id="keyBoard" type="text" name="KeyBoard" class="form-control" value="@Model.Asset.KeyBoard" required maxlength="32" minlength="2">
-                        </div>
+                </div>
+                <div class="form-group row required">
+                    <label class="col-md-3 col-form-label" for="keyBoard">@L("KeyBoard")</label>
+                    <div class="col-md-3">
+                        <input id="keyBoard" type="text" name="KeyBoard" class="form-control" value="@Model.Asset.KeyBoard" required maxlength="32" minlength="2">
                     </div>
-                    <div class="form-group row required">
-                        <label class="col-md-3 col-form-label" for="mouse">@L("Mouse")</label>
-                        <div class="col-md-9">
-                            <input id="mouse" type="text" name="Mouse" class="form-control" value="@Model.Asset.Mouse" required maxlength="32" minlength="2">
-                        </div>
+                    <label class="col-md-3 col-form-label" for="mouse">@L("Mouse")</label>
+                    <div class="col-md-3">
+                        <input id="mouse" type="text" name="Mouse" class="form-control" value="@Model.Asset.Mouse" required maxlength="32" minlength="2">
                     </div>
-                    <div class="form-group row required">
-                        <label class="col-md-3 col-form-label" for="operatingSystem">@L("OperatingSystem")</label>
-                        <div class="col-md-9">
-                            <input id="operatingSystem" type="text" name="OperatingSystem" class="form-control" value="@Model.Asset.OperatingSystem" required maxlength="32" minlength="2">
-                        </div>
+                </div>
+                <div class="form-group row required">
+                    <label class="col-md-3 col-form-label" for="operatingSystem">@L("OperatingSystem")</label>
+                    <div class="col-md-3">
+                        <input id="operatingSystem" type="text" name="OperatingSystem" class="form-control" value="@Model.Asset.OperatingSystem" required maxlength="32" minlength="2">
                     </div>
-                    <div class="form-group row required">
-                        <label class="col-md-3 col-form-label" for="msOffice">@L("MSOffice")</label>
-                        <div class="col-md-9">
-                            <input id="msOffice" type="text" name="MSOffice" class="form-control" value="@Model.Asset.MSOffice" required maxlength="32" minlength="2">
-                        </div>
+                    <label class="col-md-3 col-form-label" for="msOffice">@L("MSOffice")</label>
+                    <div class="col-md-3">
+                        <input id="msOffice" type="text" name="MSOffice" class="form-control" value="@Model.Asset.MSOffice" required maxlength="32" minlength="2">
                     </div>
-                    <div class="form-group row required">
-                        <label class="col-md-3 col-form-label" for="purchaseDate">@L("PurchaseDate")</label>
-                        <div class="col-md-9">
-                            <input id="purchaseDate" type="date" name="PurchaseDate" class="form-control" value="@Model.Asset.PurchaseDate.ToString("yyyy-MM-dd")" required>
-                        </div>
+                </div>
+                <div class="form-group row required">
+                    <label class="col-md-3 col-form-label" for="purchaseDate">@L("PurchaseDate")</label>
+                    <div class="col-md-3">
+                        <input id="purchaseDate" type="date" name="PurchaseDate" class="form-control" value="@Model.Asset.PurchaseDate.ToString("yyyy-MM-dd")" required>
                     </div>
-                    <div class="form-group row required">
-                        <label class="col-md-3 col-form-label" for="details">@L("Details")</label>
-                        <div class="col-md-9">
-                            <input id="details" type="text" name="Details" class="form-control" value="@Model.Asset.Details" required maxlength="32" minlength="2">
-                        </div>
+                    <label class="col-md-3 col-form-label" for="modelNumber">@L("ModelNumber")</label>
+                    <div class="col-md-3">
+                        <input id="modelNumber" type="text" name="ModelNumber" class="form-control" value="@Model.Asset.ModelNumber" required maxlength="32" minlength="2">
                     </div>
-                    <div class="form-group row required">
-                        <label class="col-md-3 col-form-label" for="modelNumber">@L("ModelNumber")</label>
-                        <div class="col-md-9">
-                            <input id="modelNumber" type="text" name="ModelNumber" class="form-control" value="@Model.Asset.ModelNumber" required maxlength="32" minlength="2">
-                        </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-md-3 col-form-label" for="isInWarrenty">@L("IsInWarrenty")</label>
+                    <div class="col-md-3">
+                        <input id="isInWarrenty" type="checkbox" name="IsInWarrenty" value="true" @(Model.Asset.IsInWarrenty ? "checked" : "") />
                     </div>
-                    <div class="form-group row">
-                        <label class="col-md-3 col-form-label" for="isInWarrenty">@L("IsInWarrenty")</label>
-                        <div class="col-md-9">
-                            <input id="isInWarrenty" type="checkbox" name="IsInWarrenty" value="true" @(Model.Asset.IsInWarrenty ? "checked" : "") />
-                        </div>
+                    <label class="col-md-3 col-form-label" for="CreateAssetIsActive">@L("IsActive")</label>
+                    <div class="col-md-3">
+                        <input id="CreateAssetIsActive" type="checkbox" name="IsActive" value="true" @(Model.Asset.IsActive ? "checked" : "") />
                     </div>
-                    <div class="form-group row required">
-                        <label class="col-md-3 col-form-label" for="startWarrentyDate">@L("StartWarrentyDate")</label>
-                        <div class="col-md-9">
-                            <input id="startWarrentyDate" type="date" name="StartWarrentyDate" value="@(Model.Asset.StartWarrentyDate.ToString("yyyy-MM-dd"))" class="form-control" required>
-                        </div>
+                </div>
+                <div class="form-group row required">
+                    <label class="col-md-3 col-form-label" for="startWarrentyDate">@L("StartWarrentyDate")</label>
+                    <div class="col-md-3">
+                        <input id="startWarrentyDate" type="date" name="StartWarrentyDate" value="@(Model.Asset.StartWarrentyDate.ToString("yyyy-MM-dd"))" class="form-control" required>
                     </div>
-                    <div class="form-group row required">
-                        <label class="col-md-3 col-form-label" for="endWarrentyDate">@L("EndWarrentyDate")</label>
-                        <div class="col-md-9">
-                            <input id="endWarrentyDate" type="date" name="EndWarrentyDate" value="@Model.Asset.EndWarrentyDate.ToString("yyyy-MM-dd")" class="form-control" required>
-                        </div>
+                    <label class="col-md-3 col-form-label" for="endWarrentyDate">@L("EndWarrentyDate")</label>
+                    <div class="col-md-3">
+                        <input id="endWarrentyDate" type="date" name="EndWarrentyDate" value="@Model.Asset.EndWarrentyDate.ToString("yyyy-MM-dd")" class="form-control" required>
                     </div>
-                    <div class="form-group row">
-                        <label class="col-md-3 col-form-label" for="CreateAssetIsActive">@L("IsActive")</label>
-                        <div class="col-md-9">
-                            <input id="CreateAssetIsActive" type="checkbox" name="IsActive" value="true" @(Model.Asset.IsActive ? "checked" : "") />
-                        </div>
+                </div>
+                <div class="form-group row required">
+                    <label class="col-md-3 col-form-label" for="details">@L("Details")</label>
+                    <div class="col-md-9">
+                        <input id="details" type="text" name="Details" class="form-control" value="@Model.Asset.Details" required maxlength="32" minlength="2">
                     </div>
+                </div>
             </div>
         </div>
-    </div>
     @await Html.PartialAsync("~/Views/Shared/Modals/_ModalFooterWithSaveAndCancel.cshtml")
 </form>
 
