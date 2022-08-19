@@ -205,8 +205,46 @@
         }
     });
 
+    $(document).on('click', 'a[id="ImportExcelBtn"]', (e) => {
+        if (abp.auth.grantedPermissions['Pages.Master.Organizations.Dropdown'] == true && $('.organization-dropdown')[0].value != "All Organization") {
+            $("#ImportAssetExcelModal").addClass('show');
+            $("#ImportAssetExcelModal").show();
+        }
+        else if (_userLogSession.organizationId != defaultGuid) {
+            $("#ImportAssetExcelModal").addClass('show');
+            $("#ImportAssetExcelModal").show();
+        }
+        else {
+            $("#ImportAssetExcelModal").removeClass('show');
+            abp.message.error(abp.utils.formatString(l('Please select Organization before import from dropdown in header.')));
+        }
+    });
+
+    $(document).on('click', 'a[id="ImportAssetsBtn"]', (e) => {
+        var files = $("#importFile").get(0).files;
+
+        var formData = new FormData();
+        formData.append('importFile', files[0]); 
+
+        abp.ajax({
+            url: abp.appPath + 'Assets/ImportAssetsData',
+            data: formData,
+            type: 'POST',
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                if (data.Status === 1) {
+                    alert(data.Message);
+                } else {
+                    alert("Failed to Import");
+                }
+            }  
+        });
+    });
+
     $(document).on('click', '.close', (e) => {
         $("#AssetCreateModal").hide();
+        $("#ImportAssetExcelModal").hide();
         _$form.clearForm();
     });
 
@@ -229,17 +267,21 @@
                     // clear before appending new list 
                     $("#loc_dropdown").html("");
                     $("#location_data").html("");
+                    $("#location_dropdown").html("");
 
                     $.each(locations.Result, function (i, loc) {
                         $element1 = $('<option></option>').val(loc.Id).html(loc.Address1 + ' ' + loc.Address2);
                         $element2 = $('<option></option>').val(loc.Id).html(loc.Address1 + ' ' + loc.Address2);
+                        $element3 = $('<option></option>').val(loc.Id).html(loc.Address1 + ' ' + loc.Address2);
 
                         if (i === 0) {
                             $element1 = $element1.attr("selected", "selected");
                             $element2 = $element2.attr("selected", "selected");
+                            $element3 = $element3.attr("selected", "selected");
                         }
                         $("#loc_dropdown").append($element1);
                         $("#location_data").append($element2);
+                        $("#location_dropdown").append($element3);
                     });
                 },
                 error: function (e) {
@@ -259,6 +301,13 @@
             if (!$("#location_data option")[0].selected) {
                 $("#location_data option")[0].removeAttribute("selected", "selected");
                 $("#location_data option:selected")[0].setAttribute("selected", "selected");
+            }
+        });
+
+        document.getElementById('location_dropdown').addEventListener("change", function () {
+            if (!$("#location_dropdown option")[0].selected) {
+                $("#location_dropdown option")[0].removeAttribute("selected", "selected");
+                $("#location_dropdown option:selected")[0].setAttribute("selected", "selected");
             }
         });
     }

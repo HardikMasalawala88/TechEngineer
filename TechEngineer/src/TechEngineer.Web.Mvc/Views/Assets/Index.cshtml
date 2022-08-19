@@ -9,7 +9,6 @@
     <environment names="Development">
         <script src="~/view-resources/Views/Assets/Index.js" asp-append-version="true"></script>
     </environment>
-
     <environment names="Staging,Production">
         <script src="~/view-resources/Views/Assets/Index.min.js" asp-append-version="true"></script>
     </environment>
@@ -23,6 +22,10 @@
             <div class="col-sm-6">
                 @if (PermissionChecker.IsGranted(TechEngineer.Authorization.PermissionNames.Pages_Assets_Add))
                 {
+                    <a href="javascript:;" data-toggle="modal" id="ImportExcelBtn" class="btn bg-blue float-sm-right ml-3">
+                        <i class="fa fa-plus-square"></i>
+                        @L("Import Excel")
+                    </a>
                     <a href="javascript:;" data-toggle="modal" id="CreateAssetsBtn" class="btn bg-blue float-sm-right">
                         <i class="fa fa-plus-square"></i>
                         @L("Create")
@@ -87,6 +90,7 @@
 </section>
 
 @await Html.PartialAsync("~/Views/Assets/_CreateModal.cshtml", Model)
+@await Html.PartialAsync("~/Views/Assets/ImportAssetExcel.cshtml", Model)
 
 <div class="modal fade" id="AssetEditModal" tabindex="-1" role="dialog" aria-labelledby="AssetEditModalLabel" data-backdrop="static">
     <div class="modal-dialog modal-lg" role="document">

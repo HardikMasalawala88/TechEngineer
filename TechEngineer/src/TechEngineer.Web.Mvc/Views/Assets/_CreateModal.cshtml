@@ -7,7 +7,7 @@
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             @await Html.PartialAsync("~/Views/Shared/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel(L("CreateNewAsset")))
-            <form name="assetCreateForm" role="form" class="form-horizontal" style="overflow-y:scroll;height:85vh;">
+            <form name="assetCreateForm" role="form" class="form-horizontal">
                 <div class="modal-body">
                     <div class="form-group row required">
                         <label class="col-md-3 col-form-label" for="locationId">@L("Location")</label>
@@ -22,129 +22,109 @@
                         </div>
                     </div>
                     <div class="form-group row required">
+                        <label class="col-md-3 col-form-label" for="systemUsername">@L("SystemUsername")</label>
+                        <div class="col-md-3">
+                            <input id="systemUsername" type="text" name="SystemUsername" class="form-control" required maxlength="32" minlength="2">
+                        </div>
                         <label class="col-md-3 col-form-label" for="assetName">@L("Name")</label>
-                        <div class="col-md-9">
+                        <div class="col-md-3">
                             <input id="assetName" type="text" name="Name" class="form-control" required maxlength="32" minlength="2">
                         </div>
                     </div>
                     <div class="form-group row required">
                         <label class="col-md-3 col-form-label" for="category">@L("Category")</label>
-                        <div class="col-md-9">
+                        <div class="col-md-3">
                             <input id="category" type="text" name="Category" class="form-control" required maxlength="32" minlength="2">
                         </div>
-                    </div>
-                    <div class="form-group row required">
                         <label class="col-md-3 col-form-label" for="serialNumber">@L("SerialNumber")</label>
-                        <div class="col-md-9">
+                        <div class="col-md-3">
                             <input id="serialNumber" type="text" name="SerialNumber" class="form-control" required>
                         </div>
                     </div>
                     <div class="form-group row required">
                         <label class="col-md-3 col-form-label" for="departmentName">@L("Department")</label>
-                        <div class="col-md-9">
+                        <div class="col-md-3">
                             <input id="departmentName" type="text" name="Department" class="form-control" required maxlength="32" minlength="2">
                         </div>
-                    </div>
-                    <div class="form-group row required">
                         <label class="col-md-3 col-form-label" for="ipAddress">@L("IPAddress")</label>
-                        <div class="col-md-9">
+                        <div class="col-md-3">
                             <input id="ipAddress" type="text" name="IPAddress" class="form-control" required maxlength="32" minlength="2">
                         </div>
                     </div>
                     <div class="form-group row required">
-                        <label class="col-md-3 col-form-label" for="systemUsername">@L("SystemUsername")</label>
-                        <div class="col-md-9">
-                            <input id="systemUsername" type="text" name="SystemUsername" class="form-control" required maxlength="32" minlength="2">
-                        </div>
-                    </div>
-                    <div class="form-group row required">
                         <label class="col-md-3 col-form-label" for="cpu">@L("CPU")</label>
-                        <div class="col-md-9">
+                        <div class="col-md-3">
                             <input id="cpu" type="text" name="CPU" class="form-control" required maxlength="32" minlength="2">
                         </div>
-                    </div>
-                    <div class="form-group row required">
                         <label class="col-md-3 col-form-label" for="motherBoard">@L("MotherBoard")</label>
-                        <div class="col-md-9">
+                        <div class="col-md-3">
                             <input id="motherBoard" type="text" name="MotherBoard" class="form-control" required maxlength="32" minlength="2">
                         </div>
                     </div>
                     <div class="form-group row required">
                         <label class="col-md-3 col-form-label" for="ram">@L("RAM")</label>
-                        <div class="col-md-9">
+                        <div class="col-md-3">
                             <input id="ram" type="text" name="RAM" class="form-control" required maxlength="32" minlength="2">
                         </div>
-                    </div>
-                    <div class="form-group row required">
                         <label class="col-md-3 col-form-label" for="hdd">@L("HDD")</label>
-                        <div class="col-md-9">
+                        <div class="col-md-3">
                             <input id="hdd" type="text" name="HDD" class="form-control" required maxlength="32" minlength="2">
                         </div>
                     </div>
                     <div class="form-group row required">
                         <label class="col-md-3 col-form-label" for="monitor">@L("Monitor")</label>
-                        <div class="col-md-9">
+                        <div class="col-md-3">
                             <input id="monitor" type="text" name="Monitor" class="form-control" required maxlength="32" minlength="2">
                         </div>
-                    </div>
-                    <div class="form-group row required">
                         <label class="col-md-3 col-form-label" for="monitor_SerialNo">@L("Monitor_SerialNo")</label>
-                        <div class="col-md-9">
+                        <div class="col-md-3">
                             <input id="monitor_SerialNo" type="text" name="Monitor_SerialNo" class="form-control" required maxlength="32" minlength="2">
                         </div>
                     </div>
                     <div class="form-group row required">
                         <label class="col-md-3 col-form-label" for="keyBoard">@L("KeyBoard")</label>
-                        <div class="col-md-9">
+                        <div class="col-md-3">
                             <input id="keyBoard" type="text" name="KeyBoard" class="form-control" required maxlength="32" minlength="2">
                         </div>
-                    </div>
-                    <div class="form-group row required">
                         <label class="col-md-3 col-form-label" for="mouse">@L("Mouse")</label>
-                        <div class="col-md-9">
+                        <div class="col-md-3">
                             <input id="mouse" type="text" name="Mouse" class="form-control" required maxlength="32" minlength="2">
                         </div>
                     </div>
                     <div class="form-group row required">
                         <label class="col-md-3 col-form-label" for="operatingSystem">@L("OperatingSystem")</label>
-                        <div class="col-md-9">
+                        <div class="col-md-3">
                             <input id="operatingSystem" type="text" name="OperatingSystem" class="form-control" required maxlength="32" minlength="2">
                         </div>
-                    </div>
-                    <div class="form-group row required">
                         <label class="col-md-3 col-form-label" for="msOffice">@L("MSOffice")</label>
-                        <div class="col-md-9">
+                        <div class="col-md-3">
                             <input id="msOffice" type="text" name="MSOffice" class="form-control" required maxlength="32" minlength="2">
                         </div>
                     </div>
                     <div class="form-group row required">
                         <label class="col-md-3 col-form-label" for="purchaseDate">@L("PurchaseDate")</label>
-                        <div class="col-md-9">
+                        <div class="col-md-3">
                             <input id="purchaseDate" type="date" name="PurchaseDate" class="form-control" required>
+                        </div>
+                        <label class="col-md-3 col-form-label" for="modelNumber">@L("ModelNumber")</label>
+                        <div class="col-md-3">
+                            <input id="modelNumber" type="text" name="ModelNumber" class="form-control" required maxlength="32" minlength="2">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-md-3 col-form-label" for="CreateAssetIsActive">@L("IsActive")</label>
+                        <div class="col-md-3">
+                            <input id="CreateAssetIsActive" type="checkbox" name="IsActive" value="true" checked />
+                        </div>
+                        <label class="col-md-3 col-form-label" for="isInWarrenty">@L("IsInWarrenty")</label>
+                        <div class="col-md-3">
+                            <input id="isInWarrenty" type="checkbox" name="IsInWarrenty" value="true" />
                         </div>
                     </div>
                     <div class="form-group row required">
                         <label class="col-md-3 col-form-label" for="details">@L("Details")</label>
                         <div class="col-md-9">
                             <input id="details" type="text" name="Details" class="form-control" required maxlength="32" minlength="2">
-                        </div>
-                    </div>
-                    <div class="form-group row required">
-                        <label class="col-md-3 col-form-label" for="modelNumber">@L("ModelNumber")</label>
-                        <div class="col-md-9">
-                            <input id="modelNumber" type="text" name="ModelNumber" class="form-control" required maxlength="32" minlength="2">
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-md-3 col-form-label" for="isInWarrenty">@L("IsInWarrenty")</label>
-                        <div class="col-md-9">
-                            <input id="isInWarrenty" type="checkbox" name="IsInWarrenty" value="true" />
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-md-3 col-form-label" for="CreateAssetIsActive">@L("IsActive")</label>
-                        <div class="col-md-9">
-                            <input id="CreateAssetIsActive" type="checkbox" name="IsActive" value="true" checked />
                         </div>
                     </div>
                 </div>
