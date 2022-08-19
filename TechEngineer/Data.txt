@@ -1,0 +1,16 @@
+UserName/Password
+SuperAdmin1/SuperAdmin1
+SuperAdmin2/SuperAdmin2
+
+
+dotnet ModuleServicePOS.dll
+
+sqlcmd -S "LOCALHOST\SQLEXPRESS"
+
+sqlcmd -S "LOCALHOST\SQLEXPRESS" -q "drop database [ModuleServiceDb_Development]"
+
+
+
+=====
+
+dotnet TechEngineer.Web.Mvc.dll

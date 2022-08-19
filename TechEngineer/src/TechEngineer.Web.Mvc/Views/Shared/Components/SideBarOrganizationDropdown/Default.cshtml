@@ -1,0 +1,12 @@
+﻿@using TechEngineer.Web.Views.Shared.Components.SideBarOrganizationDropdown
+@model SideBarOrganizationListViewModel
+
+<div class="p-0">
+    <select class="organization-dropdown form-control" id="org_dropdown" style="width:300px">
+        <option id="All" disabled selected>All Organization</option>
+        @foreach (var organization in Model.Organizations)
+        {
+            <option id="@organization.Id">@organization.Name</option>
+        }
+    </select>
+</div>

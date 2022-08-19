@@ -1,0 +1,52 @@
+﻿@using TechEngineer.Web.Models.Common.Modals
+@model TechEngineer.Web.Models.Appointments.EditAppointmentViewModel
+@{
+    List<string> StatusList = new List<string>() { "Initial", "Open", "InProgress", "OnHold", "Closed"};
+}
+
+@await Html.PartialAsync("~/Views/Shared/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel(L("EditAppointment")))
+<form name="appointmentEditForm" role="form" class="form-horizontal">
+    <input type="hidden" name="Id" value="@Model.Appointment.Id" />
+    <input type="hidden" name="userId" id="userId" />
+    <input type="hidden" name="Remarks" value="@Model.Appointment.Remarks" />
+    <input type="hidden" name="RequestDate" value="@Model.Appointment.RequestDate" />
+    <div class="modal-body">
+        <div class="form-group row required">
+            <label class="col-md-3 col-form-label" for="assetId">@L("Asset")</label>
+            <div class="col-md-9">
+                <select class="form-control asset_edit_dd" name="assetId" disabled id="asset_data">
+                    <option id="@Model.Asset.Id" selected>@Model.Asset.Name</option>
+                </select>
+                <input type="hidden" name="locationId" id="locationId" value="@Model.Location.Id" />
+                <input type="hidden" name="organizationId" id="organizationId" value="@Model.Location.OrganizationId" />
+            </div>
+        </div>
+        <div class="form-group row required">
+            <label class="col-md-3 col-form-label" for="status">@L("Status")</label>
+            <div class="col-md-9">
+                <select class="form-control status_dd" name="status" id="status_data">
+                    @foreach (var status in StatusList)
+                    {
+                        @if (Model.Appointment.Status == status)
+                        {
+                            <option id="@status" selected>@status</option>
+                        }
+                        else
+                        {
+                            <option id="@status" >@status</option>   
+                        }
+                    }
+                </select>
+            </div>
+        </div>
+        <div class="form-group row required">
+            <label class="col-md-3 col-form-label" for="remarks">@L("Remarks")</label>
+            <div class="col-md-9">
+                <textarea id="remarks" name="Remarks" class="form-control" required maxlength="50">@Model.Appointment.Remarks</textarea>
+            </div>
+        </div>
+    </div>
+    @await Html.PartialAsync("~/Views/Shared/Modals/_ModalFooterWithSaveAndCancel.cshtml")
+</form>
+
+<script src="~/view-resources/Views/Appointments/_EditModal.js" asp-append-version="true"></script>
