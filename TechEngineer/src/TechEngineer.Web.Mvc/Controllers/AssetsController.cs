@@ -63,7 +63,7 @@ namespace TechEngineer.Web.Controllers
             return Json(locations, new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.None });
         }
 
-        //public async Task<ActionResult> ImportFile(HttpPostedFileBase importFile)
+        //public async Task<ActionResult> ImportAssetsData(HttpPostedFileBase importFile)
         //{
         //    if (importFile == null) return Json(new { Status = 0, Message = "No File Selected" });
 

@@ -22,13 +22,13 @@
             <div class="col-sm-6">
                 @if (PermissionChecker.IsGranted(TechEngineer.Authorization.PermissionNames.Pages_Assets_Add))
                 {
-                    <a href="javascript:;" data-toggle="modal" id="ImportExcelBtn" class="btn bg-blue float-sm-right ml-3">
-                        <i class="fa fa-plus-square"></i>
-                        @L("Import Excel")
-                    </a>
-                    <a href="javascript:;" data-toggle="modal" id="CreateAssetsBtn" class="btn bg-blue float-sm-right">
+                    <a href="javascript:;" data-toggle="modal" id="CreateAssetsBtn" class="btn bg-blue float-sm-right mx-2">
                         <i class="fa fa-plus-square"></i>
                         @L("Create")
+                    </a>
+                    <a href="javascript:;" data-toggle="modal" id="ImportExcelBtn" class="btn bg-blue float-sm-right mx-2">
+                        <i class="fa fa-plus-square"></i>
+                        @L("Import Excel")
                     </a>
                 }
             </div>

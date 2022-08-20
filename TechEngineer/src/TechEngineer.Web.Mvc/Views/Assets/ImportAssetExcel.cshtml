@@ -23,17 +23,23 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <div class="col-md-3">
+                        <label class="col-md-3 col-form-label" for="locationId">@L("Select File")</label>
+                        <div class="col-md-6">
+                            <input class="form-control col-md-9" type="file" name="importFile" id="importFile" /> 
+                        </div>
+                        <div class="col-md-3 d-flex justify-content-end">
+                            <a href="javascript:;" id="ImportAssetsBtn" class="btn bg-blue">
+                            @L("Import Assets")
+                            </a>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 d-flex justify-content-start">
                             <a href="~/excel/TechEngineerAssetsSample.xlsx" class="btn bg-blue">
-                                @L("Download Demo Excel")
+                                @L("Download Sample Excel")
                             </a>
                         </div>
-                        <div class="col-md-9">
-                            <input class="form-control" type="file" name="importFile" id="importFile" /> 
-                            <a href="javascript:;" id="ImportAssetsBtn" class="btn bg-blue ml-2">
-                                @L("Import Assets")
-                            </a>
-                        </div>
+                        
                     </div>
                 </div>
             </form>

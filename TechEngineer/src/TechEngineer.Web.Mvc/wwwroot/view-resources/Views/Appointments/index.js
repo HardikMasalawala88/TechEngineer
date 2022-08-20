@@ -129,18 +129,20 @@
         {
             appointment.organizationId = $('.organization-dropdown').children(":selected").attr("id");
             appointment.locationId = $('.location-dropdown').children(":selected").attr("value");
+            appointment.assetId = $('.asset_dd').children(":selected").attr("value");
         }
         else if (_userLogSession.organizationId) {
             appointment.organizationId = _userLogSession.organizationId;
             appointment.locationId = _userLogSession.locationId;
+            appointment.assetId = $('.asset_dd').children(":selected").attr("id");
         }
         else {
             abp.message.error(abp.utils.formatString(l('Please select Organization before create from dropdown in header.')));
         }
-        appointment.assetId = $('.asset_dd').children(":selected").attr("value");
         appointment.userId = _userLogSession.id;
 
         abp.ui.setBusy(_$modal);
+        debugger;
         _appointmentService.create(appointment).done(function () {
             _$modal.modal('hide');
             _$form[0].reset();
