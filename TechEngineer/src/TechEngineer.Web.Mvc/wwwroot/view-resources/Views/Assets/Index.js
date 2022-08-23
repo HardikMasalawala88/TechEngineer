@@ -221,6 +221,7 @@
     });
 
     $(document).on('click', 'a[id="ImportAssetsBtn"]', (e) => {
+        debugger;
         var files = $("#importFile").get(0).files;
 
         var formData = new FormData();

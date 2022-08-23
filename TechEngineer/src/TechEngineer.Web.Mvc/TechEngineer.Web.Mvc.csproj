@@ -2072,6 +2072,7 @@
     <PackageReference Include="Abp.HangFire" Version="7.3.0" />
     <PackageReference Include="Abp.RedisCache" Version="7.3.0" />
     <PackageReference Include="Abp.Castle.Log4Net" Version="7.3.0" />
+    <PackageReference Include="System.Data.OleDb" Version="5.0.0" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="wwwroot\view-resources\Views\_Bundles\" />

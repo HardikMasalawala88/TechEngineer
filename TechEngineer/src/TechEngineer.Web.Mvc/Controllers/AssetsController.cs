@@ -1,14 +1,17 @@
 ﻿using Abp.Application.Services.Dto;
 using Abp.AspNetCore.Mvc.Authorization;
 using ExcelDataReader;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.OleDb;
 using System.IO;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using TechEngineer.Authorization;
 using TechEngineer.Controllers;
@@ -63,84 +66,104 @@ namespace TechEngineer.Web.Controllers
             return Json(locations, new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.None });
         }
 
-        //public async Task<ActionResult> ImportAssetsData(HttpPostedFileBase importFile)
-        //{
-        //    if (importFile == null) return Json(new { Status = 0, Message = "No File Selected" });
-
-        //    try
-        //    {
-        //        var fileData = GetDataFromCSVFile(importFile.InputStream);
-
-        //        var dtEmployee = fileData.ToDataTable();
-        //        var tblEmployeeParameter = new SqlParameter("tblEmployeeTableType", SqlDbType.Structured)
-        //        {
-        //            TypeName = "dbo.tblTypeEmployee",
-        //            Value = dtEmployee
-        //        };
-        //        await _dbContext.Database.ExecuteSqlCommandAsync("EXEC spBulkImportEmployee @tblEmployeeTableType", tblEmployeeParameter);
-        //        return Json(new { Status = 1, Message = "File Imported Successfully " });
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return Json(new { Status = 0, Message = ex.Message });
-        //    }
-        //}
-
-        private List<AssetDto> GetDataFromCSVFile(Stream stream)
+        public async Task<ActionResult> ImportAssetsData(IFormCollection file)
         {
-            var assetList = new List<AssetDto>();
             try
             {
-                using (var reader = ExcelReaderFactory.CreateCsvReader(stream))
-                {
-                    var dataSet = reader.AsDataSet(new ExcelDataSetConfiguration
-                    {
-                        ConfigureDataTable = _ => new ExcelDataTableConfiguration
-                        {
-                            UseHeaderRow = true // To set First Row As Column Names    
-                        }
-                    });
+                var filename = ContentDispositionHeaderValue.Parse(file.Files[0].ContentDisposition).FileName.Trim('"');
 
-                    if (dataSet.Tables.Count > 0)
+                //get path
+                var MainPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Uploads");
+
+                //create directory "Uploads" if it doesn't exists
+                if (!Directory.Exists(MainPath))
+                {
+                    Directory.CreateDirectory(MainPath);
+                }
+
+                //get file path 
+                var filePath = Path.Combine(MainPath, filename);
+                using (Stream stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await file.Files[0].CopyToAsync(stream);
+                }
+
+                //get extension
+                string extension = Path.GetExtension(filename);
+                string conString = string.Empty;
+
+                switch (extension)
+                {
+                    case ".xls": //Excel 97-03.
+                        conString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + filePath + ";Extended Properties='Excel 8.0;HDR=YES'";
+                        break;
+                    case ".xlsx": //Excel 07 and above.
+                        conString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + filePath + ";Extended Properties='Excel 8.0;HDR=YES'";
+                        break;
+                }
+
+                DataTable dt = new DataTable();
+                conString = string.Format(conString, filePath);
+
+                using (OleDbConnection connExcel = new OleDbConnection(conString))
+                {
+                    using (OleDbCommand cmdExcel = new OleDbCommand())
                     {
-                        var dataTable = dataSet.Tables[0];
-                        foreach (DataRow objDataRow in dataTable.Rows)
+                        using (OleDbDataAdapter odaExcel = new OleDbDataAdapter())
                         {
-                            if (objDataRow.ItemArray.All(x => string.IsNullOrEmpty(x?.ToString()))) continue;
-                            assetList.Add(new AssetDto()
-                            {
-                                Id = (Guid)objDataRow["ID"],
-                                Name = objDataRow["Name"].ToString(),
-                                System_Username = objDataRow["System_Username"].ToString(),
-                                Category = objDataRow["Category"].ToString(),
-                                ModelNumber = objDataRow["ModelNumber"].ToString(),
-                                Monitor = objDataRow["Monitor"].ToString(),
-                                SerialNumber = objDataRow["SerialNumber"].ToString(),
-                                Department = objDataRow["Department"].ToString(),
-                                IPAddress = objDataRow["IPAddress"].ToString(),
-                                CPU = objDataRow["CPU"].ToString(),
-                                RAM = objDataRow["RAM"].ToString(),
-                                MotherBoard = objDataRow["MotherBoard"].ToString(),
-                                Mouse = objDataRow["Mouse"].ToString(),
-                                Monitor_SerialNo = objDataRow["Monitor_SerialNo"].ToString(),
-                                HDD = objDataRow["HDD"].ToString(),
-                                KeyBoard = objDataRow["KeyBoard"].ToString(),
-                                OperatingSystem = objDataRow["OperatingSystem"].ToString(),
-                                MSOffice = objDataRow["MSOffice"].ToString(),
-                                Details = objDataRow["Details"].ToString(),
-                                IsInWarrenty = (bool)objDataRow["IsInWarrenty"],
-                                IsActive = (bool)objDataRow["IsActive"],
-                                PurchaseDate = (DateTime)objDataRow["PurchaseDate"],
-                            });
+                            cmdExcel.Connection = connExcel;
+
+                            //Get the name of First Sheet.
+                            connExcel.Open();
+                            DataTable dtExcelSchema;
+                            dtExcelSchema = connExcel.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
+                            string sheetName = dtExcelSchema.Rows[0]["TABLE_NAME"].ToString();
+                            connExcel.Close();
+
+                            //Read Data from First Sheet.
+                            connExcel.Open();
+                            cmdExcel.CommandText = "SELECT * From [" + sheetName + "]";
+                            odaExcel.SelectCommand = cmdExcel;
+                            odaExcel.Fill(dt);
+                            connExcel.Close();
                         }
                     }
                 }
+
+                //your database connection string
+                conString = @"Server=techengineerdb.database.windows.net;Database=TechEngineerDb;User ID=TechEngineer;Password=Demo@124;";
+
+                using (SqlConnection con = new SqlConnection(conString))
+                {
+                    try
+                    {
+                        using (SqlBulkCopy sqlBulkCopy = new SqlBulkCopy(con))
+                        {
+                            //Set the database table name.
+                            sqlBulkCopy.DestinationTableName = "dbo.Assets";
+
+                            // Map the Excel columns with that of the database table, this is optional but good if you do
+                            // 
+                            object Id = new Guid();
+                            Id = Guid.NewGuid().ToString();
+                            dt.Rows[0].ItemArray.SetValue(Id, 0);
+                            con.Open();
+                            sqlBulkCopy.WriteToServer(dt);
+                            con.Close();
+                        }
+                    }
+                    catch (Exception ecx)
+                    {
+
+                        
+                    }
+                }
+                return Json(new { Status = 1, Message = "File Imported Successfully " });
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                return Json(new { Status = 0, Message = ex.Message });
             }
-            return assetList;
         }
     }
 }
