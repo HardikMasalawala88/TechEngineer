@@ -1,17 +1,8 @@
 ﻿using Abp.Application.Services.Dto;
 using Abp.AspNetCore.Mvc.Authorization;
-using ExcelDataReader;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Data.SqlClient;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.OleDb;
-using System.IO;
-using System.Linq;
-using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using TechEngineer.Authorization;
 using TechEngineer.Controllers;
@@ -66,104 +57,106 @@ namespace TechEngineer.Web.Controllers
             return Json(locations, new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.None });
         }
 
-        public async Task<ActionResult> ImportAssetsData(IFormCollection file)
-        {
-            try
-            {
-                var filename = ContentDispositionHeaderValue.Parse(file.Files[0].ContentDisposition).FileName.Trim('"');
+        //public async Task<ActionResult> ImportAssetsData(IFormCollection file)
+        //{
+        //    try
+        //    {
+        //        var filename = ContentDispositionHeaderValue.Parse(file.Files[0].ContentDisposition).FileName.Trim('"');
 
-                //get path
-                var MainPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Uploads");
+        //        //get path
+        //        var MainPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Uploads");
 
-                //create directory "Uploads" if it doesn't exists
-                if (!Directory.Exists(MainPath))
-                {
-                    Directory.CreateDirectory(MainPath);
-                }
+        //        //create directory "Uploads" if it doesn't exists
+        //        if (!Directory.Exists(MainPath))
+        //        {
+        //            Directory.CreateDirectory(MainPath);
+        //        }
 
-                //get file path 
-                var filePath = Path.Combine(MainPath, filename);
-                using (Stream stream = new FileStream(filePath, FileMode.Create))
-                {
-                    await file.Files[0].CopyToAsync(stream);
-                }
+        //        //get file path 
+        //        var filePath = Path.Combine(MainPath, filename);
+        //        using (Stream stream = new FileStream(filePath, FileMode.Create))
+        //        {
+        //            await file.Files[0].CopyToAsync(stream);
+        //        }
 
-                //get extension
-                string extension = Path.GetExtension(filename);
-                string conString = string.Empty;
+        //        //get extension
+        //        string extension = Path.GetExtension(filename);
+        //        string conString = string.Empty;
 
-                switch (extension)
-                {
-                    case ".xls": //Excel 97-03.
-                        conString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + filePath + ";Extended Properties='Excel 8.0;HDR=YES'";
-                        break;
-                    case ".xlsx": //Excel 07 and above.
-                        conString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + filePath + ";Extended Properties='Excel 8.0;HDR=YES'";
-                        break;
-                }
+        //        switch (extension)
+        //        {
+        //            case ".xls": //Excel 97-03.
+        //                conString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + filePath + ";Extended Properties='Excel 8.0;HDR=YES'";
+        //                break;
+        //            case ".xlsx": //Excel 07 and above.
+        //                conString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + filePath + ";Extended Properties='Excel 8.0;HDR=YES'";
+        //                break;
+        //        }
 
-                DataTable dt = new DataTable();
-                conString = string.Format(conString, filePath);
+        //        DataTable dt = new DataTable();
+        //        dt.Columns.Add("Id",typeof(Guid));
+        //        conString = string.Format(conString, filePath);
 
-                using (OleDbConnection connExcel = new OleDbConnection(conString))
-                {
-                    using (OleDbCommand cmdExcel = new OleDbCommand())
-                    {
-                        using (OleDbDataAdapter odaExcel = new OleDbDataAdapter())
-                        {
-                            cmdExcel.Connection = connExcel;
+        //        using (OleDbConnection connExcel = new OleDbConnection(conString))
+        //        {
+        //            using (OleDbCommand cmdExcel = new OleDbCommand())
+        //            {
+        //                using (OleDbDataAdapter odaExcel = new OleDbDataAdapter())
+        //                {
+        //                    cmdExcel.Connection = connExcel;
 
-                            //Get the name of First Sheet.
-                            connExcel.Open();
-                            DataTable dtExcelSchema;
-                            dtExcelSchema = connExcel.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
-                            string sheetName = dtExcelSchema.Rows[0]["TABLE_NAME"].ToString();
-                            connExcel.Close();
+        //                    //Get the name of First Sheet.
+        //                    connExcel.Open();
+        //                    DataTable dtExcelSchema;
+        //                    dtExcelSchema = connExcel.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
+        //                    string sheetName = dtExcelSchema.Rows[0]["TABLE_NAME"].ToString();
+        //                    connExcel.Close();
 
-                            //Read Data from First Sheet.
-                            connExcel.Open();
-                            cmdExcel.CommandText = "SELECT * From [" + sheetName + "]";
-                            odaExcel.SelectCommand = cmdExcel;
-                            odaExcel.Fill(dt);
-                            connExcel.Close();
-                        }
-                    }
-                }
+        //                    //Read Data from First Sheet.
+        //                    connExcel.Open();
+        //                    cmdExcel.CommandText = "SELECT * From [" + sheetName + "]";
+        //                    odaExcel.SelectCommand = cmdExcel;
+        //                    odaExcel.Fill(dt);
+        //                    connExcel.Close();
+        //                }
+        //            }
+        //        }
 
-                //your database connection string
-                conString = @"Server=techengineerdb.database.windows.net;Database=TechEngineerDb;User ID=TechEngineer;Password=Demo@124;";
+        //        //your database connection string
+        //        conString = @"Server=techengineerdb.database.windows.net;Database=TechEngineerDb;User ID=TechEngineer;Password=Demo@124;";
 
-                using (SqlConnection con = new SqlConnection(conString))
-                {
-                    try
-                    {
-                        using (SqlBulkCopy sqlBulkCopy = new SqlBulkCopy(con))
-                        {
-                            //Set the database table name.
-                            sqlBulkCopy.DestinationTableName = "dbo.Assets";
+        //        using (SqlConnection con = new SqlConnection(conString))
+        //        {
+        //            try
+        //            {
+        //                using (SqlBulkCopy sqlBulkCopy = new SqlBulkCopy(con))
+        //                {
+        //                    //Set the database table name.
+        //                    sqlBulkCopy.DestinationTableName = "dbo.Assets";
 
-                            // Map the Excel columns with that of the database table, this is optional but good if you do
-                            // 
-                            object Id = new Guid();
-                            Id = Guid.NewGuid().ToString();
-                            dt.Rows[0].ItemArray.SetValue(Id, 0);
-                            con.Open();
-                            sqlBulkCopy.WriteToServer(dt);
-                            con.Close();
-                        }
-                    }
-                    catch (Exception ecx)
-                    {
+        //                    // Map the Excel columns with that of the database table, this is optional but good if you do
+        //                    // 
+        //                    object Id = new Guid();
+        //                    Id = Guid.NewGuid();
+        //                    //dt.Rows;
+        //                    dt.Rows[0].ItemArray.SetValue(Id, 0);
+        //                    con.Open();
+        //                    sqlBulkCopy.WriteToServer(dt);
+        //                    con.Close();
+        //                }
+        //            }
+        //            catch (Exception ecx)
+        //            {
 
                         
-                    }
-                }
-                return Json(new { Status = 1, Message = "File Imported Successfully " });
-            }
-            catch (Exception ex)
-            {
-                return Json(new { Status = 0, Message = ex.Message });
-            }
-        }
+        //            }
+        //        }
+        //        return Json(new { Status = 1, Message = "File Imported Successfully " });
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return Json(new { Status = 0, Message = ex.Message });
+        //    }
+        //}
     }
 }

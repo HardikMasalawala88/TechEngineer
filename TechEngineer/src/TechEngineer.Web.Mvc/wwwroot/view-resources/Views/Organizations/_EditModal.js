@@ -10,8 +10,11 @@
         }
 
         var organization = _$form.serializeFormToObject();
+        debugger;
         organization.location = {
             Address1: organization['AddressLine1'],
+            Id: organization['LocationId'],
+            OrganizationId: organization['Id'],
             Address2: organization['AddressLine2'],
             Landmark: organization['Landmark'],
             PostalCode: organization['PostalCode'],

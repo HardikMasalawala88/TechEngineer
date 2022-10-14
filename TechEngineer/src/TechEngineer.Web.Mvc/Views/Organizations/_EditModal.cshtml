@@ -8,6 +8,7 @@
 @await Html.PartialAsync("~/Views/Shared/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel(L("EditOrganization")))
 <form name="organizationEditForm" role="form" class="form-horizontal">
     <input type="hidden" name="Id" value="@Model.Organization.Id" />
+    <input type="hidden" name="LocationId" value="@Model.Locations.Id" />
     <div class="modal-body">
         <ul class="nav nav-tabs" role="tablist">
             <li class="nav-item">

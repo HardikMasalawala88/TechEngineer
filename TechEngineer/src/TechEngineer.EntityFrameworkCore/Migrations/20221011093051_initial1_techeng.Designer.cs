@@ -2,7 +2,6 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TechEngineer.EntityFrameworkCore;
@@ -12,17 +11,15 @@ using TechEngineer.EntityFrameworkCore;
 namespace TechEngineer.Migrations
 {
     [DbContext(typeof(TechEngineerDbContext))]
-    [Migration("20220809140014_Initial04_Assets_NewFields")]
-    partial class Initial04_Assets_NewFields
+    [Migration("20221011093051_initial1_techeng")]
+    partial class initial1_techeng
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.4")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128);
-
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+                .HasAnnotation("ProductVersion", "6.0.7")
+                .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("Abp.Application.Editions.Edition", b =>
                 {
@@ -30,10 +27,8 @@ namespace TechEngineer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
                     b.Property<DateTime>("CreationTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<long?>("CreatorUserId")
                         .HasColumnType("bigint");
@@ -42,18 +37,18 @@ namespace TechEngineer.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<DateTime?>("DeletionTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
                         .HasMaxLength(64)
-                        .HasColumnType("nvarchar(64)");
+                        .HasColumnType("varchar(64)");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime?>("LastModificationTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<long?>("LastModifierUserId")
                         .HasColumnType("bigint");
@@ -61,7 +56,7 @@ namespace TechEngineer.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(32)
-                        .HasColumnType("nvarchar(32)");
+                        .HasColumnType("varchar(32)");
 
                     b.HasKey("Id");
 
@@ -74,22 +69,20 @@ namespace TechEngineer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
-
                     b.Property<DateTime>("CreationTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<long?>("CreatorUserId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("Discriminator")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("varchar(128)");
 
                     b.Property<int?>("TenantId")
                         .HasColumnType("int");
@@ -97,7 +90,7 @@ namespace TechEngineer.Migrations
                     b.Property<string>("Value")
                         .IsRequired()
                         .HasMaxLength(2000)
-                        .HasColumnType("nvarchar(2000)");
+                        .HasColumnType("varchar(2000)");
 
                     b.HasKey("Id");
 
@@ -112,37 +105,35 @@ namespace TechEngineer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
-
                     b.Property<string>("BrowserInfo")
                         .HasMaxLength(512)
-                        .HasColumnType("nvarchar(512)");
+                        .HasColumnType("varchar(512)");
 
                     b.Property<string>("ClientIpAddress")
                         .HasMaxLength(64)
-                        .HasColumnType("nvarchar(64)");
+                        .HasColumnType("varchar(64)");
 
                     b.Property<string>("ClientName")
                         .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("varchar(128)");
 
                     b.Property<string>("CustomData")
                         .HasMaxLength(2000)
-                        .HasColumnType("nvarchar(2000)");
+                        .HasColumnType("varchar(2000)");
 
                     b.Property<string>("Exception")
                         .HasMaxLength(2000)
-                        .HasColumnType("nvarchar(2000)");
+                        .HasColumnType("varchar(2000)");
 
                     b.Property<string>("ExceptionMessage")
                         .HasMaxLength(1024)
-                        .HasColumnType("nvarchar(1024)");
+                        .HasColumnType("varchar(1024)");
 
                     b.Property<int>("ExecutionDuration")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("ExecutionTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<int?>("ImpersonatorTenantId")
                         .HasColumnType("int");
@@ -152,18 +143,18 @@ namespace TechEngineer.Migrations
 
                     b.Property<string>("MethodName")
                         .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("varchar(256)");
 
                     b.Property<string>("Parameters")
                         .HasMaxLength(1024)
-                        .HasColumnType("nvarchar(1024)");
+                        .HasColumnType("varchar(1024)");
 
                     b.Property<string>("ReturnValue")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("ServiceName")
                         .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("varchar(256)");
 
                     b.Property<int?>("TenantId")
                         .HasColumnType("int");
@@ -188,25 +179,23 @@ namespace TechEngineer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
-
                     b.Property<DateTime>("CreationTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<long?>("CreatorUserId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("Discriminator")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<bool>("IsGranted")
-                        .HasColumnType("bit");
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("varchar(128)");
 
                     b.Property<int?>("TenantId")
                         .HasColumnType("int");
@@ -226,17 +215,15 @@ namespace TechEngineer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
-
                     b.Property<string>("ClaimType")
                         .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("varchar(256)");
 
                     b.Property<string>("ClaimValue")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<DateTime>("CreationTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<long?>("CreatorUserId")
                         .HasColumnType("bigint");
@@ -262,10 +249,8 @@ namespace TechEngineer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
-
                     b.Property<DateTime>("CreationTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<long?>("CreatorUserId")
                         .HasColumnType("bigint");
@@ -274,17 +259,17 @@ namespace TechEngineer.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<DateTime?>("DeletionTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("EmailAddress")
                         .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("varchar(256)");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime?>("LastModificationTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<long?>("LastModifierUserId")
                         .HasColumnType("bigint");
@@ -300,7 +285,7 @@ namespace TechEngineer.Migrations
 
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("varchar(256)");
 
                     b.HasKey("Id");
 
@@ -323,17 +308,15 @@ namespace TechEngineer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
-
                     b.Property<string>("ClaimType")
                         .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("varchar(256)");
 
                     b.Property<string>("ClaimValue")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<DateTime>("CreationTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<long?>("CreatorUserId")
                         .HasColumnType("bigint");
@@ -359,17 +342,15 @@ namespace TechEngineer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
-
                     b.Property<string>("LoginProvider")
                         .IsRequired()
                         .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("varchar(128)");
 
                     b.Property<string>("ProviderKey")
                         .IsRequired()
                         .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("varchar(256)");
 
                     b.Property<int?>("TenantId")
                         .HasColumnType("int");
@@ -382,8 +363,7 @@ namespace TechEngineer.Migrations
                     b.HasIndex("UserId");
 
                     b.HasIndex("ProviderKey", "TenantId")
-                        .IsUnique()
-                        .HasFilter("[TenantId] IS NOT NULL");
+                        .IsUnique();
 
                     b.HasIndex("TenantId", "UserId");
 
@@ -398,29 +378,27 @@ namespace TechEngineer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
-
                     b.Property<string>("BrowserInfo")
                         .HasMaxLength(512)
-                        .HasColumnType("nvarchar(512)");
+                        .HasColumnType("varchar(512)");
 
                     b.Property<string>("ClientIpAddress")
                         .HasMaxLength(64)
-                        .HasColumnType("nvarchar(64)");
+                        .HasColumnType("varchar(64)");
 
                     b.Property<string>("ClientName")
                         .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("varchar(128)");
 
                     b.Property<DateTime>("CreationTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<byte>("Result")
-                        .HasColumnType("tinyint");
+                        .HasColumnType("tinyint unsigned");
 
                     b.Property<string>("TenancyName")
                         .HasMaxLength(64)
-                        .HasColumnType("nvarchar(64)");
+                        .HasColumnType("varchar(64)");
 
                     b.Property<int?>("TenantId")
                         .HasColumnType("int");
@@ -430,7 +408,7 @@ namespace TechEngineer.Migrations
 
                     b.Property<string>("UserNameOrEmailAddress")
                         .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("varchar(256)");
 
                     b.HasKey("Id");
 
@@ -447,16 +425,14 @@ namespace TechEngineer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
-
                     b.Property<DateTime>("CreationTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<long?>("CreatorUserId")
                         .HasColumnType("bigint");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<long>("OrganizationUnitId")
                         .HasColumnType("bigint");
@@ -482,10 +458,8 @@ namespace TechEngineer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
-
                     b.Property<DateTime>("CreationTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<long?>("CreatorUserId")
                         .HasColumnType("bigint");
@@ -516,18 +490,16 @@ namespace TechEngineer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
-
                     b.Property<DateTime?>("ExpireDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("LoginProvider")
                         .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("varchar(128)");
 
                     b.Property<string>("Name")
                         .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("varchar(128)");
 
                     b.Property<int?>("TenantId")
                         .HasColumnType("int");
@@ -537,7 +509,7 @@ namespace TechEngineer.Migrations
 
                     b.Property<string>("Value")
                         .HasMaxLength(512)
-                        .HasColumnType("nvarchar(512)");
+                        .HasColumnType("varchar(512)");
 
                     b.HasKey("Id");
 
@@ -554,35 +526,33 @@ namespace TechEngineer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
-
                     b.Property<DateTime>("CreationTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<long?>("CreatorUserId")
                         .HasColumnType("bigint");
 
                     b.Property<bool>("IsAbandoned")
-                        .HasColumnType("bit");
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<string>("JobArgs")
                         .IsRequired()
                         .HasMaxLength(1048576)
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("JobType")
                         .IsRequired()
                         .HasMaxLength(512)
-                        .HasColumnType("nvarchar(512)");
+                        .HasColumnType("varchar(512)");
 
                     b.Property<DateTime?>("LastTryTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<DateTime>("NextTryTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<byte>("Priority")
-                        .HasColumnType("tinyint");
+                        .HasColumnType("tinyint unsigned");
 
                     b.Property<short>("TryCount")
                         .HasColumnType("smallint");
@@ -600,16 +570,14 @@ namespace TechEngineer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
-
                     b.Property<DateTime>("CreationTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<long?>("CreatorUserId")
                         .HasColumnType("bigint");
 
                     b.Property<DateTime?>("LastModificationTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<long?>("LastModifierUserId")
                         .HasColumnType("bigint");
@@ -617,7 +585,7 @@ namespace TechEngineer.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("varchar(256)");
 
                     b.Property<int?>("TenantId")
                         .HasColumnType("int");
@@ -626,7 +594,7 @@ namespace TechEngineer.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<string>("Value")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
@@ -644,14 +612,12 @@ namespace TechEngineer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
                     b.Property<int>("DynamicPropertyId")
                         .HasColumnType("int");
 
                     b.Property<string>("EntityFullName")
                         .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("varchar(256)");
 
                     b.Property<int?>("TenantId")
                         .HasColumnType("int");
@@ -661,8 +627,7 @@ namespace TechEngineer.Migrations
                     b.HasIndex("DynamicPropertyId");
 
                     b.HasIndex("EntityFullName", "DynamicPropertyId", "TenantId")
-                        .IsUnique()
-                        .HasFilter("[EntityFullName] IS NOT NULL AND [TenantId] IS NOT NULL");
+                        .IsUnique();
 
                     b.ToTable("AbpDynamicEntityProperties");
                 });
@@ -673,20 +638,18 @@ namespace TechEngineer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
-
                     b.Property<int>("DynamicEntityPropertyId")
                         .HasColumnType("int");
 
                     b.Property<string>("EntityId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<int?>("TenantId")
                         .HasColumnType("int");
 
                     b.Property<string>("Value")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
@@ -701,20 +664,18 @@ namespace TechEngineer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
                     b.Property<string>("DisplayName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("InputType")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Permission")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("PropertyName")
                         .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("varchar(256)");
 
                     b.Property<int?>("TenantId")
                         .HasColumnType("int");
@@ -722,8 +683,7 @@ namespace TechEngineer.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("PropertyName", "TenantId")
-                        .IsUnique()
-                        .HasFilter("[PropertyName] IS NOT NULL AND [TenantId] IS NOT NULL");
+                        .IsUnique();
 
                     b.ToTable("AbpDynamicProperties");
                 });
@@ -734,8 +694,6 @@ namespace TechEngineer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
-
                     b.Property<int>("DynamicPropertyId")
                         .HasColumnType("int");
 
@@ -744,7 +702,7 @@ namespace TechEngineer.Migrations
 
                     b.Property<string>("Value")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
@@ -759,24 +717,22 @@ namespace TechEngineer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
-
                     b.Property<DateTime>("ChangeTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<byte>("ChangeType")
-                        .HasColumnType("tinyint");
+                        .HasColumnType("tinyint unsigned");
 
                     b.Property<long>("EntityChangeSetId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("EntityId")
                         .HasMaxLength(48)
-                        .HasColumnType("nvarchar(48)");
+                        .HasColumnType("varchar(48)");
 
                     b.Property<string>("EntityTypeFullName")
                         .HasMaxLength(192)
-                        .HasColumnType("nvarchar(192)");
+                        .HasColumnType("varchar(192)");
 
                     b.Property<int?>("TenantId")
                         .HasColumnType("int");
@@ -796,25 +752,23 @@ namespace TechEngineer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
-
                     b.Property<string>("BrowserInfo")
                         .HasMaxLength(512)
-                        .HasColumnType("nvarchar(512)");
+                        .HasColumnType("varchar(512)");
 
                     b.Property<string>("ClientIpAddress")
                         .HasMaxLength(64)
-                        .HasColumnType("nvarchar(64)");
+                        .HasColumnType("varchar(64)");
 
                     b.Property<string>("ClientName")
                         .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("varchar(128)");
 
                     b.Property<DateTime>("CreationTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("ExtensionData")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<int?>("ImpersonatorTenantId")
                         .HasColumnType("int");
@@ -824,7 +778,7 @@ namespace TechEngineer.Migrations
 
                     b.Property<string>("Reason")
                         .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("varchar(256)");
 
                     b.Property<int?>("TenantId")
                         .HasColumnType("int");
@@ -849,32 +803,30 @@ namespace TechEngineer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
-
                     b.Property<long>("EntityChangeId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("NewValue")
                         .HasMaxLength(512)
-                        .HasColumnType("nvarchar(512)");
+                        .HasColumnType("varchar(512)");
 
                     b.Property<string>("NewValueHash")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("OriginalValue")
                         .HasMaxLength(512)
-                        .HasColumnType("nvarchar(512)");
+                        .HasColumnType("varchar(512)");
 
                     b.Property<string>("OriginalValueHash")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("PropertyName")
                         .HasMaxLength(96)
-                        .HasColumnType("nvarchar(96)");
+                        .HasColumnType("varchar(96)");
 
                     b.Property<string>("PropertyTypeFullName")
                         .HasMaxLength(192)
-                        .HasColumnType("nvarchar(192)");
+                        .HasColumnType("varchar(192)");
 
                     b.Property<int?>("TenantId")
                         .HasColumnType("int");
@@ -892,10 +844,8 @@ namespace TechEngineer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
                     b.Property<DateTime>("CreationTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<long?>("CreatorUserId")
                         .HasColumnType("bigint");
@@ -904,25 +854,25 @@ namespace TechEngineer.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<DateTime?>("DeletionTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
                         .HasMaxLength(64)
-                        .HasColumnType("nvarchar(64)");
+                        .HasColumnType("varchar(64)");
 
                     b.Property<string>("Icon")
                         .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("varchar(128)");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<bool>("IsDisabled")
-                        .HasColumnType("bit");
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime?>("LastModificationTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<long?>("LastModifierUserId")
                         .HasColumnType("bigint");
@@ -930,7 +880,7 @@ namespace TechEngineer.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("varchar(128)");
 
                     b.Property<int?>("TenantId")
                         .HasColumnType("int");
@@ -948,10 +898,8 @@ namespace TechEngineer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
-
                     b.Property<DateTime>("CreationTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<long?>("CreatorUserId")
                         .HasColumnType("bigint");
@@ -959,15 +907,15 @@ namespace TechEngineer.Migrations
                     b.Property<string>("Key")
                         .IsRequired()
                         .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("varchar(256)");
 
                     b.Property<string>("LanguageName")
                         .IsRequired()
                         .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("varchar(128)");
 
                     b.Property<DateTime?>("LastModificationTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<long?>("LastModifierUserId")
                         .HasColumnType("bigint");
@@ -975,7 +923,7 @@ namespace TechEngineer.Migrations
                     b.Property<string>("Source")
                         .IsRequired()
                         .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("varchar(128)");
 
                     b.Property<int?>("TenantId")
                         .HasColumnType("int");
@@ -983,7 +931,7 @@ namespace TechEngineer.Migrations
                     b.Property<string>("Value")
                         .IsRequired()
                         .HasMaxLength(67108864)
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
@@ -996,56 +944,56 @@ namespace TechEngineer.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("char(36)");
 
                     b.Property<DateTime>("CreationTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<long?>("CreatorUserId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("Data")
                         .HasMaxLength(1048576)
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("DataTypeName")
                         .HasMaxLength(512)
-                        .HasColumnType("nvarchar(512)");
+                        .HasColumnType("varchar(512)");
 
                     b.Property<string>("EntityId")
                         .HasMaxLength(96)
-                        .HasColumnType("nvarchar(96)");
+                        .HasColumnType("varchar(96)");
 
                     b.Property<string>("EntityTypeAssemblyQualifiedName")
                         .HasMaxLength(512)
-                        .HasColumnType("nvarchar(512)");
+                        .HasColumnType("varchar(512)");
 
                     b.Property<string>("EntityTypeName")
                         .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)");
+                        .HasColumnType("varchar(250)");
 
                     b.Property<string>("ExcludedUserIds")
                         .HasMaxLength(131072)
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("NotificationName")
                         .IsRequired()
                         .HasMaxLength(96)
-                        .HasColumnType("nvarchar(96)");
+                        .HasColumnType("varchar(96)");
 
                     b.Property<byte>("Severity")
-                        .HasColumnType("tinyint");
+                        .HasColumnType("tinyint unsigned");
 
                     b.Property<string>("TargetNotifiers")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("TenantIds")
                         .HasMaxLength(131072)
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("UserIds")
                         .HasMaxLength(131072)
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
@@ -1056,29 +1004,29 @@ namespace TechEngineer.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("char(36)");
 
                     b.Property<DateTime>("CreationTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<long?>("CreatorUserId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("EntityId")
                         .HasMaxLength(96)
-                        .HasColumnType("nvarchar(96)");
+                        .HasColumnType("varchar(96)");
 
                     b.Property<string>("EntityTypeAssemblyQualifiedName")
                         .HasMaxLength(512)
-                        .HasColumnType("nvarchar(512)");
+                        .HasColumnType("varchar(512)");
 
                     b.Property<string>("EntityTypeName")
                         .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)");
+                        .HasColumnType("varchar(250)");
 
                     b.Property<string>("NotificationName")
                         .HasMaxLength(96)
-                        .HasColumnType("nvarchar(96)");
+                        .HasColumnType("varchar(96)");
 
                     b.Property<int?>("TenantId")
                         .HasColumnType("int");
@@ -1099,41 +1047,41 @@ namespace TechEngineer.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("char(36)");
 
                     b.Property<DateTime>("CreationTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<long?>("CreatorUserId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("Data")
                         .HasMaxLength(1048576)
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("DataTypeName")
                         .HasMaxLength(512)
-                        .HasColumnType("nvarchar(512)");
+                        .HasColumnType("varchar(512)");
 
                     b.Property<string>("EntityId")
                         .HasMaxLength(96)
-                        .HasColumnType("nvarchar(96)");
+                        .HasColumnType("varchar(96)");
 
                     b.Property<string>("EntityTypeAssemblyQualifiedName")
                         .HasMaxLength(512)
-                        .HasColumnType("nvarchar(512)");
+                        .HasColumnType("varchar(512)");
 
                     b.Property<string>("EntityTypeName")
                         .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)");
+                        .HasColumnType("varchar(250)");
 
                     b.Property<string>("NotificationName")
                         .IsRequired()
                         .HasMaxLength(96)
-                        .HasColumnType("nvarchar(96)");
+                        .HasColumnType("varchar(96)");
 
                     b.Property<byte>("Severity")
-                        .HasColumnType("tinyint");
+                        .HasColumnType("tinyint unsigned");
 
                     b.Property<int?>("TenantId")
                         .HasColumnType("int");
@@ -1149,22 +1097,22 @@ namespace TechEngineer.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("char(36)");
 
                     b.Property<DateTime>("CreationTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<int>("State")
                         .HasColumnType("int");
 
                     b.Property<string>("TargetNotifiers")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<int?>("TenantId")
                         .HasColumnType("int");
 
                     b.Property<Guid>("TenantNotificationId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("char(36)");
 
                     b.Property<long>("UserId")
                         .HasColumnType("bigint");
@@ -1182,15 +1130,13 @@ namespace TechEngineer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
-
                     b.Property<string>("Code")
                         .IsRequired()
                         .HasMaxLength(95)
-                        .HasColumnType("nvarchar(95)");
+                        .HasColumnType("varchar(95)");
 
                     b.Property<DateTime>("CreationTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<long?>("CreatorUserId")
                         .HasColumnType("bigint");
@@ -1199,18 +1145,18 @@ namespace TechEngineer.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<DateTime?>("DeletionTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
                         .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("varchar(128)");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime?>("LastModificationTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<long?>("LastModifierUserId")
                         .HasColumnType("bigint");
@@ -1236,16 +1182,14 @@ namespace TechEngineer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
-
                     b.Property<DateTime>("CreationTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<long?>("CreatorUserId")
                         .HasColumnType("bigint");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<long>("OrganizationUnitId")
                         .HasColumnType("bigint");
@@ -1269,26 +1213,26 @@ namespace TechEngineer.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("char(36)");
 
                     b.Property<DateTime>("CreationTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("Data")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<DateTime?>("DeletionTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<int?>("TenantId")
                         .HasColumnType("int");
 
                     b.Property<string>("WebhookName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
@@ -1299,16 +1243,16 @@ namespace TechEngineer.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("char(36)");
 
                     b.Property<DateTime>("CreationTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<DateTime?>("LastModificationTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("Response")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<int?>("ResponseStatusCode")
                         .HasColumnType("int");
@@ -1317,10 +1261,10 @@ namespace TechEngineer.Migrations
                         .HasColumnType("int");
 
                     b.Property<Guid>("WebhookEventId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("char(36)");
 
                     b.Property<Guid>("WebhookSubscriptionId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("char(36)");
 
                     b.HasKey("Id");
 
@@ -1333,33 +1277,33 @@ namespace TechEngineer.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("char(36)");
 
                     b.Property<DateTime>("CreationTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<long?>("CreatorUserId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("Headers")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<string>("Secret")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<int?>("TenantId")
                         .HasColumnType("int");
 
                     b.Property<string>("WebhookUri")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Webhooks")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
@@ -1372,15 +1316,13 @@ namespace TechEngineer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("varchar(128)");
 
                     b.Property<DateTime>("CreationTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<long?>("CreatorUserId")
                         .HasColumnType("bigint");
@@ -1389,28 +1331,28 @@ namespace TechEngineer.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<DateTime?>("DeletionTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("Description")
                         .HasMaxLength(5000)
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("varchar(5000)");
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
                         .HasMaxLength(64)
-                        .HasColumnType("nvarchar(64)");
+                        .HasColumnType("varchar(64)");
 
                     b.Property<bool>("IsDefault")
-                        .HasColumnType("bit");
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<bool>("IsStatic")
-                        .HasColumnType("bit");
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime?>("LastModificationTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<long?>("LastModifierUserId")
                         .HasColumnType("bigint");
@@ -1418,12 +1360,12 @@ namespace TechEngineer.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(32)
-                        .HasColumnType("nvarchar(32)");
+                        .HasColumnType("varchar(32)");
 
                     b.Property<string>("NormalizedName")
                         .IsRequired()
                         .HasMaxLength(32)
-                        .HasColumnType("nvarchar(32)");
+                        .HasColumnType("varchar(32)");
 
                     b.Property<int?>("TenantId")
                         .HasColumnType("int");
@@ -1447,22 +1389,20 @@ namespace TechEngineer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
-
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
                     b.Property<string>("AuthenticationSource")
                         .HasMaxLength(64)
-                        .HasColumnType("nvarchar(64)");
+                        .HasColumnType("varchar(64)");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("varchar(128)");
 
                     b.Property<DateTime>("CreationTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<long?>("CreatorUserId")
                         .HasColumnType("bigint");
@@ -1471,86 +1411,86 @@ namespace TechEngineer.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<DateTime?>("DeletionTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("EmailAddress")
                         .IsRequired()
                         .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("varchar(256)");
 
                     b.Property<string>("EmailConfirmationCode")
                         .HasMaxLength(328)
-                        .HasColumnType("nvarchar(328)");
+                        .HasColumnType("varchar(328)");
 
                     b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<bool>("IsEmailConfirmed")
-                        .HasColumnType("bit");
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<bool>("IsLockoutEnabled")
-                        .HasColumnType("bit");
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<bool>("IsPhoneNumberConfirmed")
-                        .HasColumnType("bit");
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<bool>("IsTwoFactorEnabled")
-                        .HasColumnType("bit");
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime?>("LastModificationTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<long?>("LastModifierUserId")
                         .HasColumnType("bigint");
 
                     b.Property<Guid>("LocationId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("char(36)");
 
                     b.Property<DateTime?>("LockoutEndDateUtc")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(64)
-                        .HasColumnType("nvarchar(64)");
+                        .HasColumnType("varchar(64)");
 
                     b.Property<string>("NormalizedEmailAddress")
                         .IsRequired()
                         .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("varchar(256)");
 
                     b.Property<string>("NormalizedUserName")
                         .IsRequired()
                         .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("varchar(256)");
 
                     b.Property<Guid>("OrganizationId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("char(36)");
 
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("varchar(128)");
 
                     b.Property<string>("PasswordResetCode")
                         .HasMaxLength(328)
-                        .HasColumnType("nvarchar(328)");
+                        .HasColumnType("varchar(328)");
 
                     b.Property<string>("PhoneNumber")
                         .HasMaxLength(32)
-                        .HasColumnType("nvarchar(32)");
+                        .HasColumnType("varchar(32)");
 
                     b.Property<string>("SecurityStamp")
                         .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("varchar(128)");
 
                     b.Property<string>("Surname")
                         .IsRequired()
                         .HasMaxLength(64)
-                        .HasColumnType("nvarchar(64)");
+                        .HasColumnType("varchar(64)");
 
                     b.Property<int?>("TenantId")
                         .HasColumnType("int");
@@ -1558,7 +1498,7 @@ namespace TechEngineer.Migrations
                     b.Property<string>("UserName")
                         .IsRequired()
                         .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("varchar(256)");
 
                     b.HasKey("Id");
 
@@ -1579,13 +1519,13 @@ namespace TechEngineer.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("char(36)");
 
                     b.Property<Guid>("AssetId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("char(36)");
 
                     b.Property<DateTime>("CreationTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<long?>("CreatorUserId")
                         .HasColumnType("bigint");
@@ -1594,31 +1534,31 @@ namespace TechEngineer.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<DateTime?>("DeletionTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime?>("LastModificationTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<long?>("LastModifierUserId")
                         .HasColumnType("bigint");
 
                     b.Property<Guid>("LocationId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("char(36)");
 
                     b.Property<Guid>("OrganizationId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("char(36)");
 
                     b.Property<string>("Remarks")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<DateTime>("RequestDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("Status")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<long>("UserId")
                         .HasColumnType("bigint");
@@ -1640,18 +1580,18 @@ namespace TechEngineer.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("char(36)");
 
                     b.Property<string>("CPU")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Category")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<DateTime>("CreationTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<long?>("CreatorUserId")
                         .HasColumnType("bigint");
@@ -1660,100 +1600,100 @@ namespace TechEngineer.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<DateTime?>("DeletionTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("Department")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Details")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<DateTime>("EndWarrentyDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("HDD")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("IPAddress")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<bool>("IsInWarrenty")
-                        .HasColumnType("bit");
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<string>("KeyBoard")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<DateTime?>("LastModificationTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<long?>("LastModifierUserId")
                         .HasColumnType("bigint");
 
                     b.Property<Guid>("LocationId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("char(36)");
 
                     b.Property<string>("MSOffice")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("ModelNumber")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Monitor")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Monitor_SerialNo")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("MotherBoard")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Mouse")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("OperatingSystem")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<Guid>("OrganizationId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("char(36)");
 
                     b.Property<DateTime>("PurchaseDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("RAM")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("SerialNumber")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<DateTime>("StartWarrentyDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("System_Username")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
@@ -1768,30 +1708,30 @@ namespace TechEngineer.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("char(36)");
 
                     b.Property<string>("Address1")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Address2")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("BranchITHeadEmail")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("CityId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("CountryId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<DateTime>("CreationTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<long?>("CreatorUserId")
                         .HasColumnType("bigint");
@@ -1800,37 +1740,37 @@ namespace TechEngineer.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<DateTime?>("DeletionTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<bool>("IsBaseLocation")
-                        .HasColumnType("bit");
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<string>("Landmark")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<DateTime?>("LastModificationTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<long?>("LastModifierUserId")
                         .HasColumnType("bigint");
 
                     b.Property<Guid>("OrganizationId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("char(36)");
 
                     b.Property<string>("PostalCode")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("StateId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
@@ -1843,18 +1783,18 @@ namespace TechEngineer.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("char(36)");
 
                     b.Property<string>("ContactNumber")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("ContactPersonName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<DateTime>("CreationTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<long?>("CreatorUserId")
                         .HasColumnType("bigint");
@@ -1863,31 +1803,31 @@ namespace TechEngineer.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<DateTime?>("DeletionTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("GSTNumber")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime?>("LastModificationTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<long?>("LastModifierUserId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("PrimaryEmailAddress")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
@@ -1900,14 +1840,12 @@ namespace TechEngineer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
                     b.Property<string>("ConnectionString")
                         .HasMaxLength(1024)
-                        .HasColumnType("nvarchar(1024)");
+                        .HasColumnType("varchar(1024)");
 
                     b.Property<DateTime>("CreationTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<long?>("CreatorUserId")
                         .HasColumnType("bigint");
@@ -1916,19 +1854,19 @@ namespace TechEngineer.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<DateTime?>("DeletionTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<int?>("EditionId")
                         .HasColumnType("int");
 
                     b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime?>("LastModificationTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<long?>("LastModifierUserId")
                         .HasColumnType("bigint");
@@ -1936,12 +1874,12 @@ namespace TechEngineer.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("varchar(128)");
 
                     b.Property<string>("TenancyName")
                         .IsRequired()
                         .HasMaxLength(64)
-                        .HasColumnType("nvarchar(64)");
+                        .HasColumnType("varchar(64)");
 
                     b.HasKey("Id");
 

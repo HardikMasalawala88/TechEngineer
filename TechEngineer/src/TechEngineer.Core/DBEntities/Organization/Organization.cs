@@ -3,6 +3,7 @@ using Abp.Timing;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using TechEngineer.DBEntities.Location;
 
 namespace TechEngineer.DBEntities.Organization
 {

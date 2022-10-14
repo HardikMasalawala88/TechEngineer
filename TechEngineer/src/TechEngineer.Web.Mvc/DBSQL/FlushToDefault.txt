@@ -1,0 +1,8 @@
+﻿--DELETE from [dbo].[Appointments]
+--DELETE from [dbo].[Assets]
+--DELETE from [dbo].[Locations]
+--DELETE from [dbo].[Organizations]
+--DELETE FROM [dbo].[AbpUserAccounts] WHERE UserId > 2
+--DELETE FROM [dbo].[AbpUserLoginAttempts] WHERE UserId > 2
+--DELETE FROM [dbo].[AbpUserRoles] WHERE UserId > 2
+--DELETE FROM [dbo].[AbpUsers] WHERE Id > 2

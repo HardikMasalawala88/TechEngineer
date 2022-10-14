@@ -200,9 +200,16 @@ namespace TechEngineer.DBEntities.Organizations
             CheckUpdatePermission();
 
             var organizationData = await _organizationRepository.GetAsync(organization.Id);
+            if(organization.Location is not null)
+            {
+                var locationData = await _locationRepository.GetAsync(organization.Location.Id);
+                _objectMapper.Map(organization.Location, locationData);
+                //organizationData.Location = locationData;
+            }
 
             _objectMapper.Map(organization, organizationData);
             await _organizationRepository.UpdateAsync(organizationData);
+
 
             return MapToEntityDto(organizationData);
         }

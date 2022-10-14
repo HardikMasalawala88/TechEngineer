@@ -7,12 +7,14 @@ namespace TechEngineer.EntityFrameworkCore
     {
         public static void Configure(DbContextOptionsBuilder<TechEngineerDbContext> builder, string connectionString)
         {
-            builder.UseSqlServer(connectionString);
+            var serverVersion = ServerVersion.AutoDetect(connectionString);
+            builder.UseMySql(connectionString, serverVersion);
         }
 
         public static void Configure(DbContextOptionsBuilder<TechEngineerDbContext> builder, DbConnection connection)
         {
-            builder.UseSqlServer(connection);
+            var serverVersion = ServerVersion.AutoDetect(connection.ConnectionString);
+            builder.UseMySql(connection, serverVersion);
         }
     }
 }
